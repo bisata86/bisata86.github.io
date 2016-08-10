@@ -6,6 +6,8 @@ var auto;
 var turno;
 var steps;
 $( document ).ready(function() {
+	var isMobile = detectmob();
+	var click = isMobile ? 'touchstart' : 'click';
 	if(mode=='single') {
 		auto = false;
 		turno = false;
@@ -33,7 +35,7 @@ $( document ).ready(function() {
 	creaScacchiera(partita);
 	disegnaScacchiera(partita);
 	if(mode!='steps') {
-		$( "body" ).on( "click, tap",'.scacchiera div[class*="bianco"]', function() {
+		$( "body" ).on( click,'.scacchiera div[class*="bianco"]', function() {
 		  $('div').removeClass('highlight')
 		  var a  = possibilita($( this ).attr('class'),$( this ).prevAll().length,partita);
 		  var b  = possibilitaDiMangiare($( this ).attr('class'),$( this ).prevAll().length,partita);
@@ -59,7 +61,7 @@ $( document ).ready(function() {
 		  };
 		  //$('.scacchieraTemp').remove();
 		});
-		$( "body" ).on( "click, tap",'.scacchiera.ricezione div[class*="highlight"]', function() {
+		$( "body" ).on( click,'.scacchiera.ricezione div[class*="highlight"]', function() {
 			$( ".scacchiera" ).removeClass('ricezione');
 		  	$('div').removeClass('highlight');
 		  	currentMove.posizioneFinale = $( this ).prevAll().length;
@@ -1615,4 +1617,19 @@ function clone(obj) {
     }
 
     throw new Error("Unable to copy obj! Its type isn't supported.");
+}
+function detectmob() {
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ ){
+    return true;
+  }
+ else {
+    return false;
+  }
 }
