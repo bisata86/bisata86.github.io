@@ -10,6 +10,9 @@ body {
 .landscape {
     text-align:center;
 }
+.landscape h1 {
+    display:none;
+}
 .landscape .scacchiera {
     width: 100vh;
     height: 100vh;
@@ -30,7 +33,7 @@ body {
 	width:12.5%;
 	height:12.5%;
 	display:inline-block;
-    background-size: 70%;
+    background-size: 90%;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     font-size: 12px;

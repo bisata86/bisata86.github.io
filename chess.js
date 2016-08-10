@@ -303,7 +303,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 	$.each(arrayMosse, function(index, val) {
 		conto += val.endings.length
 	});
-	console.log(conto+' mosse possibili')
+	//console.log(conto+' mosse possibili')
 	var tutte = [];// provaleTutte(arrayMosse,partita);
 	if(tutte[1]!=undefined) {
 		//console.log('conviene: da '+tutte[1][0]+' a '+tutte[1][1])
@@ -314,7 +314,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		//besaz AI
 		var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
 		var statoCorrente = dammiStato(coloreCorrente,partita,arrayMosse);
-		console.log(statoCorrente)
+		//console.log(statoCorrente)
 		// console.log('-------')
 		// console.log('le mosse: ')
 		var sit = provaleTutte(arrayMosse,partita)
@@ -334,16 +334,16 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		// console.log('--------------------------------');
 		// console.log('mosse da non fare?');
 		if(attaccateEscoperte.length>0) {
-			console.log('attaccateEscoperte')
+			//console.log('attaccateEscoperte')
 			var lenuoveMosse = [];
 			if(attaccateEscoperte.length<sit.length) {
 				$.each(sit, function(index, val) {
 					if(attaccateEscoperte.indexOf(index)==-1) {
 						lenuoveMosse.push(val);
-					} else 	console.log(val)
+					}// else console.log(val)
 				});
 				// console.log(sit)//sit = lenuoveMosse;
-				 console.log('elimino '+(sit.length-lenuoveMosse.length)+' mosse dannose')
+				 //console.log('elimino '+(sit.length-lenuoveMosse.length)+' mosse dannose')
 				sit = lenuoveMosse;
 			}
 			//
@@ -387,7 +387,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 				return a.avversario - b.avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
-			console.log('mangio la pedina scoperta con più valore')
+			//console.log('mangio la pedina scoperta con più valore')
 			currentMove.posizioneCorrente = sit[byDate[0]].lamossa[0];
 			currentMove.posizioneFinale = sit[byDate[0]].lamossa[1];
 		}
@@ -399,13 +399,13 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 				    return a.pedineAttaccate.length - b.pedineAttaccate.length;
 				});
 				$.each(byDate, function(index, val) {
-					 	console.log(val)
+					 	//console.log(val)
 				});
 				var byDue = [];
 				if(byDate.length>0) {
 					$.each(byDate, function(index, val) {
 						 if(val.pedineAttaccate.length==byDate[0].pedineAttaccate.length) {
-						 	console.log(index)
+						 	//console.log(index)
 						 	byDue.push(val)
 						 }
 					});
@@ -418,7 +418,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 
 				currentMove.posizioneCorrente = byDate[0].lamossa[0];
 				currentMove.posizioneFinale = byDate[0].lamossa[1];
-				console.log('muovo per proteggere')
+				//console.log('muovo per proteggere')
 				// var randomInt = getRandomInt(0,arrayMosse.length-1);
 				// var mossaRandom = arrayMosse[randomInt]
 				// currentMove.posizioneCorrente = mossaRandom.starting;
