@@ -33,7 +33,7 @@ $( document ).ready(function() {
 	creaScacchiera(partita);
 	disegnaScacchiera(partita);
 	if(mode!='steps') {
-		$( "body" ).on( "click",'.scacchiera div[class*="bianco"]', function() {
+		$( "body" ).on( "click, tap",'.scacchiera div[class*="bianco"]', function() {
 		  $('div').removeClass('highlight')
 		  var a  = possibilita($( this ).attr('class'),$( this ).prevAll().length,partita);
 		  var b  = possibilitaDiMangiare($( this ).attr('class'),$( this ).prevAll().length,partita);
@@ -59,7 +59,7 @@ $( document ).ready(function() {
 		  };
 		  //$('.scacchieraTemp').remove();
 		});
-		$( "body" ).on( "click",'.scacchiera.ricezione div[class*="highlight"]', function() {
+		$( "body" ).on( "click, tap",'.scacchiera.ricezione div[class*="highlight"]', function() {
 			$( ".scacchiera" ).removeClass('ricezione');
 		  	$('div').removeClass('highlight');
 		  	currentMove.posizioneFinale = $( this ).prevAll().length;
@@ -83,7 +83,7 @@ function checkWindow() {
 	if(window.innerHeight<window.innerWidth)  $('body').addClass('landscape').removeClass('portrait')
 	else $('body').addClass('portrait').removeClass('landscape')
 }
-function controldlaScacco(partita,chi) {
+function controllaScacco(partita,chi) {
 		//disegnaScacchieraTemp(partita)
 		var hisMove = []
 		if(auto) {
