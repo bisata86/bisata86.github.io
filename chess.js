@@ -83,7 +83,7 @@ function checkWindow() {
 	if(window.innerHeight<window.innerWidth)  $('body').addClass('landscape').removeClass('portrait')
 	else $('body').addClass('portrait').removeClass('landscape')
 }
-function controllaScacco(partita,chi) {
+function controldlaScacco(partita,chi) {
 		//disegnaScacchieraTemp(partita)
 		var hisMove = []
 		if(auto) {
