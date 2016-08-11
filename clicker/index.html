@@ -1,0 +1,195 @@
+
+  <html>
+  <head>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript" src="./jsrobot.js"></script>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=1"/>
+    <link rel="stylesheet" type="text/css" href="./jsrobot.css">
+    <title>CLICKETRONS</title>
+  </head>
+  <body>
+    <div id="infos">
+      Population: <span id="population">0</span>/<span id="spaceForPeople">0</span></td>
+
+    </div>
+    <div id="resources">
+      <div class="wood"></div>
+      <div class="gold"></div>
+      <div class="food"></div>
+    </div>
+    <div id="numbersResources">
+      <div id="wood">0</div>
+      <div id="gold">0</div>
+      <div id="food">0</div>
+    </div>
+    <div id="bonusbar">
+      <div></div>
+    </div>
+    <div id="canvas">
+      <div class="houseplace"></div>
+      <div class='structureplace'></div>
+    </div>
+    <div id="improvements">
+        <ul class="tabs">
+          <li>
+              <input type="radio" name="tabs" id="tab1" checked />
+              <label for="tab1">build</label>
+              <div id="tab-content1" class="tab-content">
+                <p>
+                  <table>
+                    <tr id="tent">
+                      <td style="width:20%">Tent:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                   <tr id="house">
+                      <td style="width:20%">House:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="bigHouse" >
+                      <td style="width:20%">Big house:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="hospital">
+                      <td style="width:20%">Hospital:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="woodMaker">
+                      <td style="width:20%">Sawmill:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                     <tr id="goldMaker">
+                      <td style="width:20%">Gold mine:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="foodMaker">
+                      <td style="width:20%">Farm:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                  </table>
+                </p>
+              </div>
+          </li>
+          <li>
+              <input type="radio" name="tabs" id="tab2" />
+              <label for="tab2">upgrades</label>
+              <div id="tab-content2" class="tab-content">
+                <p>
+                  <table>
+                    <tr id="woodClick">
+                      <td style="width:20%">Wood click:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="goldClick">
+                      <td style="width:20%">Gold click:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="foodClick">
+                      <td style="width:20%">Food click:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                     <tr id="betterFarms">
+                      <td style="width:20%">Better farms:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="betterMills">
+                      <td style="width:20%">Better mills:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="betterMines">
+                      <td style="width:20%">Better mines:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                  </table>
+
+                </p>
+              </div>
+          </li>
+          <li>
+              <input type="radio" name="tabs" id="tab3" />
+              <label for="tab3">events</label>
+              <div id="tab-content3" class="tab-content">
+                <p>
+                 <table>
+                    <tr id="sausages">
+                      <td style="width:20%">Sausages's Fest:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="sausages2">
+                      <td style="width:20%">Sausages's Radune :</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="sausages3">
+                      <td style="width:20%">Sausages's Festival:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                    <tr id="sausages4">
+                      <td style="width:20%">Sausages's Mega Event:</td>
+                      <td><input type="button" value="buy"></input></td>
+                      <td class="woodCost">12</td>
+                      <td class="goldCost">12</td>
+                      <td class="foodCost">12</td>
+                    </tr>
+                  </table>
+
+                </p>
+              </div>
+          </li>
+          <li>
+              <label id="toggleImprovements"></label>
+          </li>
+      </ul>
+      <br style="clear: both;" />
+    </div>
+   <!--  <div id="tent" >build tent <span class="cost"></div> -->
+    <!-- <div id="woodClick" >better wood click <span class="cost"></div> -->
+
+  </body>
+  </html>

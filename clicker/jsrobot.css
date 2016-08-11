@@ -1,0 +1,286 @@
+body {
+  overflow:hidden;
+}
+#resources {
+	text-align: center;
+}
+#resources div, #numbersResources div {
+	height: 100px;
+	display:inline-block;
+	width: 32%;
+	text-align: center;
+	position:relative;
+      -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+#bonusbar {
+  height: 10px;
+    border: 1px solid orangered;
+    margin: 10px;
+}
+#bonusbar div {
+  background-color: orangered;
+  height: 100%;
+  width:0%;
+
+}
+.alerta {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    font-size: xx-large;
+    z-index: 200000;
+    left: 0;
+    -webkit-transition-duration: 500ms;
+    -moz-transition-duration: 550ms;
+    transition-duration: 550ms;
+}
+#numbersResources div {
+	height:auto;
+	padding:5px;
+}
+#improvements {
+	padding:10px;
+	position: absolute;
+    width: 100%;
+    -webkit-transition-duration: 500ms;
+    -moz-transition-duration: 550ms;
+    transition-duration: 550ms;
+    bottom: 50%;
+}
+#improvements.opened {
+	bottom:0;
+
+}
+#toggleImprovements {
+	background-image: url('./arrowDown.png');
+	background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+.casa {
+	background-image: url('./house.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 30px;
+    width:30px;
+    height:30px;
+}
+.miniera {
+  background-image: url('./mine.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px;
+    width:50px;
+    height:50px;
+}
+.fattoria {
+  background-image: url('./farm.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px;
+    width:50px;
+    height:50px;
+}
+.segheria {
+  background-image: url('./sawmill.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px;
+    width:50px;
+    height:50px;
+}
+.ospedale {
+	background-image: url('./hospital.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px;
+    width:50px;
+    height:50px;
+}
+.tenda {
+	background-image: url('./tent.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 30px;
+    width:30px;
+    height:30px;
+}
+#improvements.opened #toggleImprovements {
+	background-image: url('./arrowUp.png');
+}
+#improvements input {
+      padding: 10px !important;
+    border-radius: 5px;
+    -webkit-appearance: none;
+    text-transform: uppercase;
+}
+.woodCost {
+	background-image: url('./wood.png');
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+}
+.foodCost {
+	background-image: url('./food.png');
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+}
+.goldCost {
+	background-image: url('./gold.png');
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: 0% 50%;
+}
+.wood {
+    background-image: url('./wood.png');
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+.food {
+    background-image: url('./food.png');
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+.gold {
+    background-image: url('./gold.png');
+    background-size: 100px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+#canvas {
+	width:100%;
+	background-image: url('./background.jpg');
+	position:relative;
+    background-repeat: no-repeat;
+    background-position: 50% 0%;
+    padding-top:10px;
+    background-size:100% 100%;
+
+}
+.houseplace {
+	overflow:hidden;
+	position:absolute;
+	bottom: 0;
+    height: 45%;
+    width: 45%;
+    right: 10;
+}
+.structureplace {
+	 text-align:right;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    height: 45%;
+    width: 45%;
+    left: 10;
+}
+.houseplace div, .structureplace div {
+	display:inline-block;
+
+}
+#infos {
+	text-align:center;
+	font-size:xx-large;
+}
+#infos table, #improvements table {
+	width: 100%;
+    text-align: center;
+}
+* {
+  margin: 0;
+  padding: 0;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.tabs {
+  width: 100%;
+  float: none;
+  list-style: none;
+  position: relative;
+  text-align: left;
+}
+.tabs li {
+  float: left;
+  display: block;
+  width:25%;
+
+}
+.tabs input[type="radio"] {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+.tabs label {
+  width: 100%;
+  text-align: center;
+  display: block;
+  height: 53px;
+  padding: 14px 10px;
+  border-radius: 4px 4px 0 0;
+  font-size: 20px;
+  font-weight: normal;
+  text-transform: uppercase;
+  background: orange;
+  cursor: pointer;
+  position: relative;
+  top: 4px;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.tabs label:hover {
+  background: orange;
+}
+.tabs .tab-content {
+  z-index: 2;
+  display: none;
+  overflow: hidden;
+  width: 100%;
+  font-size: 17px;
+  line-height: 25px;
+  padding: 10px;
+  position: absolute;
+  top: 53px;
+  left: 0;
+  background: #fdba4b;
+  height:1000px;
+}
+.tabs [id^="tab"]:checked + label {
+  top: 0;
+  padding-top: 17px;
+  background: #fdba4b;
+}
+.tabs [id^="tab"]:checked ~ [id^="tab-content"] {
+  display: block;
+}
+
+p.link {
+  clear: both;
+  margin: 380px 0 0 15px;
+}
+p.link a {
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  color: #fff;
+  padding: 5px 10px;
+  margin: 0 5px;
+  background-color: #fdba4b;
+  -moz-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+}
+p.link a:hover {
+  background-color: #522764;
+}
