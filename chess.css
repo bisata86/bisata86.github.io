@@ -34,9 +34,21 @@ body {
 }
 #prima {
     border-radius: 50% 0 0 50%;
+    background-image: url('./imgs/freccia.png');
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-color: lightgray;
+    min-width:50px;
 }
 #dopo {
     border-radius: 0 50% 50% 0;
+    background-image: url('./imgs/freccia1.png');
+    background-size: 90%;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-color: lightgray;
+    min-width:50px;
 }
 
 .casella {

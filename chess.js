@@ -682,8 +682,8 @@ function creaScacchiera(partita) {
 	};
 	if(mode=='single') {
 		$('body').append("<div class='controllo'></div>");
-		$('.controllo').append("<input type='button' id='prima' value='<''></input>");
-		$('.controllo').append("<input type='button' id='dopo' value='>''></input>");
+		$('.controllo').append("<input type='button' id='prima' value=''></input>");
+		$('.controllo').append("<input type='button' id='dopo' value=''></input>");
 	}
 	localStorage.setItem('mosse', JSON.stringify([partita]));
 }
