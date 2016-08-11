@@ -6,6 +6,16 @@ var auto;
 var turno;
 var steps;
 $( document ).ready(function() {
+	var body = document.documentElement;
+if (body.requestFullscreen) {
+body.requestFullscreen();
+} else if (body.webkitrequestFullscreen) {
+body.webkitrequestFullscreen();
+} else if (body.mozrequestFullscreen) {
+body.mozrequestFullscreen();
+} else if (body.msrequestFullscreen) {
+body.msrequestFullscreen();
+}
 	var isMobile = detectmob();
 	var click = isMobile ? 'touchstart' : 'click';
 	if(mode=='single') {
