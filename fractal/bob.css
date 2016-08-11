@@ -1,0 +1,78 @@
+body {
+	margin:0;
+	overflow:hidden;
+}
+#debug {
+	font-size:-webkit-xxx-large;
+	text-align:center;
+}
+.pageTitle {
+	text-align:center;
+	font-size:-webkit-xxx-large;
+}
+#canvasContainer {
+	text-align:center;
+}
+#indicators .span {
+	float:right;
+	border: 1px solid;
+}
+#indicators .tit {
+	float:left;
+	text-align: right;
+	width: 30%;
+}
+#indicators  {
+	text-align:center;
+	box-sizing:border-box;
+	padding:10px;
+	display:none;
+}
+#indicators > div {
+	display: inline-block;
+    width: 100%;
+}
+#indicators > div:after {
+	content: '';
+	clear:both;
+}
+#indicators > div > div {
+ display: inline-block;
+ width:65%;
+}
+#indicators .pin {
+	height: 15px;
+    background-image: url("pin.png");
+    background-size: 10px 100%;
+    background-repeat: no-repeat;
+ 	-webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+}
+
+.hidden1 {
+	background-image: url("./heror.png");
+}
+.hidden2 {
+	background-image: url("./herol.png");
+}
+.hidden3 {
+	background-image: url("./herou.png");
+}
+.hidden4 {
+	background-image: url("./herod.png");
+}
+.hidden5 {
+	background-image: url("./herour.png");
+}
+.hidden6 {
+	background-image: url("./herodr.png");
+}
+.hidden7 {
+	background-image: url("./heroul.png");
+}
+.hidden8 {
+	background-image: url("./herodl.png");
+}
+
+
+
