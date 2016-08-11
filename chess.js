@@ -697,6 +697,8 @@ function creaScacchiera(partita) {
 		$('.controllo').append("<input type='button' id='dopo' value=''></input>");
 	}
 	localStorage.setItem('mosse', JSON.stringify([partita]));
+	$('.scacchiera').addClass('rotate')
+	setTimeout(function(){  $('.scacchiera').removeClass('rotate') }, 0);
 }
 function disegnaScacchiera(partita) {
 	$('.scacchiera').html('');
