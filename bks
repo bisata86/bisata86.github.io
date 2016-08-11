@@ -412,14 +412,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 				$.each(sit, function(index, val) {
 					if(attaccateEscoperte.indexOf(index)==-1) {
 						lenuoveMosse.push(val);
-					} else {
-						if(partita.caselle[val.lamossa[0]].occupata>=partita.caselle[val.lamossa[1]].occupata+2)
-						lenuoveMosse.push(val);
-						else console.log(val)
-						// console.log('col '+partita.caselle[val.lamossa[0]].occupata);
-						// console.log('averi mangiato');
-						// console.log('il '+partita.caselle[val.lamossa[1]].occupata)
-					}
+					} else console.log(val)
 				});
 				// console.log(sit)//sit = lenuoveMosse;
 				 //console.log('elimino '+(sit.length-lenuoveMosse.length)+' mosse dannose')
@@ -433,9 +426,9 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		var mosseInCuiMangio = [];
 		//console.log(sit)
 		$.each(sit, function(index, val) {
-			 console.log(val)
+			 //console.log(val)
 			 if(statoCorrente.avversario>val.avversario) {
-			 	console.log('posso mangiare in posizione: '+val.lamossa[1]);
+			 	//console.log('posso mangiare in posizione: '+val.lamossa[1]);
 			 	mosseInCuiMangio.push(index)
 			 }
 
@@ -444,11 +437,11 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		$.each(mosseInCuiMangio, function(index, val) {
 			  //console.log(sit[val]);
 			 if(enemyattack.indexOf(sit[val].lamossa[1])!=-1) {
-			 	 console.log('è coperta, valori:')
-			 	 console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
-			 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
-			 	 console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
-			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)+2) {
+			 	// console.log('è coperta, valori:')
+			 	// console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
+			 	// console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
+			 	// console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
+			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)+3) {
 			 			//console.log('mangio lo stesso')
 			 			scoperte.push(val)
 			 	}
@@ -492,56 +485,62 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 						});
 					} else byDue = byDate;
 
-					console.log('ordino per pedine scoperte')
-					byDate = byDue.slice(0);
-					byDate.sort(function(a,b) {
-				    return a.pedineScoperte.length - b.pedineScoperte.length;
-					});
-					//console.log('muovo per proteggere');
-					var byDue = [];
-					if(byDate.length>0) {
-						console.log('rimuovo  per pedine scoperte')
-						$.each(byDate, function(index, val) {
-							 if(val.pedineScoperte.length==byDate[0].pedineScoperte.length) {
-							 	byDue.push(val)
-							 }
-						});
-					} else byDue = byDate;
+						if(statoCorrente.avversario<=20) {
+							console.log('ordino per pedine che attacco')
+							byDate = byDue.slice(0);
+							byDate.sort(function(a,b) {
+						    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
+							});
+							var byDue = [];
+							if(byDate.length>0) {
+								console.log('rimuovo  per pedine che attacco')
+								$.each(byDate, function(index, val) {
+									 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
+									 	byDue.push(val)
+									 }
+								});
+							} else byDue = byDate;
+							byDate = byDue;
+							//console.log('muovo per attaccare');
+						} else {
+							console.log('ordino per pedine scoperte')
+							byDate = byDue.slice(0);
+							byDate.sort(function(a,b) {
+						    return a.pedineScoperte.length - b.pedineScoperte.length;
+							});
+							//console.log('muovo per proteggere');
+							var byDue = [];
+							if(byDate.length>0) {
+								console.log('rimuovo  per pedine scoperte')
+								$.each(byDate, function(index, val) {
+									 if(val.pedineScoperte.length==byDate[0].pedineScoperte.length) {
+									 	byDue.push(val)
+									 }
+								});
+							} else byDue = byDate;
+							byDate = byDue;
+						}
 
-					console.log('ordino per pedine che attacco')
-					byDate = byDue.slice(0);
-					byDate.sort(function(a,b) {
-				    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
-					});
-					var byDue = [];
-					if(byDate.length>0) {
-						console.log('rimuovo  per pedine che attacco')
 						$.each(byDate, function(index, val) {
-							 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
-							 	byDue.push(val)
-							 }
+							 	console.log(val)
 						});
-					} else byDue = byDate;
-					byDate = byDue;
-
-					$.each(byDate, function(index, val) {
-						 	console.log(val)
-					});
 
 						// var byDue = [];
-						if(byDate.length>0) {
-							var randomInt = getRandomInt(0,byDate.length-1)
-							var mossaRandom = byDate[randomInt]
-						}
+						// if(byDate.length>0) {
+						// 	console.log('una a caso')
+						// 	$.each(byDate, function(index, val) {
+						// 		 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
+						// 		 	byDue.push(val)
+						// 		 }
+						// 	});
 						// } else byDue = byDate;
 						// byDate = byDue;
 
 
-						var randomInt = getRandomInt(0,byDate.length-1)
-						var mossaRandom = byDate[randomInt]
 
-						currentMove.posizioneCorrente = mossaRandom.lamossa[0];
-						currentMove.posizioneFinale = mossaRandom.lamossa[1];
+
+						currentMove.posizioneCorrente = byDate[0].lamossa[0];
+						currentMove.posizioneFinale = byDate[0].lamossa[1];
 
 
 					// var randomInt = getRandomInt(0,arrayMosse.length-1);
