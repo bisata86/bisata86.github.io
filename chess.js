@@ -413,7 +413,8 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 					if(attaccateEscoperte.indexOf(index)==-1) {
 						lenuoveMosse.push(val);
 					} else {
-						if(partita.caselle[val.lamossa[0]].occupata>=partita.caselle[val.lamossa[1]].occupata+2)
+						console.log(partita.caselle[val.lamossa[0]].occupata)
+						if(convertiInValore(partita.caselle[val.lamossa[0]].occupata)<=convertiInValore(partita.caselle[val.lamossa[1]].occupata))
 						lenuoveMosse.push(val);
 						else console.log(val)
 						// console.log('col '+partita.caselle[val.lamossa[0]].occupata);
@@ -433,7 +434,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		var mosseInCuiMangio = [];
 		//console.log(sit)
 		$.each(sit, function(index, val) {
-			 console.log(val)
+			 //console.log(val)
 			 if(statoCorrente.avversario>val.avversario) {
 			 	console.log('posso mangiare in posizione: '+val.lamossa[1]);
 			 	mosseInCuiMangio.push(index)
@@ -448,7 +449,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 			 	 console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
 			 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
 			 	 console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
-			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)+2) {
+			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)) {
 			 			//console.log('mangio lo stesso')
 			 			scoperte.push(val)
 			 	}
@@ -474,6 +475,11 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 
 
 					var byDate = sit.slice(0);
+
+					if(statoCorrente.avversario<20 || statoCorrente.avversario>38) {
+
+
+
 					console.log('ordino per pedine sotto attacco')
 					byDate.sort(function(a,b) {
 					    return a.totaleAttaccate - b.totaleAttaccate;
@@ -510,6 +516,10 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 
 					console.log('ordino per pedine che attacco')
 					byDate = byDue.slice(0);
+
+					}
+
+
 					byDate.sort(function(a,b) {
 				    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
 					});
