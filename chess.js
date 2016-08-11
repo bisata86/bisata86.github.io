@@ -117,7 +117,6 @@ $( document ).ready(function() {
 				} else {
 					$('#prima').removeClass('disabled');
 				}
-				console.log('vado al:'+(partita.length-1-historyCounter))
 				partita = partita[partita.length-1-historyCounter]
 				historyCounter++;
 			}
@@ -376,7 +375,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 	$.each(arrayMosse, function(index, val) {
 		conto += val.endings.length
 	});
-	//console.log(conto+' mosse possibili')
+	console.log(conto+' mosse possibili')
 	var tutte = [];// provaleTutte(arrayMosse,partita);
 	if(tutte[1]!=undefined) {
 		//console.log('conviene: da '+tutte[1][0]+' a '+tutte[1][1])
@@ -387,7 +386,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		//besaz AI
 		var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
 		var statoCorrente = dammiStato(coloreCorrente,partita,arrayMosse);
-		//console.log(statoCorrente)
+		console.log(statoCorrente)
 		// console.log('-------')
 		// console.log('le mosse: ')
 		var sit = provaleTutte(arrayMosse,partita)
@@ -407,19 +406,19 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		// console.log('--------------------------------');
 		// console.log('mosse da non fare?');
 		if(attaccateEscoperte.length>0) {
-			//console.log('attaccateEscoperte')
+			console.log('eliminate')
 			var lenuoveMosse = [];
 			if(attaccateEscoperte.length<sit.length) {
 				$.each(sit, function(index, val) {
 					if(attaccateEscoperte.indexOf(index)==-1) {
 						lenuoveMosse.push(val);
-					}// else console.log(val)
+					} else console.log(val)
 				});
 				// console.log(sit)//sit = lenuoveMosse;
 				 //console.log('elimino '+(sit.length-lenuoveMosse.length)+' mosse dannose')
 				sit = lenuoveMosse;
 			}
-			//
+			console.log('-----------')
 
 
 		}
@@ -466,38 +465,52 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		}
 		else {
 
-				//console.log(sit)
-				var byDate = sit.slice(0);
-				byDate.sort(function(a,b) {
-				    return a.pedineAttaccate.length - b.pedineAttaccate.length;
-				});
-				$.each(byDate, function(index, val) {
-					 	//console.log(val)
-				});
-				var byDue = [];
-				if(byDate.length>0) {
-					$.each(byDate, function(index, val) {
-						 if(val.pedineAttaccate.length==byDate[0].pedineAttaccate.length) {
-						 	//console.log(index)
-						 	byDue.push(val)
-						 }
-					});
-					byDate = byDue.slice(0);
+
+					var byDate = sit.slice(0);
 					byDate.sort(function(a,b) {
-				    return a.pedineScoperte.length - b.pedineScoperte.length;
-				});
-				}
+					    return a.totaleAttaccate - b.totaleAttaccate;
+					});
+					$.each(byDate, function(index, val) {
+						 	//console.log(val)
+					});
+					var byDue = [];
+					if(byDate.length>0) {
+						$.each(byDate, function(index, val) {
+							 if(val.totaleAttaccate==byDate[0].totaleAttaccate) {
+							 	//console.log(index)
+							 	byDue.push(val)
+							 }
+						});
 
 
-				currentMove.posizioneCorrente = byDate[0].lamossa[0];
-				currentMove.posizioneFinale = byDate[0].lamossa[1];
-				//console.log('muovo per proteggere')
-				// var randomInt = getRandomInt(0,arrayMosse.length-1);
-				// var mossaRandom = arrayMosse[randomInt]
-				// currentMove.posizioneCorrente = mossaRandom.starting;
-				// var randomInt2 = getRandomInt(0,mossaRandom.endings.length-1);
-				// currentMove.posizioneFinale = mossaRandom.endings[randomInt2];
-				// console.log('mossa a caso: da '+currentMove.posizioneCorrente+' a '+currentMove.posizioneFinale)
+						if(statoCorrente.avversario<=20 || true) {
+							byDate = byDue.slice(0);
+							byDate.sort(function(a,b) {
+						    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
+							});
+							console.log('muovo per attaccare');
+						} else {
+							byDate = byDue.slice(0);
+							byDate.sort(function(a,b) {
+						    return a.pedineScoperte.length - b.pedineScoperte.length;
+							});
+							console.log('muovo per proteggere');
+						}
+					}
+					$.each(byDate, function(index, val) {
+						 	console.log(val)
+					});
+					currentMove.posizioneCorrente = byDate[0].lamossa[0];
+					currentMove.posizioneFinale = byDate[0].lamossa[1];
+
+
+					// var randomInt = getRandomInt(0,arrayMosse.length-1);
+					// var mossaRandom = arrayMosse[randomInt]
+					// currentMove.posizioneCorrente = mossaRandom.starting;
+					// var randomInt2 = getRandomInt(0,mossaRandom.endings.length-1);
+					// currentMove.posizioneFinale = mossaRandom.endings[randomInt2];
+					// console.log('mossa a caso: da '+currentMove.posizioneCorrente+' a '+currentMove.posizioneFinale)
+
 			}
 
 
@@ -534,6 +547,7 @@ function dammiStato(coloreCorrente,partita,arrayMosse,lamossa) {
 	var statoattuale2 = 0;
 	var pedineAttaccate = [];
 	var pedineScoperte = [];
+	var pedineCheAttacco = [];
 
 	var attack = [];
 
@@ -573,19 +587,26 @@ function dammiStato(coloreCorrente,partita,arrayMosse,lamossa) {
 			if(val.occupata=='regina') statoattuale1=statoattuale1+9;
 		}
 		else if(val.colore==coloreAvversario) {
+			if(attack.indexOf(index)!=-1) pedineCheAttacco.push(index)
 			if(val.occupata=='pedone') statoattuale2=statoattuale2+1;
 			if(val.occupata=='cavallo' || val.occupata=='alfiere') statoattuale2=statoattuale2+3;
 			if(val.occupata=='torre') statoattuale2=statoattuale2+5;
 			if(val.occupata=='regina') statoattuale2=statoattuale2+9;
 		}
 	});
-	return {corrente:statoattuale1,avversario:statoattuale2,pedineAttaccate:pedineAttaccate,pedineScoperte:pedineScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente'};
+	var totaleAttaccate = 0;
+		$.each(pedineAttaccate, function(index, val) {
+			 totaleAttaccate+=convertiInValore(partita.caselle[val].occupata);
+	});
+	return {corrente:statoattuale1,avversario:statoattuale2,pedineCheAttacco:pedineCheAttacco,pedineAttaccate:pedineAttaccate,totaleAttaccate:totaleAttaccate,pedineScoperte:pedineScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente'};
 }
 function convertiInValore(pedina) {
 	if(pedina=='pedone') return 1;
 	if(pedina=='cavallo' || pedina=='alfiere') return 3;
 	if(pedina=='torre') return 5;
 	if(pedina=='regina') return 9;
+	if(pedina=='re') return 10;
+
 }
 function creaScacchiera(partita) {
 	$('body').append("<div class='scacchiera'></div>");

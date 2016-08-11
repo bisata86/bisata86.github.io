@@ -60,7 +60,7 @@ body {
 .casella:nth-child(56) ~ .casella:nth-child(-2n+63) {
     background-color: lightgray;
 }
-.highlight {background-color: green !important;}
+.highlight {background-color: lightgreen !important;}
 .highlight2 {opacity: 0.5}
 .highlight3 {background-color: darkorange !important;}
 .scacco {border: 1px solid red !important;}
