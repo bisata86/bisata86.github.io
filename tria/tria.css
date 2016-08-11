@@ -1,0 +1,286 @@
+body {
+	text-align: center;
+	height:10vh;
+min-height:10vh;
+}
+.onlyone #container, .onlyone #reset {
+	display: none;
+}
+.onlyme {
+	display: inline-block !important;
+	float:none !important;
+	position:inherit !important;
+	margin-top:50px;
+}
+.higlight {
+	-ms-transform: rotate(560deg); /* IE 9 */
+    -webkit-transform: rotate(560deg); /* Chrome, Safari, Opera */
+    transform: rotate(560deg);
+    transition-duration: 1s;
+
+}
+#container {
+	padding-top: 20px;
+}
+#mainGrid {
+	cursor:pointer;
+	 -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent; /* For some Androids */
+	position:relative;
+	width: 60vw;
+    height: 60vw;
+    max-width: 500px;
+    max-height: 500px;
+	margin: auto;
+	margin-top: 50px;
+	/*
+	background-image: url('./bg.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: 0%50%;
+
+	background-image: url('./black.png'),url('./black.png'),url('./black.png'),url('./black.png');
+	background-size: 6px 100%,6px 100%, 100% 6px, 100% 6px;
+	background-repeat: no-repeat;
+	background-position: 33.3333333% top,
+	                     66.66666666% top,
+	                     left 33.333333333%,
+	                     left 66.6666666666%;
+	*/
+}
+.vert {
+ 	background-image: url('./black.png'),url('./black.png');
+	background-size: 5px 100%,5px 100%;
+	background-repeat: no-repeat;
+	background-position: 33.3333333% top,
+	                     66.66666666% top;
+}
+.horiz {
+    background-image: url('./black.png'),url('./black.png');
+	background-size: 100% 5px, 100% 5px;
+	background-repeat: no-repeat;
+	background-position: left 33.333333333%,
+	                     left 66.6666666666%;
+}
+.fake {
+	display:none;
+}
+#reset, .fake {
+	width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 50px;
+    -webkit-appearance: none;
+    text-transform:uppercase;
+    background-color: white;
+    border-color: black;
+}
+.score {
+    height: 50px;
+    width: 100%;
+    font-size: xx-large;
+}
+textarea {
+	text-align:center;
+	resize: none;
+	padding-top: 10px;
+	border:none;
+}
+.playerCont1 {
+	float:right;
+    position: absolute;
+        bottom: 20vw;
+    left: 10px;
+}
+.playerCont2 {
+	float:left;
+	position: absolute;
+    bottom: 20vw;
+    right: 10px;
+}
+.casella {
+	width: 33.3333333%;
+	height: 33.33333333%;
+	display:inline-block;
+	box-sizing: border-box;
+	border:3px solid black;
+	position:relative;
+
+}
+#mainGrid div:nth-child(3),#mainGrid div:nth-child(6),#mainGrid div:nth-child(9) {
+    border-right:none;
+}
+#mainGrid div:nth-child(1),#mainGrid div:nth-child(4),#mainGrid div:nth-child(7) {
+    border-left:none;
+}
+#mainGrid div:nth-child(1),#mainGrid div:nth-child(2),#mainGrid div:nth-child(3) {
+    border-top:none;
+}
+#mainGrid div:nth-child(7),#mainGrid div:nth-child(8),#mainGrid div:nth-child(9) {
+    border-bottom:none;
+}
+
+
+.playerCont1 textarea {
+	background-image: url('./p2.png');
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+}
+.playerCont2 textarea {
+	background-image: url('./p1.png');
+	background-size: 20px 20px;
+	background-repeat: no-repeat;
+	background-position: 100% 50%;
+}
+
+#topArrow {
+	border:none !important;
+	position:absolute;
+	top:-60;
+    width: 100% !important;
+    height: 50px !important;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    background-image: url('./up.png'),url('./up.png'),url('./up.png');
+	background-size: 50px;
+	background-repeat: no-repeat;
+	background-position: 10% top,
+	                     50% top,
+	                     90% top;
+}
+#bottomArrow {
+	border:none !important;
+	position:absolute;
+	bottom:-60;
+    width: 100% !important;
+    height: 50px !important;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    background-image: url('./bottom.png'),url('./bottom.png'),url('./bottom.png');
+	background-size: 50px;
+	background-repeat: no-repeat;
+	background-position: 10% top,
+	                     50% top,
+	                     90% top;
+}
+#rightArrow {
+	border:none !important;
+	position:absolute;
+	right:-60;
+    width: 50px !important;
+    height: 100% !important;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    bottom: 0;
+    background-image: url('./right.png'),url('./right.png'),url('./right.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: left 10%,
+	                     left 50%,
+	                     left 90%;
+}
+#leftArrow {
+	border:none !important;
+	position:absolute;
+	left:-60;
+    width: 50px !important;
+    height: 100% !important;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    bottom: 0;
+    background-image: url('./left.png'),url('./left.png'),url('./left.png');
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: left 10%,
+	                     left 50%,
+	                     left 90%;
+}
+.disappear {
+	background-size: 0%;
+	border:0px solid transparent;
+}
+.disappeartop {
+	border-bottom:0px solid transparent;
+}
+.disappearbottom  {
+	border-top:0px solid transparent;
+}
+.disappearright  {
+	border-right:0px solid transparent;
+}
+.disappearleft  {
+	border-left:0px solid transparent;
+}
+.inactive {
+	pointer-events:none;
+	opacity: 0.9;
+}
+.forcetop {
+	border-top:6px solid black !important;
+}
+.forcebottom {
+	border-bottom:6px solid black !important;
+}
+.forceleft {
+	border-left:6px solid black !important;
+}
+
+.forceright {
+	border-right:6px solid black !important;
+}
+
+.p1:before,.p1:after{
+    content:'';
+    position:absolute;
+    width:60%;
+    height:4px;
+    max-width:50px;
+    background-color:black;
+    border-radius:2px;
+    margin: auto;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+.p1:before{
+    -webkit-transform:rotate(45deg);
+    -moz-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+.p1:after{
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);
+    transform:rotate(-45deg);
+}
+.p2:before{
+    content:'';
+    position:absolute;
+    width:40%;
+    height:40%;
+    max-width:50px;
+    max-height:50px;
+    background-color:transparent;
+    border:4px solid black;
+    border-radius:100%;
+    margin: auto;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    left: 0;
+}
+.win.p1:before,.win.p1:after {
+	background-color:red;
+}
+.win.p2:before,.win.p2:after {
+	border-color:red;
+}
+
