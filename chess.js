@@ -376,12 +376,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		conto += val.endings.length
 	});
 	console.log(conto+' mosse possibili')
-	var tutte = [];// provaleTutte(arrayMosse,partita);
-	if(tutte[1]!=undefined) {
-		//console.log('conviene: da '+tutte[1][0]+' a '+tutte[1][1])
-		currentMove.posizioneCorrente = tutte[1][0];
-		currentMove.posizioneFinale = tutte[1][1];
-	} else {
+
 
 		//besaz AI
 		var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
@@ -475,8 +470,8 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 
 
 					var byDate = sit.slice(0);
-
-					if(statoCorrente.avversario<20 || statoCorrente.avversario>38) {
+  					var byDue = byDate;
+					if(statoCorrente.avversario>10) {
 
 
 
@@ -514,12 +509,12 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 						});
 					} else byDue = byDate;
 
-					console.log('ordino per pedine che attacco')
-					byDate = byDue.slice(0);
+
 
 					}
 
-
+					console.log('ordino per pedine che attacco')
+					byDate = byDue.slice(0);
 					byDate.sort(function(a,b) {
 				    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
 					});
@@ -564,10 +559,6 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 			}
 
 
-
-
-
-	}
 }
 function provaleTutte(arrayMosse,partita,attack,enemyattack) {
 	var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
