@@ -10,7 +10,7 @@ function changeGridDim() {
 	if ($(window).width() > $(window).height()) {
 		$('body').addClass('landscape');
 		$('body').removeClass('portrait');
-		
+
 	}
 	else {
 		$('body').removeClass('landscape');
@@ -19,26 +19,7 @@ function changeGridDim() {
 }
 $(function() {
 var sortedChart = [];
-	$.getJSON( "./example.json", function( data ) {
-	  var items = [];
-	  var tv = data.chart;
-	  var datasorted = tv.sort(function (a, b) {
-				    a = parseInt(a.score, 10);
-				    b = parseInt(b.score, 10);
-				    return a > b ? -1 : a < b ? 1 : 0;
-				});
-	  sortedChart = datasorted;
-	  $.each( data.chart, function( key ) {
 
-	    items.push( "<li class='chartitem'><span class='userid'>" + data.chart[key].name + "</span><span class='chartPoints'>" + data.chart[key].score + "</span></li>" );
-	  });
-
-	  $( "<ol/>", {
-	    "class": "my-new-list",
-	    html: items.join( "" )
-	  }).appendTo( "#chartview" );
-	  	
-	});
 	var changeviewporttimer;
 	checkorientaitonchange();
 	var rowTiles;
@@ -51,7 +32,7 @@ var sortedChart = [];
 		$('body').addClass('desktop');
 		clickType = 'click';
 		rowTiles = 20;
-	} 
+	}
 	var pixelDimension = 100/rowTiles+'%';
 	var grid;
 	var timer;
@@ -60,7 +41,7 @@ var sortedChart = [];
 	var endx = rowTiles-1;
 	var endy = Math.floor(rowTiles/2);
 	var level = 1;
-	var points = 0; 
+	var points = 0;
 	var lifebonus = 0;
 	var loopCeck = ['nothing','none','none','none','none'];
 	var timealmostdone;
@@ -68,12 +49,12 @@ var sortedChart = [];
 	var startingclickcounter = 9;
 	var clickcounter = startingclickcounter;
 	var invulnerable = false;
-	var invulnerableNr = 0; 
+	var invulnerableNr = 0;
 	var evilclickable = false;
-	var evilclickableNr = 0; 
+	var evilclickableNr = 0;
 	var turnLeft = false;
 	var turnLeftNr = 0;
-	var fuckSkullsNr = 0; 
+	var fuckSkullsNr = 0;
 	var skullstofree = false;
 	var skullstofreeNr = 0;
 	var teleport = false;
@@ -85,8 +66,8 @@ var sortedChart = [];
 	$('#clickleftcounter').html(clickcounter+1);
 	$('.power').addClass('disabled');
 	function invertDirection() {
-		if (turnLeft) { 
-			turnLeft = false; 
+		if (turnLeft) {
+			turnLeft = false;
 			//$('.dinrobot').removeClass('spinrev')
 		}
 		else  {
@@ -136,7 +117,7 @@ var sortedChart = [];
 			$(this).html('disable animations');
 			animations = true;
 		}
-	});	
+	});
 
 
 	$( "#start" ).click(function() {
@@ -157,14 +138,14 @@ var sortedChart = [];
 		calulatedH = $(window).height()-16;
 		$('#infocontent').css({
 			height: calulatedH
-		}); 
+		});
 		$('body').toggleClass('infodisplayed');
 		$('body').removeClass('chartdisplayed');
-	});	
+	});
 	$( ".chart" ).on( "click", function() {
 			if(animations) $(this).addClass('magictimeslow magic');
 			else $('body').removeClass(' chartdisplayed');
-	});		
+	});
     $('.showchart').on('click', function(event) {
     		ga('send', 'event', 'click', 'classifica');
     		$('body').addClass('chartdisplayed');
@@ -197,7 +178,7 @@ var sortedChart = [];
 		$('body').removeClass('infodisplayed');
 		var playername = $('#namePlayer').val();
 		if(playername=='') playername = "anonymous";
-		sortedChart[sortedChart.length-1] = {"name": playername,"score": points};     
+		sortedChart[sortedChart.length-1] = {"name": playername,"score": points};
 		$.ajax({
             type: "POST",
             datatype: "json",
@@ -213,7 +194,7 @@ var sortedChart = [];
             checkorientaitonchange();
         }, 1000);
 	});
-	$( "#bonuslife" ).on( "click", function() {	
+	$( "#bonuslife" ).on( "click", function() {
 			grid[gridPos(robot.position)[0]][gridPos(robot.position)[1]] = 'free';
 			loopCeck = ['nothing','none','none','none','none'];
 			$('#bonusleftcounter').html(lifebonus);
@@ -225,7 +206,7 @@ var sortedChart = [];
 			$('body').removeClass('infodisplayed');
 			changeGridDim();
 			if(clickcounter<=10) clickcounter=10;
-			$('#clickleftcounter').html(clickcounter+1); 
+			$('#clickleftcounter').html(clickcounter+1);
 			$('body').addClass('gaming');
 			$('body').removeClass('gameover');
 			turnLeft = false;
@@ -235,7 +216,7 @@ var sortedChart = [];
 				    direction : "right",
 				    stall       :  0
 					};
-				grid[0][5] = 'free';	
+				grid[0][5] = 'free';
 				grid[1][5] = 'free';
 				grid[0][9] = 'free';
 				grid[0][4] = 'wall';
@@ -293,13 +274,13 @@ var sortedChart = [];
 				$('#power5').addClass('disabled');
 				fuckSkullsNr = 0;
 				$('#power2 span').html('');
-				$('#power2').addClass('disabled');		
+				$('#power2').addClass('disabled');
 				skullstofreeNr = 0;
 				$('#power6 span').html('');
 				$('#power6').addClass('disabled');
 				teleportNr = 0;
 				$('#power3 span').html('');
-				$('#power3').addClass('disabled');			
+				$('#power3').addClass('disabled');
 				robot = {
 				    position : null,
 				    direction : "right",
@@ -412,10 +393,10 @@ var sortedChart = [];
 				if(skullstofreeNr>=1) $('#power6').removeClass('disabled');
 				if(skullstofreeNr!=0) $('#power6 span').html(skullstofreeNr);
 				if(evilclickableNr>=1) $('#power4').removeClass('disabled');
-				if(evilclickableNr!=0) $('#power4 span').html(evilclickableNr);	
-				if(teleportNr!=0) $('#power3').removeClass('disabled');	
+				if(evilclickableNr!=0) $('#power4 span').html(evilclickableNr);
+				if(teleportNr!=0) $('#power3').removeClass('disabled');
 			}, 2000);
-				
+
 				teleport = false;
 			}
 			else {
@@ -444,7 +425,7 @@ var sortedChart = [];
 					$('.clickcounter').show();
 					$('.clickcounter').html(donecounter);
 					$('.clickcounter').fadeOut();
-				}, 1000);	
+				}, 1000);
 				 almostdone =  setInterval(function() {
 					$('.clickcounter').hide();
 					$('body').removeClass('gaming');
@@ -490,7 +471,7 @@ var sortedChart = [];
 				//setTimeout(function() {
 			 	drawGridLight(position,positions[0],positions[1]);
 				//}, 300);
-				
+
 			}
 			else if(grid[positions[0]][positions[1]] == 'evil'){
 				grid[positions[0]][positions[1]] = 'free';
@@ -599,8 +580,8 @@ var sortedChart = [];
 					if(count==0) {
 						clearInterval(countertimer);
 						$('#power1 span').html(curHTML);
-					} 
-		
+					}
+
 				}, 1000);
 			setTimeout(function() {
 				$( "#power1" ).removeClass('active')
@@ -618,7 +599,7 @@ var sortedChart = [];
 		if(turnLeftNr>=1) {
 			turnLeftNr--;
 			if(turnLeftNr==0) $('#power5').addClass('disabled');
-			if(turnLeftNr!=0) $('#power5 span').html(turnLeftNr); else $('#power5 span').html('');			
+			if(turnLeftNr!=0) $('#power5 span').html(turnLeftNr); else $('#power5 span').html('');
 			robot.direction = getNewDirection('down',robot.direction);
 			invertDirection();
 			$('#power5').addClass('disabled');
@@ -635,7 +616,7 @@ var sortedChart = [];
 		if(fuckSkullsNr>=1) {
 			fuckSkullsNr--;
 			if(fuckSkullsNr==0) $('#power2').addClass('disabled');
-			if(fuckSkullsNr!=0) $('#power2 span').html(fuckSkullsNr); else $('#power2 span').html('');			
+			if(fuckSkullsNr!=0) $('#power2 span').html(fuckSkullsNr); else $('#power2 span').html('');
 
 			for(var ki=0;ki<rowTiles;ki++) {
 			for(var k=0;k<rowTiles;k++) {
@@ -662,7 +643,7 @@ var sortedChart = [];
 				if(skullstofreeNr>=1) $('#power6').removeClass('disabled');
 				if(skullstofreeNr!=0) $('#power6 span').html(skullstofreeNr);
 				if(evilclickableNr>=1) $('#power4').removeClass('disabled');
-				if(evilclickableNr!=0) $('#power4 span').html(evilclickableNr);	
+				if(evilclickableNr!=0) $('#power4 span').html(evilclickableNr);
 				if(teleportNr==0) $(this).addClass('disabled');
 				startWalking();
 			}
@@ -673,7 +654,7 @@ var sortedChart = [];
 				$('#grid').removeClass('stall');
 			  	teleportNr--;
 				teleport = true;
-				if(teleportNr!=0) $('#power3 span').html(teleportNr); else $('#power3 span').html('');		
+				if(teleportNr!=0) $('#power3 span').html(teleportNr); else $('#power3 span').html('');
 				clearInterval(timer);
 			}
 		} else {
@@ -686,13 +667,13 @@ var sortedChart = [];
 		if(skullstofreeNr>=1) {
 			skullstofreeNr--;
 			$('#power6').addClass('disabled');
-			if(skullstofreeNr!=0) $('#power6 span').html(skullstofreeNr); else $('#power6 span').html('');			
+			if(skullstofreeNr!=0) $('#power6 span').html(skullstofreeNr); else $('#power6 span').html('');
 			clearInterval(timer);
 			var currentPos = gridPos(robot.position)
 			$('#power6').addClass('disabled');
 				if((gridPos(robot.position)[1]) < rowTiles-1) {
 					if(grid[gridPos(robot.position)[0]][gridPos(robot.position)[1]+1] != 'end') grid[gridPos(robot.position)[0]][gridPos(robot.position)[1]+1] = 'free';
-				} 
+				}
 				if((gridPos(robot.position)[1]) > 0) {
 					if(grid[gridPos(robot.position)[0]][gridPos(robot.position)[1]-1] != 'end') grid[gridPos(robot.position)[0]][gridPos(robot.position)[1]-1] = 'free';
 				}
@@ -702,17 +683,17 @@ var sortedChart = [];
 				if((gridPos(robot.position)[0]) > 0) {
 					if(grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]] != 'end') grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]] = 'free';
 				}
-				
+
 			setTimeout(function() {
 					startWalking();
 				}, 4500);
 			setTimeout(function() {
-					drawGrid();		
+					drawGrid();
 			}, 1000);
 			setTimeout(function() {
 				if(((gridPos(robot.position)[1]) < rowTiles-1) && ((gridPos(robot.position)[0]) < rowTiles-1)) {
 					if(grid[gridPos(robot.position)[0]+1][gridPos(robot.position)[1]+1] != 'end') grid[gridPos(robot.position)[0]+1][gridPos(robot.position)[1]+1] = 'free';
-				} 
+				}
 				if(((gridPos(robot.position)[1]) > 0) && ((gridPos(robot.position)[0]) > 0)) {
 					if(grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]-1] != 'end') grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]-1] = 'free';
 				}
@@ -721,8 +702,8 @@ var sortedChart = [];
 				}
 				if(((gridPos(robot.position)[0]) > 0) && ((gridPos(robot.position)[1]) < rowTiles-1)) {
 					if(grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]+1] != 'end') grid[gridPos(robot.position)[0]-1][gridPos(robot.position)[1]+1] = 'free';
-				}				
-					drawGrid();		
+				}
+					drawGrid();
 			}, 2000);
 			setTimeout(function() {
 					if(skullstofreeNr!=0) $('#power6').removeClass('disabled');
@@ -733,7 +714,7 @@ var sortedChart = [];
 			notificate('lurido imbroglione!');
 		}
 
-	});	
+	});
 	$( "#power4" ).on( clickType, function() {
 		if(evilclickableNr>=1) {
 			$(this).addClass('active');
@@ -751,8 +732,8 @@ var sortedChart = [];
 					if(count==0) {
 						clearInterval(countertimer);
 						$('#power4 span').html(curHTML);
-					} 
-		
+					}
+
 				}, 1000);
 			setTimeout(function() {
 				$( "#power4" ).removeClass('active')
@@ -790,7 +771,7 @@ var sortedChart = [];
 			    "class": "my-new-list",
 			    html: items.join( "" )
 			  }); $( "#chartview" ).html(myol);
-			  	
+
 			});
 	}
 	function notificate(text) {
@@ -804,7 +785,7 @@ var sortedChart = [];
 		$('.clickcounter').html(text);
 		$('.clickcounter').show();
 		$('.clickcounter').fadeOut();
-	}	
+	}
 	function updatePoints() {
 		if(points<=0) points = 0;
 		$('#pointscounter').html(points);
@@ -831,15 +812,15 @@ var sortedChart = [];
 				else if(grid[a][b]=='wall') {optimize.attr('class', 'pixel');}
 				else if(grid[a][b]=='evil') {optimize.attr('class', 'pixel evil');}
 				else optimize.attr('class', 'pixel free');
-	}	
+	}
 	function drawRobot() {
 		var tr = $('.pixel').eq(robot.position);
 
-		 if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {  
+		 if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1) {
 		   $('.dinrobot').css('transform', 'translate('+tr.position().left+'px,'+tr.position().top+'px)');
 		   $('.dinrobot').css('transition-duration', '200ms');
 		} else $('.dinrobot').css('-webkit-transform', 'translate3d('+tr.position().left+'px,'+tr.position().top+'px,0)');
-	
+
 
 		if(!turnLeft) $('.dinrobot').attr('id', ''+robot.direction+'');
 		else $('.dinrobot').attr('id', ''+getNewDirection('down',robot.direction)+'');
@@ -869,7 +850,7 @@ var sortedChart = [];
 		});
 	}
 	function moveindirection(direzione) {
-			
+
 			if(direzione=='left') {
 				moveLeft();
 			}
@@ -895,15 +876,15 @@ var sortedChart = [];
 			}
 			else if(checkRelative('up')[0]) {
 				moveindirection(checkRelative('up')[1]);
-				
+
 			}
 			else if(checkRelative('right')[0]) {
 				moveindirection(checkRelative('right')[1]);
-			
+
 			}
 			else if(checkRelative('down')[0]) {
 				moveindirection(checkRelative('down')[1]);
-			
+
 			}
 			else {robot.stall++;};
 		} else {
@@ -915,21 +896,21 @@ var sortedChart = [];
 			}
 			else if(checkRelative('up')[0]) {
 				moveindirection(checkRelative('up')[1]);
-				
+
 			}
 			else if(checkRelative('left')[0]) {
 				moveindirection(checkRelative('left')[1]);
-			
+
 			}
 			else if(checkRelative('down')[0]) {
 				moveindirection(checkRelative('down')[1]);
-			
+
 			}
 			else {robot.stall++;};
 		}
 
 
-		//winning code  
+		//winning code
 		if(gridPos(robot.position)[0]==endx && gridPos(robot.position)[1]==endy) {
 			clearInterval(timer);
 			$('body').removeClass('infodisplayed');
@@ -950,15 +931,15 @@ var sortedChart = [];
 					ceckchart();
 					$('.loosecontrols').removeClass('noclick');
 		        }, 2000);
-				
+
 			}
 			else {
 				$('.cleared').html('level '+level+' cleared');
 				$('body').addClass('win');
 				$('body').removeClass('gaming');
-			}		
+			}
 		}
-		//winning code 
+		//winning code
 
 	}
 
@@ -979,7 +960,7 @@ var sortedChart = [];
 		if(newDirection=='right') {
 			return [checkRight(),newDirection];
 		}
-	}	
+	}
 	function checkRight(){
 		var currPos = gridPos(robot.position);
 		if(currPos[0] == rowTiles-1 ) { return false; }
@@ -1014,7 +995,7 @@ var sortedChart = [];
 		else {
 			var nextPos = gridPos(robot.position);
 			if(grid[nextPos[0]][nextPos[1]+1]=='free') return true;
-			else if(grid[nextPos[0]][nextPos[1]+1]=='wall') return false;			
+			else if(grid[nextPos[0]][nextPos[1]+1]=='wall') return false;
 			else if(grid[nextPos[0]][nextPos[1]+1]=='hardwall') return false;
 			else return true;
 		}
@@ -1109,7 +1090,7 @@ var sortedChart = [];
 			else if(newPower==4) {evilclickableNr++; $('#power4 span').html(evilclickableNr)}
 			else if(newPower==6) {skullstofreeNr++; $('#power6 span').html(skullstofreeNr)}
 			drawGridLight(robot.position,curpositions[0],curpositions[1]);
-		} 
+		}
 	}
 	function checkEvil(value) {
 		if(value=='evil') {
@@ -1131,7 +1112,7 @@ var sortedChart = [];
 			 $('body').removeClass('gaming');
 			clearInterval(almostdone);
 			clearInterval(timealmostdone);
-			
+
 
 		}
 	}
@@ -1150,7 +1131,7 @@ var sortedChart = [];
 		return pass;
 	}
 
-	function populateGrid() {	
+	function populateGrid() {
 			startx = 0;
 			starty = 5;
 			grid = new Array(rowTiles);
@@ -1164,7 +1145,7 @@ var sortedChart = [];
 					else
 					grid[ki][k] = 'wall';
 				}
-			}	
+			}
 			grid[0][rowTiles-1] = 'free';
 			grid[1][4] = 'wall';
 			grid[1][6] = 'wall';
@@ -1200,11 +1181,11 @@ var sortedChart = [];
 				}
 				if(spaceforhardwalls.length > 0) {
 					var randomfree = Math.floor(Math.random()*(spaceforhardwalls.length-0)+0);
-					grid[spaceforhardwalls[randomfree][0]][spaceforhardwalls[randomfree][1]] = 'hardwall';	
+					grid[spaceforhardwalls[randomfree][0]][spaceforhardwalls[randomfree][1]] = 'hardwall';
 				}
 			};
 			addBonus(false);
-			
+
 	}
 	function addBonus(random) {
 			var freecels = [];
@@ -1217,12 +1198,12 @@ var sortedChart = [];
 			}
 			if(freecels.length > 1 ) {
 				var randomfree = Math.floor(Math.random()*(freecels.length-0)+0);
-				if( level%4 == 0 || level == 1 || random) grid[freecels[randomfree][0]][freecels[randomfree][1]] = 'bonus';	
+				if( level%4 == 0 || level == 1 || random) grid[freecels[randomfree][0]][freecels[randomfree][1]] = 'bonus';
 			}
 
 			else {
 				 lastmove = true;
-			} 
+			}
 	}
 });
 function getNewDirection(tocheck,dir) {
@@ -1251,7 +1232,7 @@ function getNewDirection(tocheck,dir) {
 		if(dir.indexOf('up')!=-1) return 'down';
 	}
 }
-function detectmob() { 
+function detectmob() {
  if( navigator.userAgent.match(/Android/i)
  || navigator.userAgent.match(/webOS/i)
  || navigator.userAgent.match(/iPhone/i)
