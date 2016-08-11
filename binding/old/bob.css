@@ -1,0 +1,36 @@
+body {
+	margin:0;
+	overflow:hidden;
+}
+#debug {
+	font-size:-webkit-xxx-large;
+	text-align:center;
+}
+
+.hidden1 {
+	background-image: url("./heror.png");
+}
+.hidden2 {
+	background-image: url("./herol.png");
+}
+.hidden3 {
+	background-image: url("./herou.png");
+}
+.hidden4 {
+	background-image: url("./herod.png");
+}
+.hidden5 {
+	background-image: url("./herour.png");
+}
+.hidden6 {
+	background-image: url("./herodr.png");
+}
+.hidden7 {
+	background-image: url("./heroul.png");
+}
+.hidden8 {
+	background-image: url("./herodl.png");
+}
+#canvasContainer {
+	text-align:center;
+}
