@@ -1,0 +1,111 @@
+
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type="text/javascript" src="./jsrobot.js"></script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+</script>
+  <link rel="stylesheet" type="text/css" href="./jsrobot.css">
+  <link rel="stylesheet" type="text/css" href="./effects.css">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Skeletrons</title>
+</head>
+<body>
+<div class="info"></div>
+<div id="infocontent">
+    <div class="animatetitle">www.skeletrons.com</h1>
+</div>
+   <table class="powerupsinfo">
+    Reach the right side, tap EVERYWHERE to create a block or to erase it, blocks are counted!
+    <tr>
+      <td class="infopower infopowerskeletron"></td>
+      <td class="infotext">Don't go through it, you will die.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopowerhardwall"></td>
+      <td class="infotext">Indelible blocks.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower5"></td>
+      <td class="infotext">The ball will immediately change its direction. Every level starts with the 'right' way.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower1"></td>
+      <td class="infotext">Tap the dark blocks to erase them, 5 seconds duration.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower2"></td>
+      <td class="infotext">Lock skeletons into untappable blue blocks.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower3"></td>
+      <td class="infotext">Tap a cell to teleport there...you better do it next to something!</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower4"></td>
+      <td class="infotext">Tap the skeletrons to erase them, 5 seconds duration.</td>
+    </tr>
+    <tr>
+      <td class="infopower infopower6"></td>
+      <td class="infotext">Create some free space all around the ball, beware: loops!</td>
+    </tr>
+    <tr>
+      <td class="infopower infobonus"></td>
+      <td class="infotext">Get it with the ball, gives you an extra random power. Don't tap it</td>
+    </tr>
+  </table>
+   Tips: While looping, the ball changes direction. Erasing blocks is often the easiest way, but look at the score! One extra life every 5 levels.
+   <div class="chartcontainer">
+    <input type="button" class="showchart" value="WORLD RANKING"/>
+   </div>
+
+   Something wrong? <a href="mailto:bisata@gmail.com">Email Me</a>
+   <div id="animations">disable animations</div>
+
+  <div class="advise">
+
+   <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img style="height:15px; margin: 5px;" alt="Licenza Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/InteractiveResource" property="dct:title" rel="dct:type">Skeletrons.com</span> di<a xmlns:cc="http://creativecommons.org/ns#" href="http://www.skeletrons.com" property="cc:attributionName" rel="cc:attributionURL"> davide biasutto</a> &egrave; distribuito con Licenza <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">Creative Commons Attribuzione - Non commerciale - Non opere derivate 4.0 Internazionale</a>.
+  </div>
+</div>
+<div class="controls">
+	<div  id="start">start</div>
+</div>
+<div class="loosecontrols">
+  <div id="finishgame">You win!</div>
+  <div id="bonuslife">retry level x<span></span><div>or</div></div>
+  <div id="reload">restart</div>
+</div>
+<div class="chart">
+  -World Ranking-
+  <div id="chartview"></div>
+</div>
+<div class="newentry">
+  Your Name
+  <input type="text" id="namePlayer" placeholder="name" maxlength="10"/>
+  <input type="button" id="updateJson" value="ok"/>
+</div>
+<div  id="winning"><div class="cleared"></div>next level</div>
+<div class="clickcounter"></div>
+<div id="grid"></div>
+<div id="banners">
+  <div class="dataDisplayed">
+    level <span id="levelcounter">1</span>  blocks <span id="clickleftcounter"></span> lives <span id="bonusleftcounter">0</span> score <span id="pointscounter">0</span>
+  </div>
+  <div id="powers">
+    <div class="power" id="power5"><span></span></div>
+    <div class="power" id="power1"><span></span></div>
+    <div class="power" id="power2"><span></span></div>
+    <div class="power" id="power3"><span></span></div>
+    <div class="power" id="power4"><span></span></div>
+    <div class="power" id="power6"><span></span></div>
+  </div>
+</div>
+</body>
+</html>
