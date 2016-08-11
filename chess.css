@@ -28,6 +28,17 @@ body {
 .scacchiera {
     display:inline-block;
 }
+.disabled {
+    pointer-events:none;
+    opacity:0.5;
+}
+#prima {
+    border-radius: 50% 0 0 50%;
+}
+#dopo {
+    border-radius: 0 50% 50% 0;
+}
+
 .casella {
 	background-color:gainsboro;
 	width:12.5%;
@@ -55,6 +66,14 @@ body {
 .scacco {border: 1px solid red !important;}
 .highlight.highlight3  {background-color: red !important;}
 
+.controllo {
+    padding:10px;
+}
+.controllo input {
+    padding: 20px;
+    -webkit-appearance: none;
+    border: none;
+}
 
 .pedonebianco {background-image: url('./imgs/pedonebianco.png');}
 .pedonenero {background-image: url('./imgs/pedonenero.png');}

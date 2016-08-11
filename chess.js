@@ -1,21 +1,22 @@
-var currentMove = {};
-
+//scachcidibesaz
 //single-auto-steps//
 var mode = 'single';
 var auto;
 var turno;
 var steps;
+var currentMove = {};
 $( document ).ready(function() {
+
 	var body = document.documentElement;
-if (body.requestFullscreen) {
-body.requestFullscreen();
-} else if (body.webkitrequestFullscreen) {
-body.webkitrequestFullscreen();
-} else if (body.mozrequestFullscreen) {
-body.mozrequestFullscreen();
-} else if (body.msrequestFullscreen) {
-body.msrequestFullscreen();
-}
+	if (body.requestFullscreen) {
+	body.requestFullscreen();
+	} else if (body.webkitrequestFullscreen) {
+	body.webkitrequestFullscreen();
+	} else if (body.mozrequestFullscreen) {
+	body.mozrequestFullscreen();
+	} else if (body.msrequestFullscreen) {
+	body.msrequestFullscreen();
+	}
 	var isMobile = detectmob();
 	var click = isMobile ? 'touchstart' : 'click';
 	if(mode=='single') {
@@ -42,43 +43,105 @@ body.msrequestFullscreen();
 	  checkWindow();
 	});
 	var partita  = {};
+	//localStorage.setItem('partita', JSON.stringify(partita);
 	creaScacchiera(partita);
 	disegnaScacchiera(partita);
 	if(mode!='steps') {
 		$( "body" ).on( click,'.scacchiera div[class*="bianco"]', function() {
-		  $('div').removeClass('highlight')
-		  var a  = possibilita($( this ).attr('class'),$( this ).prevAll().length,partita);
-		  var b  = possibilitaDiMangiare($( this ).attr('class'),$( this ).prevAll().length,partita);
-		  if(a.length>0) {
-		  	$( ".scacchiera" ).addClass('ricezione');
-		  	currentMove.posizioneCorrente = $( this ).prevAll().length;
-		  }
-		  for (var i = a.length - 1; i >= 0; i--) {
-		  	$('.casella').eq(a[i]).addClass('highlight')
-		  };
-		  for (var i = b.length - 1; i >= 0; i--) {
-		  	//$('.casella').eq(b[i]).addClass('highlight2')
-		  };
-		  $('.scacchieraTemp').remove();
-		  for (var i = a.length - 1; i >= 0; i--) {
-		  	  simulazione = JSON.parse(JSON.stringify(partita));
-			  simulaMuovi(simulazione,currentMove.posizioneCorrente,a[i])
 
-			  if(controllaScacco(simulazione,'nero')) {
-			  	// $('.scacchieraTemp').last().addClass('scacco')
-			  	 $('.casella').eq(a[i]).removeClass('highlight')
+
+		  if($('.scacchiera').hasClass('mossaAi')) {
+
+		  } else {
+			  $('div').removeClass('highlight')
+			  var a  = possibilita($( this ).attr('class'),$( this ).prevAll().length,partita);
+			  var b  = possibilitaDiMangiare($( this ).attr('class'),$( this ).prevAll().length,partita);
+			  if(a.length>0) {
+			  	$( ".scacchiera" ).addClass('ricezione');
+			  	currentMove.posizioneCorrente = $( this ).prevAll().length;
 			  }
-		  };
-		  //$('.scacchieraTemp').remove();
+			  for (var i = a.length - 1; i >= 0; i--) {
+			  	$('.casella').eq(a[i]).addClass('highlight')
+			  };
+			  for (var i = b.length - 1; i >= 0; i--) {
+			  	//$('.casella').eq(b[i]).addClass('highlight2')
+			  };
+			  $('.scacchieraTemp').remove();
+			  for (var i = a.length - 1; i >= 0; i--) {
+			  	  simulazione = JSON.parse(JSON.stringify(partita));
+				  simulaMuovi(simulazione,currentMove.posizioneCorrente,a[i])
+				  if(controllaScacco(simulazione,'nero')) {
+				  	 $('.casella').eq(a[i]).removeClass('highlight')
+				  }
+			  };
+			}
 		});
 		$( "body" ).on( click,'.scacchiera.ricezione div[class*="highlight"]', function() {
 			$( ".scacchiera" ).removeClass('ricezione');
+			$('#prima').removeClass('disabled');
+			$('.scacchiera').addClass('mossaAi')
 		  	$('div').removeClass('highlight');
 		  	currentMove.posizioneFinale = $( this ).prevAll().length;
-		  	muovi(partita);
-		  	//var scacco = controllaScacco(partita,'bianco')
+			muovi(partita);
+		  	setTimeout(function(){
+		  		muoviI(partita);
+		  		$('.scacchiera').removeClass('mossaAi')
+		  		var retrievedObject = localStorage.getItem('mosse');
+				var mosse;
+				if(retrievedObject != null) {
+					mosse = JSON.parse(retrievedObject);
+				}
+				if(historyCounter==1) {
+		  			mosse.push(partita);
+		  		} else {
+		  			$('#dopo').attr('class', 'disabled');
+		  			mosse.splice(((mosse.length+1)-historyCounter),10000000)
+		  			mosse.push(partita);
+		  			historyCounter=1;
+		  		}
 
-		  	setTimeout(function(){  muoviI(partita); }, 500);
+		  		localStorage.setItem('mosse', JSON.stringify(mosse));
+		    }, 500);
+		});
+		var historyCounter = 1;
+		$('#prima').attr('class', 'disabled');
+		$('#dopo').attr('class', 'disabled');
+		$( "body" ).on( click,'#prima', function() {
+			$('#dopo').removeClass('disabled');
+			var retrievedObject = localStorage.getItem('mosse');
+			if(retrievedObject != null) {
+				partita = JSON.parse(retrievedObject);
+
+				if(historyCounter==partita.length-1) {
+					$('#prima').attr('class', 'disabled');
+				} else {
+					$('#prima').removeClass('disabled');
+				}
+				console.log('vado al:'+(partita.length-1-historyCounter))
+				partita = partita[partita.length-1-historyCounter]
+				historyCounter++;
+			}
+
+			disegnaScacchiera(partita)
+
+		});
+		$( "body" ).on( click,'#dopo', function() {
+			$('#prima').removeClass('disabled');
+			var retrievedObject = localStorage.getItem('mosse');
+			if(retrievedObject != null) {
+				partita = JSON.parse(retrievedObject);
+
+				if(historyCounter==2) {
+					$('#dopo').attr('class', 'disabled');
+				} else {
+					$('#dopo').removeClass('disabled');
+				}
+				partita = partita[partita.length+1-historyCounter]
+				historyCounter--;
+			}
+
+			disegnaScacchiera(partita)
+
 		});
 	}
 	if(steps || true) {
@@ -557,6 +620,12 @@ function creaScacchiera(partita) {
     		partita.caselle.push({colore:'no',occupata:'no'})
     	};
 	};
+	if(mode=='single') {
+		$('body').append("<div class='controllo'></div>");
+		$('.controllo').append("<input type='button' id='prima' value='<''></input>");
+		$('.controllo').append("<input type='button' id='dopo' value='>''></input>");
+	}
+	localStorage.setItem('mosse', JSON.stringify([partita]));
 }
 function disegnaScacchiera(partita) {
 	$('.scacchiera').html('');
