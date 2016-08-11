@@ -1,7 +1,6 @@
 $( document ).ready(function() {
   	changeGridDim();
-  	ga('create', 'UA-56086246-1', 'auto');
-  	ga('send', 'pageview');
+
 });
 $(window).on("orientationchange",function(){
   		changeGridDim();
@@ -147,7 +146,7 @@ var sortedChart = [];
 			else $('body').removeClass(' chartdisplayed');
 	});
     $('.showchart').on('click', function(event) {
-    		ga('send', 'event', 'click', 'classifica');
+
     		$('body').addClass('chartdisplayed');
     		$( ".chart" ).removeClass('magictimeslow magic')
     		readJson();
@@ -293,7 +292,7 @@ var sortedChart = [];
 			}
 	});
 	$( "#winning" ).on( "click", function() {
-			ga('send', 'event', 'click', 'winnning');
+
 			turnLeft = false;
 			//$('.dinrobot').removeClass('spinrev');
 			loopCeck = ['nothing','none','none','none','none'];
