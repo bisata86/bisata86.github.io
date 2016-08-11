@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="./jsrobot.css">
+		<link rel="stylesheet" type="text/css" href="./layout.css">
+		  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=0"/>
+	  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	  <meta http-equiv="Pragma" content=" no-cache" />
+	  <meta http-equiv="Expires" content="0" />
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script src="./SwipeUpDown.js"></script>
+		<script src="./GUI.js"></script>
+		<script type="text/javascript">
+			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+			ga('create', 'UA-56086246-1', 'auto');
+	    	ga('send', 'pageview');
+		</script>
+		<title>Skeletrons Colors</title>
+	</head>
+	<body>
+		<div class="clickcounter"></div>
+		<div id="waiting">
+			<div>Waiting for Players</div>
+			<button class="back">Back</button>
+			<div class="boxLoading"></div>
+		</div>
+		<div id="mp_home">
+			<div id="game_id">
+				<button class="back">Back</button>
+				<div class="code"></div>
+				<div class="boxLoading"></div>
+			</div>
+			<div id="game_join">
+
+				<div class="error"></div>
+				<input type="number" id="join_id"/><br/>
+				<button id="submit_join">Join Game</button>
+				<button class="back">Back</button>
+			</div>
+			<div id="game_intro">
+				<button id="create_game">Create Game</button><br/>
+				<button id="join_game">Join Game</button>
+				<button id="join_random">Join Random Game</button>
+				<button class="back" onclick="location.href='./index.html'">Back</button>
+			</div>
+
+		</div>
+		<div id="grid"></div>
+		<div id="banners">
+			<div class="datadisplayed">
+			<span id="timer"></span>
+		    <span style="float: left;width:30%;"><span id="P1Name">P1:</span><span id="P1Counter">1</span></span>
+		    	<span class="indicatorContainer"><span class="indicator"></span></span>
+		       <span style="float:right;width:30%;"><span id="P2Name">P2:</span><span id="P2Counter">1</span></span>
+		       <div style="clear:both;"></div>
+		    </div>
+			<div id="powers">
+				<div class="power" id="blue"><span></span></div>
+				<div class="power" id="red"><span></span></div>
+				<div class="power" id="green"><span></span></div>
+				<div class="power" id="yellow"><span></span></div>
+				<div class="power" id="orange"><span></span></div>
+				<div class="power" id="violet"><span></span></div>
+			</div>
+		</div>
+	</body>
+</html>
