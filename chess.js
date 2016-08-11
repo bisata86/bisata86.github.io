@@ -459,7 +459,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 				return a.avversario - b.avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
-			//console.log('mangio la pedina scoperta con più valore')
+			console.log('mangio la pedina scoperta con più valore')
 			currentMove.posizioneCorrente = sit[byDate[0]].lamossa[0];
 			currentMove.posizioneFinale = sit[byDate[0]].lamossa[1];
 		}
@@ -467,6 +467,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 
 
 					var byDate = sit.slice(0);
+					console.log('ordino per pedine sotto attacco')
 					byDate.sort(function(a,b) {
 					    return a.totaleAttaccate - b.totaleAttaccate;
 					});
@@ -475,33 +476,71 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 					});
 					var byDue = [];
 					if(byDate.length>0) {
+						console.log('rimuovo per pedine sotto attacco')
 						$.each(byDate, function(index, val) {
 							 if(val.totaleAttaccate==byDate[0].totaleAttaccate) {
 							 	//console.log(index)
 							 	byDue.push(val)
 							 }
 						});
+					} else byDue = byDate;
 
-
-						if(statoCorrente.avversario<=20 || true) {
+						if(statoCorrente.avversario<=20) {
+							console.log('ordino per pedine che attacco')
 							byDate = byDue.slice(0);
 							byDate.sort(function(a,b) {
 						    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
 							});
-							console.log('muovo per attaccare');
+							var byDue = [];
+							if(byDate.length>0) {
+								console.log('rimuovo  per pedine che attacco')
+								$.each(byDate, function(index, val) {
+									 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
+									 	byDue.push(val)
+									 }
+								});
+							} else byDue = byDate;
+							byDate = byDue;
+							//console.log('muovo per attaccare');
 						} else {
+							console.log('ordino per pedine scoperte')
 							byDate = byDue.slice(0);
 							byDate.sort(function(a,b) {
 						    return a.pedineScoperte.length - b.pedineScoperte.length;
 							});
-							console.log('muovo per proteggere');
+							//console.log('muovo per proteggere');
+							var byDue = [];
+							if(byDate.length>0) {
+								console.log('rimuovo  per pedine scoperte')
+								$.each(byDate, function(index, val) {
+									 if(val.pedineScoperte.length==byDate[0].pedineScoperte.length) {
+									 	byDue.push(val)
+									 }
+								});
+							} else byDue = byDate;
+							byDate = byDue;
 						}
-					}
-					$.each(byDate, function(index, val) {
-						 	console.log(val)
-					});
-					currentMove.posizioneCorrente = byDate[0].lamossa[0];
-					currentMove.posizioneFinale = byDate[0].lamossa[1];
+
+						$.each(byDate, function(index, val) {
+							 	console.log(val)
+						});
+
+						// var byDue = [];
+						// if(byDate.length>0) {
+						// 	console.log('una a caso')
+						// 	$.each(byDate, function(index, val) {
+						// 		 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
+						// 		 	byDue.push(val)
+						// 		 }
+						// 	});
+						// } else byDue = byDate;
+						// byDate = byDue;
+
+
+
+
+						currentMove.posizioneCorrente = byDate[0].lamossa[0];
+						currentMove.posizioneFinale = byDate[0].lamossa[1];
 
 
 					// var randomInt = getRandomInt(0,arrayMosse.length-1);
