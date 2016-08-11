@@ -540,8 +540,8 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 						var randomInt = getRandomInt(0,byDate.length-1)
 						var mossaRandom = byDate[randomInt]
 
-						currentMove.posizioneCorrente = mossaRandom.lamossa[0];
-						currentMove.posizioneFinale = mossaRandom.lamossa[1];
+						currentMove.posizioneCorrente = byDate[0].lamossa[0];
+						currentMove.posizioneFinale = byDate[0].lamossa[1];
 
 
 					// var randomInt = getRandomInt(0,arrayMosse.length-1);
