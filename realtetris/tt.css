@@ -1,0 +1,164 @@
+body {
+	margin:0;
+	background:white;
+	color:white;
+    position: relative;
+    display: inline-block;
+}
+html {
+	text-align:center;
+}
+.adapt {
+	max-height: 800px;
+    max-width: 500px;
+    border: 2px solid lightgray;
+}
+}
+.debug, .debug2 {
+	font-size:-webkit-x-large;
+	text-align:center;
+	padding:10px 10px;
+}
+.pageTitle {
+	text-align:center;
+	font-size:-webkit-xxx-large;
+}
+#canvasContainer {
+	text-align:center;
+}
+.container {
+	width:10%;
+	height:10%;
+	display:inline-block;
+}
+img {
+	width:100%;
+	height:100%;
+}
+.selected {
+	width:100%;
+	display:inline-block !important;
+}
+.small {
+	width:5%;
+}
+.selection .container {
+	display:none;
+}
+.disabled div {
+	pointer-events:none;
+	opacity:0.4;
+}
+.disabled .disabled {
+	opacity:1;
+}
+
+#controls {
+	position: absolute;
+	text-align:center;
+	bottom:0;
+	width:100%;
+    height: 70px;
+	  -webkit-touch-callout: none; /* iOS Safari */
+	  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+	  -khtml-user-select: none;    /* Konqueror */
+	  -moz-user-select: none;      /* Firefox */
+	  -ms-user-select: none;       /* Internet Explorer/Edge */
+	  user-select: none;
+	  box-shadow: inset 0px 0px 10px 0px #ABABAB,5px 5px 5px 1px #DDDDDD;
+-webkit-box-shadow: inset 0px 0px 10px 0px #ABABAB,5px 5px 5px 1px #DDDDDD;
+-moz-box-shadow: inset 0px 0px 10px 0px #ABABAB,5px 5px 5px 1px #DDDDDD;
+-o-box-shadow: inset 0px 0px 10px 0px #ABABAB,5px 5px 5px 1px #DDDDDD;
+}
+#controls div {
+	width: 19%;
+    height: 100%;
+	display:inline-block;
+}
+canvas {
+	width:100%;
+}
+.cont {
+	width:100%;
+	padding:10px;
+
+}
+#dw {
+	background: url("./imgs/d.png");
+}
+#rotatel {
+	background: url("./imgs/rr.png");
+}
+.adapt #rotater {
+	background: url("./imgs/s.png");
+	background-size: 50px 50px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+#rotater {
+	background: url("./imgs/rl.png");
+}
+.adapt #rotatel {
+	background: url("./imgs/a.png");
+	background-size: 50px 50px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+}
+#sx {
+	background: url("./imgs/l.png");
+}
+#dx {
+	background: url("./imgs/r.png");
+}
+#dw, #rotatel, #rotater, #sx, #dx {
+	background-size: 50px 50px;
+	background-repeat:no-repeat;
+	background-position: 50% 50%;
+}
+#statusbar {
+	width:100%;
+	height:40px;
+	position: absolute;
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+	box-sizing: border-box;
+	background: white;
+	text-align:left;
+
+}
+#statusbar div {
+	width:0%;
+	height:100%;
+	background:black;
+	display:inline-block;
+	transition: all 300ms;
+    -webkit-transition: all 300ms;
+}
+#points {
+	position: absolute;
+    top: 10px;
+    right: 10px;
+    font-family: fantasy;
+    color:black;
+    font-weight:bold;
+    font-style: italic;
+    transition: all 300ms;
+    -webkit-transition: all 300ms;
+}
+#points.end {
+	width: 100%;
+    height: 100px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+    font-size: 100px;
+    text-align:center;
+}
+.no {
+	width:0 !important;
+}
+
+
+
+
