@@ -8,11 +8,11 @@ a {color: white;}
 #grid {
 	position:relative;
 	width:100%;
-	display: inline-block;	
+	display: inline-block;
 	pointer-events:none;
 }
 #banners {	font-family: Trebuchet MS; pointer-events:none; color: white;}
-.landscape #grid {height:100%; width: 70%;float: left;} 
+.landscape #grid {height:100%; width: 70%;float: left;}
 .portrait #grid {height:70%; width:100%;}
 .landscape {background-size: 100%;}
 .landscape #banners {
@@ -101,18 +101,18 @@ a {color: white;}
 	pointer-events: none;
 }
 .spinrev {
-	background-image: url('./spinrev.gif');	
+	background-image: url('./spinrev.gif');
 }
-.dinrobot#left { 
+.dinrobot#left {
     background-position: 50% 0%;
 }
-.dinrobot#right { 
+.dinrobot#right {
     background-position: 50% 100%;
 }
-.dinrobot#down { 
+.dinrobot#down {
     background-position: 0% 50%;
 }
-.dinrobot#up { 
+.dinrobot#up {
     background-position: 100% 50%;
 }
 .clickcounter {
@@ -165,7 +165,7 @@ a {color: white;}
 	position: fixed;
 	bottom: 12%;
 	left: 12%;
-	display:inline-block;				
+	display:inline-block;
 	background-image: url('./info.png');
 	height: 30px;
 	width:30px;
@@ -177,7 +177,7 @@ a {color: white;}
 .infodisplayed .info {
 	background-image: url('./back.png');
 	bottom: 10px;
-	left: 10px;	
+	left: 10px;
 }
 .landscape .info {
 	right: 10px;
@@ -245,7 +245,7 @@ a {color: white;}
 	background-repeat: no-repeat;
 	background-position: 50% 50%;
 }
-.landscape .power {height:25%; width:45%;} 
+.landscape .power {height:25%; width:45%;}
 .portrait .power {height:40%; width:25%;}
 #power1 , .infopower1 {
 	background-image: url('./power1.png');
@@ -354,17 +354,12 @@ a {color: white;}
 	display:none;
 }
 
-@font-face {
-  font-family: 'Iceland';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Iceland'), local('Iceland-Regular'), url(http://themes.googleusercontent.com/static/fonts/iceland/v3/F6LYTZLHrG9BNYXRjU7RSw.woff) format('woff');
-}
+
 
 .animatetitle {
   text-align:center;
   font-size: xx-large;
-  margin:20px 0 20px 0; 
+  margin:20px 0 20px 0;
   font-family:Iceland;
   color: #FF9900;
 }
