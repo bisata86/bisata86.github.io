@@ -319,7 +319,7 @@ lieves = 4;
             word == '' ? word=$(this).parent('div').text() : word;
             word = word.trim();
             $.ajax({
-				url:'http://it.wikipedia.org/w/api.php?action=query&prop=revisions&prop=extracts&exintro=&explaintext&format=json&titles='+encodeURIComponent(word),
+				url:'//it.wikipedia.org/w/api.php?action=query&prop=revisions&prop=extracts&exintro=&explaintext&format=json&titles='+encodeURIComponent(word),
 			    cache: 'true',
 			    dataType : 'jsonp',
 				success: function(data) {
