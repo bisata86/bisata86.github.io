@@ -2,7 +2,7 @@
 $(document).ready(function(){
 var wk=function(_steps){
 	var _this=this;
-	this.root='http://it.wikipedia.org/w/api.php?action=query&format=json';
+	this.root='//it.wikipedia.org/w/api.php?action=query&format=json';
 	this.steps=_steps;
 
 
@@ -18,7 +18,7 @@ var wk=function(_steps){
 	getRandomNames();
 	function getRandomNames() {
 		$.ajax({
-				url:'http://it.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=600',
+				url:'//it.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=600',
 			    // contentType: 'application/json', -- you can't set content type for a <script> tag, this option does nothing for jsonp | KevinB
 			    cache: 'true',
 			    dataType : 'jsonp',
