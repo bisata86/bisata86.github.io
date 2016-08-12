@@ -1,5 +1,5 @@
 //var socket = io.connect('http://192.168.1.5:3000');
-var socket = io.connect('http://skeletrons.herokuapp.com:80');
+var socket = io.connect('//skeletrons.herokuapp.com:80');
 
 var Game = {
 	'play' : false
