@@ -361,7 +361,7 @@ function muoviI(partita) {
 			if(turno) alert('vince il nero')
 			else alert('vince il bianco')
 		}
-		else alert('hai vinto')
+		else return alert('hai vinto')
 	}  else {
 		faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack);
 		if(!steps) muovi(partita)
