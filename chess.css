@@ -70,6 +70,7 @@ body {
 .disabled {
     pointer-events:none;
     opacity:0.5;
+    box-shadow: 0px 0px 0px 0px !important;
 }
 #prima {
     border-radius: 50% 0 0 50%;
@@ -79,6 +80,7 @@ body {
     background-position: 50% 50%;
     background-color: lightgray;
     min-width:50px;
+    box-shadow: -4px 1px 2px 0px;
 }
 #dopo {
     border-radius: 0 50% 50% 0;
@@ -88,6 +90,7 @@ body {
     background-position: 50% 50%;
     background-color: lightgray;
     min-width:50px;
+    box-shadow: 4px 1px 2px 0px;
 }
 
 .casella {

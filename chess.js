@@ -445,7 +445,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 			 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
 			 	 console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
 			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)) {
-			 			//console.log('mangio lo stesso')
+			 			console.log('mangio lo stesso')
 			 			scoperte.push(val)
 			 	}
 			 } else {
@@ -458,10 +458,16 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 		});
 		if(scoperte.length>0) {
 			var byDate = scoperte.slice(0);
+			// $.each(byDate, function(index, val) {
+			// 	console.log(sit[val])
+			// })
 			byDate.sort(function(a,b) {
-				return a.avversario - b.avversario; //mangiare quello che ha più valore
+				return sit[a].avversario - sit[b].avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
+			// $.each(byDate, function(index, val) {
+			// 	console.log(sit[val])
+			// })
 			console.log('mangio la pedina scoperta con più valore')
 			currentMove.posizioneCorrente = sit[byDate[0]].lamossa[0];
 			currentMove.posizioneFinale = sit[byDate[0]].lamossa[1];
@@ -533,17 +539,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 						 	console.log(val)
 					});
 
-						// var byDue = [];
-						if(byDate.length>0) {
-							var randomInt = getRandomInt(0,byDate.length-1)
-							var mossaRandom = byDate[randomInt]
-						}
-						// } else byDue = byDate;
-						// byDate = byDue;
 
-
-						var randomInt = getRandomInt(0,byDate.length-1)
-						var mossaRandom = byDate[randomInt]
 
 						currentMove.posizioneCorrente = byDate[0].lamossa[0];
 						currentMove.posizioneFinale = byDate[0].lamossa[1];
