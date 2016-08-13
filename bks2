@@ -248,237 +248,129 @@ function simulaMuovi(partita,from,to) {
     //disegnaScacchieraTemp(partita)
 }
 function muoviI(partita) {
+	var hisMove = []
 	if(auto) {
+		var achi = turno ? 'nero' : 'bianco';
+		var avversario = turno ? 'bianco' : 'nero';
 		turno = !turno;
+
+	} else {
+		var achi = 'nero';
+		var avversario = 'bianco'
 	}
 
-	var attacko = trovaAttacco(partita);
-	$.each(attacko, function(index, val) {
+	var hisMove = []
+	var attack = [];
+	var attackTemp = [];
+	$.each(partita.caselle, function(index, val) {
+		if(val.colore==achi) {
+		hisMove.push({starting:index})
+		var construzione = val.occupata+val.colore;
+		var a  = possibilita(construzione,index,partita);
+		var b  = possibilitaDiMangiare(construzione,index,partita);
+		for (var i = b.length - 1; i >= 0; i--) {
+		  	//$('.casella').eq(a[i]).addClass('highlight')
+		  	if(attack.indexOf(b[i])==-1) {
+		  		attack.push(b[i])
+		  		attackTemp.push([b[i],1]);
+		  	} else {
+		  		$.each(attackTemp, function(index, val) {
+		  			if(val[0]==b[i]) {
+		  				val[1] = val[1]+1;
+		  			}
+		  		});
+		  	}
+		  };
+		var endings = [];
+		for (var i = a.length - 1; i >= 0; i--) {
+		  	//$('.casella').eq(a[i]).addClass('highlight')
+		  	endings.push(a[i])
+		  };
+		hisMove[hisMove.length-1].endings = endings;
+		}
+	});
+	//console.log(attack)
+	for (var i = attack.length - 1; i >= 0; i--) {
+		$('.casella').eq(attack[i]).addClass('highlight2')
+	};
+
+	var enemyattack = [];
+	$.each(partita.caselle, function(index, val) {
+		if(val.colore==avversario) {
+		var construzione = val.occupata+val.colore;
+		var b  = possibilitaDiMangiare(construzione,index,partita);
+		for (var i = b.length - 1; i >= 0; i--) {
+		  	if(enemyattack.indexOf(b[i])==-1)
+		  		enemyattack.push(b[i])
+		  };
+		}
+	});
+	for (var i = enemyattack.length - 1; i >= 0; i--) {
+		$('.casella').eq(enemyattack[i]).addClass('highlight3')
+	};
+	//console.log(enemyattack)
+	var arrayMosse = [];
+	$.each(hisMove, function(index, val) {
+		if(val.endings.length!=0) {
+			arrayMosse.push(val)
+		}
+	});
+	if(arrayMosse.length==0) {
+		return alert('fine')
+	}
+	var darimuovere = []
+	var simulazione;
+	$.each(arrayMosse, function(index, val) {
 		$.each(val.endings, function(index2, val2) {
-			$('.casella').eq(val2).addClass('highlight2')
+			simulazione = JSON.parse(JSON.stringify(partita));
+			simulaMuovi(simulazione,val.starting,val2);
+			//disegnaScacchieraTemp(simulazione);
+			if(controllaScacco(simulazione,avversario)) {
+	  	 		darimuovere.push([index,index2])
+
+	 		}
 		});
 	});
-
-	var arrayMosse = trovaLeMosse(partita);
+	//$('.scacchieraTemp').remove();
+	$.each(darimuovere, function(index, val) {
+		arrayMosse[val[0]].endings[val[1]] = -1;
+	});
+	var arrayMosse2 = [];
+	$.each(arrayMosse, function(index, val) {
+		arrayMosse2.push({starting:val.starting,endings:[]})
+		$.each(val.endings, function(index2, val2) {
+			if(val2!=-1)
+			arrayMosse2[arrayMosse2.length-1].endings.push(val2);
+		});
+	});
+	arrayMosse = arrayMosse2;
+	var arrayMosse2 = [];
+	$.each(arrayMosse, function(index, val) {
+		if(val.endings.length!=0) {
+			arrayMosse2.push({starting:val.starting,endings:val.endings})
+		}
+	});
+	arrayMosse = arrayMosse2;
 	$.each(arrayMosse, function(index, val) {
 		$.each(val.endings, function(index2, val2) {
 			$('.casella').eq(val2).addClass('highlight')
 		});
 	});
-
-	var attackoNemico = trovaAttaccoNemico(partita);
-	$.each(attackoNemico, function(index, val) {
-		$.each(val.endings, function(index2, val2) {
-			$('.casella').eq(val2).addClass('highlight3')
-		});
-	});
-
-
-
 	if(arrayMosse.length==0) {
 		if(auto) {
 			if(turno) alert('vince il nero')
 			else alert('vince il bianco')
 		}
-		else  {
-			alert('hai vinto');
-			$('.casella').removeClass('highlight').removeClass('highlight2').removeClass('highlight3')
-		}
+		else return alert('hai vinto')
 	}  else {
-		faiCalcoliComplicatissimi(arrayMosse,partita);
+		faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack);
 		if(!steps) muovi(partita)
 		if(auto) {
-			if(!steps) setTimeout(function(){  muoviI(partita); }, 500);
+			if(!steps) setTimeout(function(){  muoviI(partita); }, 0);
 		}
 	}
 }
-function trovaLeMosse(partita) {
-	var hisMove = []
-	if(auto) {
-		var achi = turno ? 'nero' : 'bianco';
-		var avversario = turno ? 'bianco' : 'nero';
-	} else {
-		var achi = 'nero';
-		var avversario = 'bianco'
-	}
-	var hisMove = []
-	$.each(partita.caselle, function(index, val) {
-		if(val.colore==achi) {
-			hisMove.push({starting:index})
-			var construzione = val.occupata+val.colore;
-			var a  = possibilita(construzione,index,partita);
-			var endings = [];
-			for (var i = a.length - 1; i >= 0; i--) {
-			  	endings.push(a[i])
-			};
-			hisMove[hisMove.length-1].endings = endings;
-		}
-	});
-	var arrayMosse = [];
-	$.each(hisMove, function(index, val) {
-		if(val.endings.length!=0) {
-			arrayMosse.push(val)
-		}
-	});
-	if(true) { //rimuovo le mosse in scacco
-		var darimuovere = []
-		var simulazione;
-		$.each(arrayMosse, function(index, val) {
-			$.each(val.endings, function(index2, val2) {
-				simulazione = JSON.parse(JSON.stringify(partita));
-				simulaMuovi(simulazione,val.starting,val2);
-				if(controllaScacco(simulazione,avversario)) {
-		  	 		darimuovere.push([index,index2])
-		 		}
-			});
-		});
-		$.each(darimuovere, function(index, val) {
-			arrayMosse[val[0]].endings[val[1]] = -1;
-		});
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			arrayMosse2.push({starting:val.starting,endings:[]})
-			$.each(val.endings, function(index2, val2) {
-				if(val2!=-1)
-				arrayMosse2[arrayMosse2.length-1].endings.push(val2);
-			});
-		});
-		arrayMosse = arrayMosse2;
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			if(val.endings.length!=0) {
-				arrayMosse2.push({starting:val.starting,endings:val.endings})
-			}
-		});
-		return arrayMosse2;
-	}
-}
-function trovaAttacco(partita,achi) {
-	var hisMove = []
-	if(achi!=undefined) {
-
-	}
-	else if(auto) {
-		var achi = turno ? 'nero' : 'bianco';
-		var avversario = turno ? 'bianco' : 'nero';
-	} else {
-		var achi = 'nero';
-		var avversario = 'bianco'
-	}
-	var hisMove = []
-	$.each(partita.caselle, function(index, val) {
-		if(val.colore==achi) {
-			hisMove.push({starting:index})
-			var construzione = val.occupata+val.colore;
-			var b  = possibilitaDiMangiare(construzione,index,partita);
-			var endings = [];
-			for (var i = b.length - 1; i >= 0; i--) {
-			  	endings.push(b[i])
-			};
-			hisMove[hisMove.length-1].endings = endings;
-		}
-	});
-	var arrayMosse = [];
-	$.each(hisMove, function(index, val) {
-		if(val.endings.length!=0) {
-			arrayMosse.push(val)
-		}
-	});
-	if(true) { //rimuovo le mosse in scacco
-		var darimuovere = []
-		var simulazione;
-		$.each(arrayMosse, function(index, val) {
-			$.each(val.endings, function(index2, val2) {
-				simulazione = JSON.parse(JSON.stringify(partita));
-				simulaMuovi(simulazione,val.starting,val2);
-				if(controllaScacco(simulazione,avversario)) {
-		  	 		darimuovere.push([index,index2])
-		 		}
-			});
-		});
-		$.each(darimuovere, function(index, val) {
-			arrayMosse[val[0]].endings[val[1]] = -1;
-		});
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			arrayMosse2.push({starting:val.starting,endings:[]})
-			$.each(val.endings, function(index2, val2) {
-				if(val2!=-1)
-				arrayMosse2[arrayMosse2.length-1].endings.push(val2);
-			});
-		});
-		arrayMosse = arrayMosse2;
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			if(val.endings.length!=0) {
-				arrayMosse2.push({starting:val.starting,endings:val.endings})
-			}
-		});
-		return arrayMosse2;
-	}
-}
-function trovaAttaccoNemico(partita) {
-	var hisMove = []
-	if(auto) {
-		var achi = !turno ? 'nero' : 'bianco';
-		var avversario = !turno ? 'bianco' : 'nero';
-	} else {
-		var achi = 'bianco';
-		var avversario = 'nero'
-	}
-	var hisMove = []
-	$.each(partita.caselle, function(index, val) {
-		if(val.colore==achi) {
-			hisMove.push({starting:index})
-			var construzione = val.occupata+val.colore;
-			var b  = possibilitaDiMangiare(construzione,index,partita);
-			var endings = [];
-			for (var i = b.length - 1; i >= 0; i--) {
-			  	endings.push(b[i])
-			};
-			hisMove[hisMove.length-1].endings = endings;
-		}
-	});
-	var arrayMosse = [];
-	$.each(hisMove, function(index, val) {
-		if(val.endings.length!=0) {
-			arrayMosse.push(val)
-		}
-	});
-	if(true) { //rimuovo le mosse in scacco
-		var darimuovere = []
-		var simulazione;
-		$.each(arrayMosse, function(index, val) {
-			$.each(val.endings, function(index2, val2) {
-				simulazione = JSON.parse(JSON.stringify(partita));
-				simulaMuovi(simulazione,val.starting,val2);
-				if(controllaScacco(simulazione,avversario)) {
-		  	 		darimuovere.push([index,index2])
-		 		}
-			});
-		});
-		$.each(darimuovere, function(index, val) {
-			arrayMosse[val[0]].endings[val[1]] = -1;
-		});
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			arrayMosse2.push({starting:val.starting,endings:[]})
-			$.each(val.endings, function(index2, val2) {
-				if(val2!=-1)
-				arrayMosse2[arrayMosse2.length-1].endings.push(val2);
-			});
-		});
-		arrayMosse = arrayMosse2;
-		var arrayMosse2 = [];
-		$.each(arrayMosse, function(index, val) {
-			if(val.endings.length!=0) {
-				arrayMosse2.push({starting:val.starting,endings:val.endings})
-			}
-		});
-		return arrayMosse2;
-	}
-}
-function faiCalcoliComplicatissimi(arrayMosse,partita) {
+function faiCalcoliComplicatissimi(arrayMosse,partita,attack,enemyattack) {
 	var conto = 0;
 	$.each(arrayMosse, function(index, val) {
 		conto += val.endings.length
@@ -488,7 +380,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 		//besaz AI
 		var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
-		var statoCorrente = dammiStato(coloreCorrente,partita);
+		var statoCorrente = dammiStato(coloreCorrente,partita,arrayMosse);
 		console.log(statoCorrente)
 		// console.log('-------')
 		// console.log('le mosse: ')
@@ -511,14 +403,15 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 		if(attaccateEscoperte.length>0) {
 			console.log('eliminate')
 			var lenuoveMosse = [];
-			if(attaccateEscoperte.length<sit.length/2) {
+			if(attaccateEscoperte.length<sit.length) {
 				$.each(sit, function(index, val) {
 					if(attaccateEscoperte.indexOf(index)==-1) {
 						lenuoveMosse.push(val);
 					} else {
+						console.log(partita.caselle[val.lamossa[0]].occupata)
 						if(convertiInValore(partita.caselle[val.lamossa[0]].occupata)<=convertiInValore(partita.caselle[val.lamossa[1]].occupata))
 						lenuoveMosse.push(val);
-						//else console.log(val)
+						else console.log(val)
 						// console.log('col '+partita.caselle[val.lamossa[0]].occupata);
 						// console.log('averi mangiato');
 						// console.log('il '+partita.caselle[val.lamossa[1]].occupata)
@@ -532,51 +425,50 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 
 		}
+
+		var mosseInCuiMangio = [];
+		//console.log(sit)
+		$.each(sit, function(index, val) {
+			 //console.log(val)
+			 if(statoCorrente.avversario>val.avversario) {
+			 	console.log('posso mangiare in posizione: '+val.lamossa[1]);
+			 	mosseInCuiMangio.push(index)
+			 }
+
+		});
 		var scoperte = []
-		if(true) {//mangia
-			var mosseInCuiMangio = [];
-			//console.log(sit)
-			$.each(sit, function(index, val) {
-				 //console.log(val)
-				 if(statoCorrente.avversario>val.avversario) {
-				 	console.log('posso mangiare in posizione: '+val.lamossa[1]);
-				 	mosseInCuiMangio.push(index)
-				 }
+		$.each(mosseInCuiMangio, function(index, val) {
+			  //console.log(sit[val]);
+			 if(enemyattack.indexOf(sit[val].lamossa[1])!=-1) {
+			 	 console.log('è coperta, valori:')
+			 	 console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
+			 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
+			 	 console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
+			 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)) {
+			 			console.log('mangio lo stesso')
+			 			scoperte.push(val)
+			 	}
+			 } else {
+			 	// console.log('è scoperta, valori:')
+			 	// console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
+			 	// console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
 
-			});
-			$.each(mosseInCuiMangio, function(index, val) {
-				  //console.log(sit[val]);
-				 if(sit[val].enemyattack.indexOf(sit[val].lamossa[1])!=-1) {
-				 	 console.log('è coperta, valori:')
-				 	 console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
-				 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
-				 	 console.log('differenza: '+Math.abs(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)-convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)))
-				 	if(convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata)>=convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata)) {
-				 			console.log('mangio lo stesso')
-				 			scoperte.push(val)
-				 	}
-				 } else {
-				 	// console.log('è scoperta, valori:')
-				 	// console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
-				 	// console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
-
-				 	scoperte.push(val)
-				 }
-			});
-		}
+			 	scoperte.push(val)
+			 }
+		});
 		if(scoperte.length>0) {
 			var byDate = scoperte.slice(0);
 			// $.each(byDate, function(index, val) {
 			// 	console.log(sit[val])
 			// })
 			byDate.sort(function(a,b) {
-				return sit[a].totaleAttaccate - sit[b].totaleAttaccate; //mangiare quello che ha più valore
+				return sit[a].avversario - sit[b].avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
 			// $.each(byDate, function(index, val) {
 			// 	console.log(sit[val])
 			// })
-			console.log('mangio la pedina scoperta che mi conviene')
+			console.log('mangio la pedina scoperta con più valore')
 			currentMove.posizioneCorrente = sit[byDate[0]].lamossa[0];
 			currentMove.posizioneFinale = sit[byDate[0]].lamossa[1];
 		}
@@ -585,7 +477,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 					var byDate = sit.slice(0);
   					var byDue = byDate;
-					if(statoCorrente.avversario>10 || true) {
+					if(statoCorrente.avversario>10) {
 
 
 
@@ -630,13 +522,13 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 					console.log('ordino per pedine che attacco')
 					byDate = byDue.slice(0);
 					byDate.sort(function(a,b) {
-				    return b.totaleCheAttacco - a.totaleCheAttacco;
+				    return b.pedineCheAttacco.length - a.pedineCheAttacco.length;
 					});
 					var byDue = [];
 					if(byDate.length>0) {
 						console.log('rimuovo  per pedine che attacco')
 						$.each(byDate, function(index, val) {
-							 if(val.totaleCheAttacco==byDate[0].totaleCheAttacco) {
+							 if(val.pedineCheAttacco.length==byDate[0].pedineCheAttacco.length) {
 							 	byDue.push(val)
 							 }
 						});
@@ -649,21 +541,21 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 
 
-					currentMove.posizioneCorrente = byDate[0].lamossa[0];
-					currentMove.posizioneFinale = byDate[0].lamossa[1];
+						currentMove.posizioneCorrente = byDate[0].lamossa[0];
+						currentMove.posizioneFinale = byDate[0].lamossa[1];
 
 			}
-}
-function ordinaErimuovi(lemosse) {
+
 
 }
-function provaleTutte(arrayMosse,partita) {
+function provaleTutte(arrayMosse,partita,attack,enemyattack) {
 	var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
 	var coloreAvversario = coloreCorrente=='bianco' ? 'nero' : 'bianco';
 	// console.log('stato corrente:')
 	// console.log(dammiStato(coloreCorrente,partita));
 	// console.log('-------')
 	var simulazione = [];
+	var minimo = dammiStato(coloreCorrente,partita,arrayMosse).avversario;
 	var lamossa;
 	var situazioni = [];
 	$.each(arrayMosse, function(index, val) {
@@ -671,12 +563,13 @@ function provaleTutte(arrayMosse,partita) {
 			simulazione = JSON.parse(JSON.stringify(partita));
 			simulaMuovi(simulazione,val.starting,val2)
 			lamossa = [val.starting,val2]
-			situazioni.push(dammiStato(coloreCorrente,simulazione,lamossa))
+			situazioni.push(dammiStato(coloreCorrente,simulazione,arrayMosse,lamossa))
+			//console.log(dammiStato(coloreCorrente,simulazione,arrayMosse,attack,enemyattack,lamossa))
 		});
 	});
 	return(situazioni)
 }
-function dammiStato(coloreCorrente,partita,lamossa) {
+function dammiStato(coloreCorrente,partita,arrayMosse,lamossa) {
 	coloreCorrente;
 	var coloreAvversario = coloreCorrente=='bianco' ? 'nero' : 'bianco';
 	var statoattuale1 = 0;
@@ -685,25 +578,34 @@ function dammiStato(coloreCorrente,partita,lamossa) {
 	var pedineScoperte = [];
 	var pedineCheAttacco = [];
 
-
 	var attack = [];
-	var cane = trovaAttacco(partita,coloreCorrente);
-	$.each(cane, function(index, val) {
-		$.each(val.endings, function(index2, val2) {
-			if(attack.indexOf(val2)==-1) {
-		  		attack.push(val2)
+
+	$.each(partita.caselle, function(index, val) {
+		if(val.colore==coloreCorrente) {
+		var construzione = val.occupata+val.colore;
+		var a  = possibilita(construzione,index,partita);
+		var b  = possibilitaDiMangiare(construzione,index,partita);
+		for (var i = b.length - 1; i >= 0; i--) {
+		  	//$('.casella').eq(a[i]).addClass('highlight')
+		  	if(attack.indexOf(b[i])==-1) {
+		  		attack.push(b[i])
 		  	}
-		});
+		  };
+
+		}
 	});
 	var enemyattack = [];
-	var cane = trovaAttacco(partita,coloreAvversario);
-	$.each(cane, function(index, val) {
-		$.each(val.endings, function(index2, val2) {
-			if(enemyattack.indexOf(val2)==-1) {
-		  		enemyattack.push(val2)
-		  	}
-		});
+	$.each(partita.caselle, function(index, val) {
+		if(val.colore==coloreAvversario) {
+		var construzione = val.occupata+val.colore;
+		var b  = possibilitaDiMangiare(construzione,index,partita);
+		for (var i = b.length - 1; i >= 0; i--) {
+		  	if(enemyattack.indexOf(b[i])==-1)
+		  		enemyattack.push(b[i])
+		  };
+		}
 	});
+
 	$.each(partita.caselle, function(index, val) {
 		if(val.colore==coloreCorrente) {
 			if(enemyattack.indexOf(index)!=-1) pedineAttaccate.push(index)
@@ -725,11 +627,7 @@ function dammiStato(coloreCorrente,partita,lamossa) {
 		$.each(pedineAttaccate, function(index, val) {
 			 totaleAttaccate+=convertiInValore(partita.caselle[val].occupata);
 	});
-	var totaleCheAttacco = 0;
-		$.each(pedineCheAttacco, function(index, val) {
-			 totaleCheAttacco+=convertiInValore(partita.caselle[val].occupata);
-	});
-	return {corrente:statoattuale1,avversario:statoattuale2,pedineCheAttacco:pedineCheAttacco,totaleCheAttacco:totaleCheAttacco,pedineAttaccate:pedineAttaccate,totaleAttaccate:totaleAttaccate,pedineScoperte:pedineScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente',attack:attack,enemyattack:enemyattack};
+	return {corrente:statoattuale1,avversario:statoattuale2,pedineCheAttacco:pedineCheAttacco,pedineAttaccate:pedineAttaccate,totaleAttaccate:totaleAttaccate,pedineScoperte:pedineScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente'};
 }
 function convertiInValore(pedina) {
 	if(pedina=='pedone') return 1;
