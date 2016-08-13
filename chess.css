@@ -3,6 +3,7 @@ body {
 	margin:0;
 	text-align:center;
     overflow:hidden;
+    position: fixed;
 }
 
 .scacchiera {
