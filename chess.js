@@ -79,7 +79,7 @@ $( document ).ready(function() {
 				  	 $('.casella').eq(a[i]).removeClass('highlight')
 				  }
 			  };
-			   if(!isMobile) {
+			   if(!isMobile || true) {
 				  $(this).addClass('nascondi');
 				  $('body').append('<div class="copia '+laClasse+'"></div>');
 				}
