@@ -40,8 +40,14 @@ body {
 
     position: relative;
 }
-
-
+.nascondi {
+    background-image:none !important;
+}
+.copia {
+    background-color:transparent !important;
+    position: fixed;
+    pointer-events:none;
+}
 .portrait .scacchiera {
     width: 100vw;
     height: 100vw;

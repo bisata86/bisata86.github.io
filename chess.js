@@ -7,6 +7,10 @@ var steps;
 var currentMove = {};
 $( document ).ready(function() {
 
+
+
+
+
 	var body = document.documentElement;
 	if (body.requestFullscreen) {
 	body.requestFullscreen();
@@ -18,7 +22,9 @@ $( document ).ready(function() {
 	body.msrequestFullscreen();
 	}
 	var isMobile = detectmob();
-	var click = isMobile ? 'touchstart' : 'click';
+	var click = isMobile ? 'touchstart' : 'mousedown';
+	var endClick = isMobile ? 'touchend' : 'mouseup';
+	var mouseMove = isMobile ? 'touchmove' : 'mousemove';
 	if(mode=='single') {
 		auto = false;
 		turno = false;
@@ -47,15 +53,15 @@ $( document ).ready(function() {
 	creaScacchiera(partita);
 	disegnaScacchiera(partita);
 	if(mode!='steps') {
-		$( "body" ).on( click,'.scacchiera div[class*="bianco"]', function() {
-
-
+		$( "body" ).on( click,'.scacchiera div[class*="bianco"]', function(event) {
+		  $('.copia').remove();
+		  $('.casella').removeClass('nascondi')
 		  if($('.scacchiera').hasClass('mossaAi')) {
-
 		  } else {
 			  $('div').removeClass('highlight')
-			  var a  = possibilita($( this ).attr('class'),$( this ).prevAll().length,partita);
-			  var b  = possibilitaDiMangiare($( this ).attr('class'),$( this ).prevAll().length,partita);
+			  var laClasse = $( this ).attr('class');
+			  var a  = possibilita(laClasse,$( this ).prevAll().length,partita);
+			  var b  = possibilitaDiMangiare(laClasse,$( this ).prevAll().length,partita);
 			  if(a.length>0) {
 			  	$( ".scacchiera" ).addClass('ricezione');
 			  	currentMove.posizioneCorrente = $( this ).prevAll().length;
@@ -73,10 +79,30 @@ $( document ).ready(function() {
 				  	 $('.casella').eq(a[i]).removeClass('highlight')
 				  }
 			  };
+			  $(this).addClass('nascondi');
+			  $('body').append('<div class="copia '+laClasse+'"></div>');
+			  $('.copia').css({
+				top: event.pageY-$('.casella').width()/2,
+				left: event.pageX-$('.casella').width()/2,
+				width: $('.casella').width(),
+				height: $('.casella').height()
+			});
 			}
 		});
-		$( "body" ).on( click,'.scacchiera.ricezione div[class*="highlight"]', function() {
+		$( "body" ).on( click,'.nascondi', function(event) {
+		  $('.copia').remove();
+		  $('.casella').removeClass('nascondi').removeClass('highlight')
+		});
+		$( "body" ).on( mouseMove, function(event) {
+			//console.log('no'+event.pageX)
+			$('.copia').css({
+				top: event.pageY-$('.casella').width()/2,
+				left: event.pageX-$('.casella').width()/2
+			});
+		});
+		$( "body" ).on( endClick,'.scacchiera.ricezione div[class*="highlight"]', function() {
 			$( ".scacchiera" ).removeClass('ricezione');
+			$('.copia').remove();
 			$('#prima').removeClass('disabled');
 			$('.scacchiera').addClass('mossaAi')
 		  	$('div').removeClass('highlight');
@@ -714,9 +740,6 @@ function ordinaErimuovi(lemosse) {
 function provaleTutte(arrayMosse,partita) {
 	var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
 	var coloreAvversario = coloreCorrente=='bianco' ? 'nero' : 'bianco';
-	// console.log('stato corrente:')
-	// console.log(dammiStato(coloreCorrente,partita));
-	// console.log('-------')
 	var simulazione = [];
 	var lamossa;
 	var situazioni = [];
