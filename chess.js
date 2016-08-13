@@ -161,7 +161,6 @@ $( document ).ready(function() {
 			   		var check = 0;
 					$.each(arrayMosse2, function(index, val) {
 						$.each(val.endings, function(index2, val2) {
-							$('.casella').eq(val2).addClass('highlight')
 							check++;
 						});
 					});
@@ -713,7 +712,6 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			}
 }
 function ordinaErimuovi(lemosse) {
-
 }
 function provaleTutte(arrayMosse,partita) {
 	var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
@@ -799,7 +797,6 @@ function convertiInValore(pedina) {
 	if(pedina=='torre') return 5;
 	if(pedina=='regina') return 9;
 	if(pedina=='re') return 10;
-
 }
 function creaScacchiera(partita) {
 	$('body').append("<div class='scacchiera'></div>");
