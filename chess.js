@@ -79,8 +79,10 @@ $( document ).ready(function() {
 				  	 $('.casella').eq(a[i]).removeClass('highlight')
 				  }
 			  };
-			  $(this).addClass('nascondi');
-			  $('body').append('<div class="copia '+laClasse+'"></div>');
+			   if(!isMobile) {
+				  $(this).addClass('nascondi');
+				  $('body').append('<div class="copia '+laClasse+'"></div>');
+				}
 			  $('.copia').css({
 				top: event.pageY-$('.casella').width()/2,
 				left: event.pageX-$('.casella').width()/2,
@@ -93,7 +95,7 @@ $( document ).ready(function() {
 		  $('.copia').remove();
 		  $('.casella').removeClass('nascondi').removeClass('highlight')
 		});
-		$( "body" ).on( mouseMove, function(event) {
+		$( "body" ).on( 'mousemove', function(event) {
 			//console.log('no'+event.pageX)
 			$('.copia').css({
 				top: event.pageY-$('.casella').width()/2,
