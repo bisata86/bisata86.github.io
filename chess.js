@@ -95,11 +95,11 @@ $( document ).ready(function() {
 		  $('.copia').remove();
 		  $('.casella').removeClass('nascondi').removeClass('highlight')
 		});
-		$( "body" ).on( 'mousemove', function(event) {
+		$( "body" ).on( mouseMove, function(event) {
 			//console.log('no'+event.pageX)
 			$('.copia').css({
-				top: event.pageY-$('.casella').width()/2,
-				left: event.pageX-$('.casella').width()/2
+				top: event.pageY-$('.casella').eq(0).width()/2,
+				left: event.pageX-$('.casella').eq(0).width()/2
 			});
 		});
 		$( "body" ).on( endClick,'.scacchiera.ricezione div[class*="highlight"]', function() {
