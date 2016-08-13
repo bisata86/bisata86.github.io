@@ -66,7 +66,6 @@ $( document ).ready(function() {
 			  for (var i = b.length - 1; i >= 0; i--) {
 			  	//$('.casella').eq(b[i]).addClass('highlight2')
 			  };
-			  $('.scacchieraTemp').remove();
 			  for (var i = a.length - 1; i >= 0; i--) {
 			  	  simulazione = JSON.parse(JSON.stringify(partita));
 				  simulaMuovi(simulazione,currentMove.posizioneCorrente,a[i])
@@ -101,6 +100,76 @@ $( document ).ready(function() {
 		  		}
 
 		  		localStorage.setItem('mosse', JSON.stringify(mosse));
+				if(true) { //controlo la fine
+					var hisMove = []
+					var achi = 'bianco';
+					var avversario = 'nero'
+					var hisMove = []
+					$.each(partita.caselle, function(index, val) {
+						if(val.colore==achi) {
+							hisMove.push({starting:index})
+							var construzione = val.occupata+val.colore;
+							var a  = possibilita(construzione,index,partita);
+							var endings = [];
+							for (var i = a.length - 1; i >= 0; i--) {
+							  	endings.push(a[i])
+							};
+							hisMove[hisMove.length-1].endings = endings;
+						}
+					});
+					var arrayMosse = [];
+					$.each(hisMove, function(index, val) {
+						if(val.endings.length!=0) {
+							arrayMosse.push(val)
+						}
+					});
+					if(true) { //rimuovo le mosse in scacco
+						console.log('sono il '+achi)
+						var darimuovere = []
+						var simulazione;
+						$.each(arrayMosse, function(index, val) {
+							$.each(val.endings, function(index2, val2) {
+								simulazione = JSON.parse(JSON.stringify(partita));
+								simulaMuovi(simulazione,val.starting,val2);
+								if(controllaScacco(simulazione,avversario)) {
+						  	 		darimuovere.push([index,index2])
+						 		}
+							});
+						});
+						console.log(darimuovere)
+						$.each(darimuovere, function(index, val) {
+							arrayMosse[val[0]].endings[val[1]] = -1;
+						});
+						var arrayMosse2 = [];
+						$.each(arrayMosse, function(index, val) {
+							arrayMosse2.push({starting:val.starting,endings:[]})
+							$.each(val.endings, function(index2, val2) {
+								if(val2!=-1)
+								arrayMosse2[arrayMosse2.length-1].endings.push(val2);
+							});
+						});
+						arrayMosse = arrayMosse2;
+						var arrayMosse2 = [];
+						$.each(arrayMosse, function(index, val) {
+							if(val.endings.length!=0) {
+								arrayMosse2.push({starting:val.starting,endings:val.endings})
+							}
+						});
+						//return arrayMosse2;
+					}
+
+			   		var check = 0;
+					$.each(arrayMosse2, function(index, val) {
+						$.each(val.endings, function(index2, val2) {
+							$('.casella').eq(val2).addClass('highlight')
+							check++;
+						});
+					});
+					if(check==0)  {
+						alert('hai perso')
+						console.log('hai perso')
+					}
+				}
 		    }, 500);
 		});
 		var historyCounter = 1;
@@ -120,9 +189,7 @@ $( document ).ready(function() {
 				partita = partita[partita.length-1-historyCounter]
 				historyCounter++;
 			}
-
 			disegnaScacchiera(partita)
-
 		});
 		$( "body" ).on( click,'#dopo', function() {
 			$('#prima').removeClass('disabled');
@@ -165,15 +232,6 @@ function controllaScacco(partita,chi) {
 		} else {
 			var achi = chi;
 		}
-		// $.each($('.scacchieraTemp:last div[class*="'+achi+'"]'), function(index, val) {
-		// 	hisMove.push({starting:$( this ).prevAll('.casella').length})
-		// 	var a  = possibilita($( this ).attr('class'),$( this ).prevAll('.casella').length,partita);
-		// 	var endings = [];
-		// 	for (var i = a.length - 1; i >= 0; i--) {
-		// 	  	endings.push(a[i])
-		// 	  };
-		// 	hisMove[hisMove.length-1].endings = endings;
-		// });
 		$.each(partita.caselle, function(index, val) {
 			if(val.colore==achi) {
 			hisMove.push({starting:index})
@@ -192,20 +250,14 @@ function controllaScacco(partita,chi) {
 				arrayMosse.push(val)
 			}
 		});
-		if(arrayMosse.length==0) {
-			return alert('scacco matto')
-		}
 		var scacco = false;
 		$.each(arrayMosse, function(index, val) {
 			$.each(val.endings, function(index2, val2) {
-					//$('.scacchieraTemp:last .casella').eq(val2).addClass('highlight2')
-					//console.log(partita.caselle[val2].occupata)
 					if(partita.caselle[val2].occupata=='re') {
 						scacco = true;
 					}
 			});
 		});
-		//console.log('------')
 		return scacco;
 }
 function muovi(partita) {
@@ -292,9 +344,12 @@ function muoviI(partita) {
 		}
 	}
 }
-function trovaLeMosse(partita) {
+function trovaLeMosse(partita,achi) {
 	var hisMove = []
-	if(auto) {
+	if(achi!=undefined) {
+
+	}
+	else if(auto) {
 		var achi = turno ? 'nero' : 'bianco';
 		var avversario = turno ? 'bianco' : 'nero';
 	} else {
@@ -321,6 +376,7 @@ function trovaLeMosse(partita) {
 		}
 	});
 	if(true) { //rimuovo le mosse in scacco
+		console.log('sono il '+achi)
 		var darimuovere = []
 		var simulazione;
 		$.each(arrayMosse, function(index, val) {
@@ -332,6 +388,7 @@ function trovaLeMosse(partita) {
 		 		}
 			});
 		});
+		console.log(darimuovere)
 		$.each(darimuovere, function(index, val) {
 			arrayMosse[val[0]].endings[val[1]] = -1;
 		});
@@ -518,7 +575,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 					} else {
 						if(convertiInValore(partita.caselle[val.lamossa[0]].occupata)<=convertiInValore(partita.caselle[val.lamossa[1]].occupata))
 						lenuoveMosse.push(val);
-						//else console.log(val)
+						else console.log(val)
 						// console.log('col '+partita.caselle[val.lamossa[0]].occupata);
 						// console.log('averi mangiato');
 						// console.log('il '+partita.caselle[val.lamossa[1]].occupata)
@@ -533,6 +590,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 		}
 		var scoperte = []
+		//console.log(sit)
 		if(true) {//mangia
 			var mosseInCuiMangio = [];
 			//console.log(sit)
@@ -556,9 +614,9 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 				 			scoperte.push(val)
 				 	}
 				 } else {
-				 	// console.log('è scoperta, valori:')
-				 	// console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
-				 	// console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
+				 	console.log('è scoperta, valori:')
+				 	console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
+				 	console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
 
 				 	scoperte.push(val)
 				 }
@@ -570,7 +628,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			// 	console.log(sit[val])
 			// })
 			byDate.sort(function(a,b) {
-				return sit[a].totaleAttaccate - sit[b].totaleAttaccate; //mangiare quello che ha più valore
+				return sit[a].avversario.length - sit[b].avversario.length; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
 			// $.each(byDate, function(index, val) {
@@ -610,14 +668,14 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 					console.log('ordino per pedine scoperte')
 					byDate = byDue.slice(0);
 					byDate.sort(function(a,b) {
-				    return a.pedineScoperte.length - b.pedineScoperte.length;
+				    return a.totaleScoperte - b.totaleScoperte;
 					});
 					//console.log('muovo per proteggere');
 					var byDue = [];
 					if(byDate.length>0) {
 						console.log('rimuovo  per pedine scoperte')
 						$.each(byDate, function(index, val) {
-							 if(val.pedineScoperte.length==byDate[0].pedineScoperte.length) {
+							 if(val.totaleScoperte==byDate[0].totaleScoperte) {
 							 	byDue.push(val)
 							 }
 						});
@@ -729,7 +787,11 @@ function dammiStato(coloreCorrente,partita,lamossa) {
 		$.each(pedineCheAttacco, function(index, val) {
 			 totaleCheAttacco+=convertiInValore(partita.caselle[val].occupata);
 	});
-	return {corrente:statoattuale1,avversario:statoattuale2,pedineCheAttacco:pedineCheAttacco,totaleCheAttacco:totaleCheAttacco,pedineAttaccate:pedineAttaccate,totaleAttaccate:totaleAttaccate,pedineScoperte:pedineScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente',attack:attack,enemyattack:enemyattack};
+	var totaleScoperte = 0;
+		$.each(pedineScoperte, function(index, val) {
+			 totaleScoperte+=convertiInValore(partita.caselle[val].occupata);
+	});
+	return {corrente:statoattuale1,avversario:statoattuale2,pedineCheAttacco:pedineCheAttacco,totaleCheAttacco:totaleCheAttacco,pedineAttaccate:pedineAttaccate,totaleAttaccate:totaleAttaccate,pedineScoperte:pedineScoperte,totaleScoperte:totaleScoperte,lamossa:lamossa!=undefined ? lamossa : 'stato corrente',attack:attack,enemyattack:enemyattack};
 }
 function convertiInValore(pedina) {
 	if(pedina=='pedone') return 1;
