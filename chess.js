@@ -124,7 +124,6 @@ $( document ).ready(function() {
 						}
 					});
 					if(true) { //rimuovo le mosse in scacco
-						console.log('sono il '+achi)
 						var darimuovere = []
 						var simulazione;
 						$.each(arrayMosse, function(index, val) {
@@ -136,7 +135,6 @@ $( document ).ready(function() {
 						 		}
 							});
 						});
-						console.log(darimuovere)
 						$.each(darimuovere, function(index, val) {
 							arrayMosse[val[0]].endings[val[1]] = -1;
 						});
@@ -660,7 +658,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 							 if(val.totaleAttaccate==byDate[0].totaleAttaccate) {
 							 	//console.log(index)
 							 	byDue.push(val)
-							 }
+							 } else console.log(val)
 						});
 					} else byDue = byDate;
 
@@ -676,7 +674,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 						$.each(byDate, function(index, val) {
 							 if(val.totaleScoperte==byDate[0].totaleScoperte) {
 							 	byDue.push(val)
-							 }
+							 }  else console.log(val)
 						});
 					} else byDue = byDate;
 
@@ -695,7 +693,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 						$.each(byDate, function(index, val) {
 							 if(val.totaleCheAttacco==byDate[0].totaleCheAttacco) {
 							 	byDue.push(val)
-							 }
+							 }  else console.log(val)
 						});
 					} else byDue = byDate;
 					byDate = byDue;
