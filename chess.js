@@ -627,7 +627,7 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			// 	console.log(sit[val])
 			// })
 			byDate.sort(function(a,b) {
-				return sit[a].avversario.length - sit[b].avversario.length; //mangiare quello che ha più valore
+				return sit[a].avversario - sit[b].avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
 			// $.each(byDate, function(index, val) {
