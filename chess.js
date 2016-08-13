@@ -250,7 +250,6 @@ function checkWindow() {
 	else $('body').addClass('portrait').removeClass('landscape')
 }
 function controllaScacco(partita,chi) {
-		//disegnaScacchieraTemp(partita)
 		var hisMove = []
 		if(auto) {
 			var achi = turno ? 'nero' : 'bianco';
@@ -322,7 +321,6 @@ function simulaMuovi(partita,from,to) {
    			}
    		}
    	}
-    //disegnaScacchieraTemp(partita)
 }
 function muoviI(partita) {
 	if(auto) {
@@ -401,7 +399,6 @@ function trovaLeMosse(partita,achi) {
 		}
 	});
 	if(true) { //rimuovo le mosse in scacco
-		console.log('sono il '+achi)
 		var darimuovere = []
 		var simulazione;
 		$.each(arrayMosse, function(index, val) {
@@ -413,7 +410,6 @@ function trovaLeMosse(partita,achi) {
 		 		}
 			});
 		});
-		console.log(darimuovere)
 		$.each(darimuovere, function(index, val) {
 			arrayMosse[val[0]].endings[val[1]] = -1;
 		});
@@ -656,9 +652,16 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 				return sit[a].avversario - sit[b].avversario; //mangiare quello che ha più valore
 			    //return sit[a].pedineScoperte.length - sit[b].pedineScoperte.length;
 			});
-			// $.each(byDate, function(index, val) {
-			// 	console.log(sit[val])
-			// })
+			$.each(byDate, function(index, val) {
+
+				console.log('------')
+				console.log(sit[val])
+				console.log('valore attuale: '+statoCorrente.totaleAttaccate)
+				console.log('valore pedina:' +partita.caselle[sit[val].lamossa[0]].occupata)
+				console.log('valore dopo: '+sit[val].totaleAttaccate)
+			})
+
+
 			console.log('mangio la pedina scoperta che mi conviene')
 			currentMove.posizioneCorrente = sit[byDate[0]].lamossa[0];
 			currentMove.posizioneFinale = sit[byDate[0]].lamossa[1];
@@ -870,16 +873,8 @@ function disegnaScacchiera(partita) {
 		 if(val.occupata!='no') tipo = val.occupata+val.colore
 		 if(steps)
 		 $('.scacchiera').append("<div class='casella "+tipo+"'><div>"+index+"</div></div>")
-		 else
-		 $('.scacchiera').append("<div class='casella "+tipo+"'></div>")
-	});
-}
-function disegnaScacchieraTemp(partita) {
-	$('body').append('<div class="scacchieraTemp"></div>');
-	$.each(partita.caselle, function(index, val) {
-		 var tipo = 'vuoto'
-		 if(val.occupata!='no') tipo = val.occupata+val.colore
-		 $('.scacchieraTemp').last().append("<div class='casella "+tipo+"'></div>")
+		  else
+		  $('.scacchiera').append("<div class='casella "+tipo+"'></div>")
 	});
 }
 function possibilita(tipo,posizione,partita) {
