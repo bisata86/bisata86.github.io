@@ -625,7 +625,11 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			});
 			$.each(mosseInCuiMangio, function(index, val) {
 				  //console.log(sit[val]);
-				 if(sit[val].enemyattack.indexOf(sit[val].lamossa[1])!=-1) {
+				 if(statoCorrente.totaleAttaccate + convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata) < sit[val].totaleAttaccate) {
+				 	console.log('lascerei scoperto troppo')
+				 	scoperte.push(val)
+				 }
+				 else if(sit[val].enemyattack.indexOf(sit[val].lamossa[1])!=-1) {
 				 	 console.log('è coperta, valori:')
 				 	 console.log('con il: '+partita.caselle[sit[val].lamossa[0]].occupata+' '+partita.caselle[sit[val].lamossa[0]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[0]].occupata));
 				 	 console.log('mangio il: '+partita.caselle[sit[val].lamossa[1]].occupata+' '+partita.caselle[sit[val].lamossa[1]].colore+' e vale: '+convertiInValore(partita.caselle[sit[val].lamossa[1]].occupata));
@@ -873,8 +877,8 @@ function disegnaScacchiera(partita) {
 		 if(val.occupata!='no') tipo = val.occupata+val.colore
 		 if(steps)
 		 $('.scacchiera').append("<div class='casella "+tipo+"'><div>"+index+"</div></div>")
-		  else
-		  $('.scacchiera').append("<div class='casella "+tipo+"'></div>")
+		 else
+		 $('.scacchiera').append("<div class='casella "+tipo+"'></div>")
 	});
 }
 function possibilita(tipo,posizione,partita) {
