@@ -195,7 +195,7 @@ $( document ).ready(function() {
 						console.log('hai perso')
 					}
 				}
-		    }, 500);
+		    }, 0);
 		});
 		var historyCounter = 1;
 		$('#prima').attr('class', 'disabled');
@@ -363,14 +363,14 @@ function muoviI(partita) {
 		faiCalcoliComplicatissimi(arrayMosse,partita);
 		if(!steps) muovi(partita)
 		if(auto) {
-			if(!steps) setTimeout(function(){  muoviI(partita); }, 500);
+			if(!steps) setTimeout(function(){  muoviI(partita); }, 0);
 		}
 	}
 }
 function trovaLeMosse(partita,achi) {
 	var hisMove = []
 	if(achi!=undefined) {
-
+		var avversario = achi=='nero' ? 'bianco' : 'nero';
 	}
 	else if(auto) {
 		var achi = turno ? 'nero' : 'bianco';
@@ -379,6 +379,8 @@ function trovaLeMosse(partita,achi) {
 		var achi = 'nero';
 		var avversario = 'bianco'
 	}
+	// console.log('corrente:' +achi)
+	// console.log('avversario:' +avversario)
 	var hisMove = []
 	$.each(partita.caselle, function(index, val) {
 		if(val.colore==achi) {
@@ -571,19 +573,66 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 		// console.log('-------')
 		// console.log('le mosse: ')
 		var sit = provaleTutte(arrayMosse,partita)
+		console.log(sit)
+		$.each(sit, function(index, val) {
+			 console.log('----'+index+'-----');
+			 // console.log(val)
+			 //  console.log('---------');
+			 var simulazione;
+			 simulazione = JSON.parse(JSON.stringify(partita));
+			 simulaMuovi(simulazione,val.lamossa[0],val.lamossa[1]);
+			 var arrayMosse2 = trovaLeMosse(simulazione,'bianco');
+			 var sit2 = provaleTutte(arrayMosse2,simulazione,'bianco');
+			 //console.log('il bianco ha '+sit2.length+ ' mosse')
+			 if(sit2.length==0) {
+
+			 	if(controllaScacco(simulazione,'nero')) {
+			 		console.log('faccio il matto')
+			 		sit = [val];
+			 	}
+			 	else {
+			 		console.log('elimino lo stallo')
+			 		sit.splice(sit.indexOf(val), 1);
+
+			 	}
+			 }
+			 // if(sit2.length==1) {
+			 // 	console.log('solo una')
+			 // 				 $.each(sit2, function(index, val) {
+			 // 	 console.log(val)
+			 // });
+			 // }
+			 // if(sit2.length==2) {
+			 // 	console.log('solo due')
+			 // 				 $.each(sit2, function(index, val) {
+			 // 	 console.log(val)
+			 // });
+			 // }
+			 // $.each(arrayMosse2, function(index, val) {
+			 // 	console.log(val)
+			 // 	var sit = provaleTutte(arrayMosse,partita)
+			 // });
+			// var simulazione;
+			// $.each(arrayMosse, function(index, val) {
+			// 	simulazione = JSON.parse(JSON.stringify(partita));
+			// 	simulaMuovi(simulazione,val.starting,val2);
+			// });
+		});
 
 
 		var attaccateEscoperte = [];
+		if(true) { //da eliminare
 		$.each(sit, function(index, val) {
-			 	$.each(val.pedineAttaccate, function(index2, val2) {
-			 		// console.log('attaccate:'); console.log(val2)
-			 		// console.log('scoperte:'); console.log(val.pedineScoperte)
-			 		 if(val.pedineScoperte.indexOf(val2)!=-1) {
-			 		 	 //console.log('in posizione '+val2+' attaccata e scoperta, pessima mossa');
-			 		 	 attaccateEscoperte.push(index)
-			 		 }
-			 	});
-		});
+				 	$.each(val.pedineAttaccate, function(index2, val2) {
+				 		// console.log('attaccate:'); console.log(val2)
+				 		// console.log('scoperte:'); console.log(val.pedineScoperte)
+				 		 if(val.pedineScoperte.indexOf(val2)!=-1) {
+				 		 	 //console.log('in posizione '+val2+' attaccata e scoperta, pessima mossa');
+				 		 	 attaccateEscoperte.push(index)
+				 		 }
+				 	});
+			});
+		}
 		// console.log('--------------------------------');
 		// console.log('mosse da non fare?');
 		if(attaccateEscoperte.length>0) {
@@ -674,68 +723,70 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 
 					var byDate = sit.slice(0);
-  					var byDue = byDate;
-					if(statoCorrente.avversario>10 || true) {
+					if(true) { //le mie stronzate
+	  					var byDue = byDate;
+						if(statoCorrente.avversario>10 || true) {
 
 
 
-					console.log('ordino per pedine sotto attacco')
-					byDate.sort(function(a,b) {
-					    return a.totaleAttaccate - b.totaleAttaccate;
-					});
-					$.each(byDate, function(index, val) {
-						 	//console.log(val)
-					});
-					var byDue = [];
-					if(byDate.length>0) {
-						console.log('rimuovo per pedine sotto attacco')
-						$.each(byDate, function(index, val) {
-							 if(val.totaleAttaccate==byDate[0].totaleAttaccate) {
-							 	//console.log(index)
-							 	byDue.push(val)
-							 } else console.log(val)
+						console.log('ordino per pedine sotto attacco')
+						byDate.sort(function(a,b) {
+						    return a.totaleAttaccate - b.totaleAttaccate;
 						});
-					} else byDue = byDate;
-
-					console.log('ordino per pedine scoperte')
-					byDate = byDue.slice(0);
-					byDate.sort(function(a,b) {
-				    return a.totaleScoperte - b.totaleScoperte;
-					});
-					//console.log('muovo per proteggere');
-					var byDue = [];
-					if(byDate.length>0) {
-						console.log('rimuovo  per pedine scoperte')
 						$.each(byDate, function(index, val) {
-							 if(val.totaleScoperte==byDate[0].totaleScoperte) {
-							 	byDue.push(val)
-							 }  else console.log(val)
+							 	//console.log(val)
 						});
-					} else byDue = byDate;
+						var byDue = [];
+						if(byDate.length>0) {
+							console.log('rimuovo per pedine sotto attacco')
+							$.each(byDate, function(index, val) {
+								 if(val.totaleAttaccate==byDate[0].totaleAttaccate) {
+								 	//console.log(index)
+								 	byDue.push(val)
+								 } //else console.log(val)
+							});
+						} else byDue = byDate;
+
+						console.log('ordino per pedine scoperte')
+						byDate = byDue.slice(0);
+						byDate.sort(function(a,b) {
+					    return a.totaleScoperte - b.totaleScoperte;
+						});
+						//console.log('muovo per proteggere');
+						var byDue = [];
+						if(byDate.length>0) {
+							console.log('rimuovo  per pedine scoperte')
+							$.each(byDate, function(index, val) {
+								 if(val.totaleScoperte==byDate[0].totaleScoperte) {
+								 	byDue.push(val)
+								 }  //else console.log(val)
+							});
+						} else byDue = byDate;
 
 
 
+						}
+
+						console.log('ordino per pedine che attacco')
+						byDate = byDue.slice(0);
+						byDate.sort(function(a,b) {
+					    return b.totaleCheAttacco - a.totaleCheAttacco;
+						});
+						var byDue = [];
+						if(byDate.length>0) {
+							console.log('rimuovo  per pedine che attacco')
+							$.each(byDate, function(index, val) {
+								 if(val.totaleCheAttacco==byDate[0].totaleCheAttacco) {
+								 	byDue.push(val)
+								 }  //else console.log(val)
+							});
+						} else byDue = byDate;
+						byDate = byDue;
+
+						$.each(byDate, function(index, val) {
+							 	//console.log(val)
+						});
 					}
-
-					console.log('ordino per pedine che attacco')
-					byDate = byDue.slice(0);
-					byDate.sort(function(a,b) {
-				    return b.totaleCheAttacco - a.totaleCheAttacco;
-					});
-					var byDue = [];
-					if(byDate.length>0) {
-						console.log('rimuovo  per pedine che attacco')
-						$.each(byDate, function(index, val) {
-							 if(val.totaleCheAttacco==byDate[0].totaleCheAttacco) {
-							 	byDue.push(val)
-							 }  else console.log(val)
-						});
-					} else byDue = byDate;
-					byDate = byDue;
-
-					$.each(byDate, function(index, val) {
-						 	console.log(val)
-					});
 
 
 
@@ -744,11 +795,14 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 
 			}
 }
-function ordinaErimuovi(lemosse) {
-}
-function provaleTutte(arrayMosse,partita) {
+function provaleTutte(arrayMosse,partita,chi) {
+	if(chi==undefined) {
 	var coloreCorrente = partita.caselle[arrayMosse[0].starting].colore;
 	var coloreAvversario = coloreCorrente=='bianco' ? 'nero' : 'bianco';
+	} else {
+	var coloreCorrente = chi;
+	var coloreAvversario = coloreCorrente=='bianco' ? 'nero' : 'bianco';
+	}
 	var simulazione = [];
 	var lamossa;
 	var situazioni = [];
@@ -871,7 +925,7 @@ function creaScacchiera(partita) {
 	setTimeout(function(){  $('.scacchiera').removeClass('rotate') }, 0);
 }
 function disegnaScacchiera(partita) {
-	$('.scacchiera').html('');
+	$('.scacchiera').empty();
 	$.each(partita.caselle, function(index, val) {
 		 var tipo = 'vuoto'
 		 if(val.occupata!='no') tipo = val.occupata+val.colore
