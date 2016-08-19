@@ -195,7 +195,7 @@ $( document ).ready(function() {
 						console.log('hai perso')
 					}
 				}
-		    }, 0);
+		    }, 10);
 		});
 		var historyCounter = 1;
 		$('#prima').attr('class', 'disabled');
@@ -573,9 +573,9 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 		// console.log('-------')
 		// console.log('le mosse: ')
 		var sit = provaleTutte(arrayMosse,partita)
-		console.log(sit)
+		var darimuovere = [];
 		$.each(sit, function(index, val) {
-			 console.log('----'+index+'-----');
+			 //console.log('----'+index+'-----');
 			 // console.log(val)
 			 //  console.log('---------');
 			 var simulazione;
@@ -585,40 +585,38 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			 var sit2 = provaleTutte(arrayMosse2,simulazione,'bianco');
 			 //console.log('il bianco ha '+sit2.length+ ' mosse')
 			 if(sit2.length==0) {
-
 			 	if(controllaScacco(simulazione,'nero')) {
 			 		console.log('faccio il matto')
 			 		sit = [val];
 			 	}
 			 	else {
-			 		console.log('elimino lo stallo')
-			 		sit.splice(sit.indexOf(val), 1);
-
+			 		darimuovere.push(sit.indexOf(val));
 			 	}
 			 }
-			 // if(sit2.length==1) {
-			 // 	console.log('solo una')
-			 // 				 $.each(sit2, function(index, val) {
-			 // 	 console.log(val)
-			 // });
-			 // }
-			 // if(sit2.length==2) {
-			 // 	console.log('solo due')
-			 // 				 $.each(sit2, function(index, val) {
-			 // 	 console.log(val)
-			 // });
-			 // }
-			 // $.each(arrayMosse2, function(index, val) {
-			 // 	console.log(val)
-			 // 	var sit = provaleTutte(arrayMosse,partita)
-			 // });
-			// var simulazione;
-			// $.each(arrayMosse, function(index, val) {
-			// 	simulazione = JSON.parse(JSON.stringify(partita));
-			// 	simulaMuovi(simulazione,val.starting,val2);
-			// });
-		});
+			 //console.log(sit2.length-index)
+			 // $('.timer').html(sit2.length-index)
+			 // $.each(sit2, function(indexo, valo) {
+			 // 	//console.log(valo);
+			 // 	var simulazione2;
+				//  simulazione2 = JSON.parse(JSON.stringify(simulazione));
+				//  simulaMuovi(simulazione2,valo.lamossa[0],valo.lamossa[1]);
+				//  var arrayMosse3 = trovaLeMosse(simulazione2,'nero');
+				//  var sit3 = provaleTutte(arrayMosse2,simulazione2,'nero');
+				//  //console.log(sit3.length)
+				//  if(sit3.length==0) {
+				//  	console.log('dio boia mi fa il matto')
 
+				//  }
+
+			 // });
+		});
+		var nuovosit = [];
+		$.each(sit, function(index, val) {
+			 if(darimuovere.indexOf(index)==-1) {
+			 	nuovosit.push(val);
+			 }
+		});
+		sit = nuovosit;
 
 		var attaccateEscoperte = [];
 		if(true) { //da eliminare
