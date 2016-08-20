@@ -1,0 +1,55 @@
+body {
+	margin:0;
+
+}
+.debug {
+	font-size:-webkit-xxx-large;
+	text-align:left;
+	padding:10px;
+}
+.pageTitle {
+	text-align:center;
+	font-size:-webkit-xxx-large;
+}
+#canvasContainer {
+	text-align:center;
+}
+#indicators .span {
+	float:right;
+	border: 1px solid;
+}
+#indicators .tit {
+	float:left;
+	text-align: right;
+	width: 30%;
+}
+#indicators  {
+	text-align:center;
+	box-sizing:border-box;
+	padding:10px;
+	display:none;
+}
+#indicators > div {
+	display: inline-block;
+    width: 100%;
+}
+#indicators > div:after {
+	content: '';
+	clear:both;
+}
+#indicators > div > div {
+ display: inline-block;
+ width:65%;
+}
+#indicators .pin {
+	height: 15px;
+    background-image: url("pin.png");
+    background-size: 10px 100%;
+    background-repeat: no-repeat;
+ 	-webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+}
+
+
+
+

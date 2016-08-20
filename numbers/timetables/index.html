@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<title>TIME TABLES</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=1"/>
+
+</head>
+	<body>
+		<script src="./jquery.js"></script>
+		<script src="./tt.js"></script>
+		<link rel="stylesheet" type="text/css" href="./tt.css">
+		<div class="controls">
+<!-- 			<input id="fast" value="slower" type="button"></input>
+			<input id="slow" value="faster" type="button"></input> -->
+			<div class="cont">
+				<input id="fas" value="10" type="hidden"></input>
+				<input id="nrpunti" style="width:10%;" value="1000" type="text" placeholder="punti"></input>
+				<select id="operation">
+					<option value="molt">multiply</option>
+					<option value="pow">pow</option>
+						<option value="smolt">multiply special</option>
+											<option value="molt">multiply</option>
+
+
+					<option value="add">adding</option>
+				</select>
+				<input id="operator" style="width:10%;" value="10" type="text" placeholder=""></input>
+			</div>
+
+			<input id="start" value="draw" type="button"></input>
+			<input id="loop" value="loop" type="button"></input>
+		</div>
+		<div class="debug2"></div>
+		<div id="canvasContainer"></div>
+		<div id="indicators"></div>
+		<div class="debug"></div>
+	</body>
+</html>

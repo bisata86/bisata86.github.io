@@ -1,0 +1,55 @@
+body {
+	margin:0;
+	background:lightgray;
+	color:white;
+}
+.debug, .debug2 {
+	font-size:-webkit-x-large;
+	text-align:center;
+	padding:10px 10px;
+}
+.pageTitle {
+	text-align:center;
+	font-size:-webkit-xxx-large;
+}
+#canvasContainer {
+	text-align:center;
+}
+.container {
+	width:10%;
+	height:10%;
+	display:inline-block;
+}
+img {
+	width:100%;
+	height:100%;
+}
+.selected {
+	width:100%;
+	display:inline-block !important;
+}
+.small {
+	width:5%;
+}
+.selection .container {
+	display:none;
+}
+.controls {
+	text-align:center;
+	padding:10px;
+}
+.controls input, .controls select {
+	padding:10px;
+}
+canvas {
+	width:100%;
+}
+.cont {
+	width:100%;
+	padding:10px;
+
+}
+
+
+
+
