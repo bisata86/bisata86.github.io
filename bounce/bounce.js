@@ -14,7 +14,7 @@ $( document ).ready(function() {
     $('body').append('<div class="bar"></div>');
     $('.bar').append('<div class="percentage"></div>');
 	$('body').on('click', 'canvas', function(event) {
-		event.preventDefault();
+		//event.preventDefault();
 
 		// shapes.push({x:event.pageX,y:event.pageY,radius:100,color:'red',direction:'none'})
 		// var temp = shapes.length
@@ -22,14 +22,14 @@ $( document ).ready(function() {
 		//drawAll()
 	});
 	$('body').on('touchstart', 'canvas', function(event) {
+		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:'red',direction:'none'})
 		loadInterval =  setInterval(function(){
-			if(salamoize==initialSalamoize) {
-				shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:'red',direction:'none'})
-			} else {
+
+
 				shapes[shapes.length-1].radius = salamoize;
-			}
-			salamoize=salamoize+2
-		}, 50);
+
+			salamoize=salamoize+1
+		}, 10);
 
 	});
 	$('body').on('touchend', 'canvas', function(event) {
@@ -59,6 +59,7 @@ var drawCirlce= function(centerX,centerY,radius) {
 
 }
 var drawAll= function() {
+	//console.log(shapes.length)
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
 	$.each(shapes, function(index, val) {
@@ -96,6 +97,7 @@ var drawAll= function() {
       		val.radius = val.radius*0.8;
       	}
       }
+
 	});
 	if(ancora) {
 		setTimeout(function(){ drawAll() }, 23);

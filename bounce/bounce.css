@@ -3,6 +3,8 @@
     height: 20px;
     width:100%;
     top:0;
+    opacity: 0.4;
+
 }
 .percentage {
     width:100%;
