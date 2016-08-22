@@ -7,8 +7,10 @@ canvas.width = canvasWidth;
 canvas.height = canvasHeight;
 var shapes = [];
 var initialSalamoize = 10;
+var storedSalamoize = 100
 var loadInterval;
 var salamoize = initialSalamoize;
+var vel =24;
 $( document ).ready(function() {
     $('body').append(canvas);
     $('body').append('<div class="bar"></div>');
@@ -26,7 +28,9 @@ $( document ).ready(function() {
 		loadInterval =  setInterval(function(){
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
-		}, 23);
+			storedSalamoize--;
+
+		}, vel);
 
 	});
 	$('body').on('touchend', 'canvas', function(event) {
@@ -56,7 +60,8 @@ var drawCirlce= function(centerX,centerY,radius) {
 
 }
 var drawAll= function() {
-	//console.log(shapes.length)
+	$('.percentage').css({
+				width: storedSalamoize+'%'});
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
 	$.each(shapes, function(index, val) {
@@ -79,25 +84,32 @@ var drawAll= function() {
       	}
       	if(val.y<5-val.radius) {
       		val.direction='s'
-      		val.radius = val.radius*0.8;
+      		val.radius = val.radius-1;
+      		storedSalamoize++
       	}
       	if(val.y>canvasHeight+val.radius) {
       		val.direction='n'
-      		val.radius = val.radius*0.8;
+      		val.radius = val.radius-1;
+      		storedSalamoize++
       	}
       	if(val.x>canvasWidth+val.radius) {
       		val.direction='w'
-      		val.radius = val.radius*0.8;
+      		val.radius = val.radius-1;
+      		storedSalamoize++
       	}
       	if(val.x<0+val.radius) {
       		val.direction='e'
-      		val.radius = val.radius*0.8;
+      		val.radius = val.radius-1;
+      		storedSalamoize++
       	}
+      }
+      if(val.radius<5) {
+      	val.radius=0;
       }
 
 	});
 	if(ancora) {
-		setTimeout(function(){ drawAll() }, 100);
+		setTimeout(function(){ drawAll() }, vel);
 	} else {
 		console.log('cane')
 	}
