@@ -22,7 +22,6 @@ $( document ).ready(function() {
 		//drawAll()
 	});
 	$('body').on('touchstart', 'canvas', function(event) {
-		console.log(event.originalEvent.touches[0].pageX)
 		loadInterval =  setInterval(function(){
 			if(salamoize==initialSalamoize) {
 				shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:'red',direction:'none'})
@@ -38,7 +37,8 @@ $( document ).ready(function() {
 		salamoize = initialSalamoize;
 		//shapes.push({x:event.pageX,y:event.pageY,radius:100,color:'red',direction:'none'})
 		var temp = shapes.length
-		setTimeout(function(){ explode(temp) }, 1000);
+		explode(shapes.length)
+		//setTimeout(function(){ explode(temp) }, 1000);
 	});
 
 	drawAll();
