@@ -24,12 +24,9 @@ $( document ).ready(function() {
 	$('body').on('touchstart', 'canvas', function(event) {
 		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:'red',direction:'none'})
 		loadInterval =  setInterval(function(){
-
-
-				shapes[shapes.length-1].radius = salamoize;
-
+			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
-		}, 10);
+		}, 23);
 
 	});
 	$('body').on('touchend', 'canvas', function(event) {
@@ -100,7 +97,7 @@ var drawAll= function() {
 
 	});
 	if(ancora) {
-		setTimeout(function(){ drawAll() }, 23);
+		setTimeout(function(){ drawAll() }, 100);
 	} else {
 		console.log('cane')
 	}
