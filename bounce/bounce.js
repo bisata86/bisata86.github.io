@@ -24,11 +24,11 @@ $( document ).ready(function() {
 		//drawAll()
 	});
 	$('body').on('touchstart', 'canvas', function(event) {
-		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:'red',direction:'none'})
+		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:getRandomColor(),direction:'none'})
 		loadInterval =  setInterval(function(){
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
-			storedSalamoize--;
+			storedSalamoize=storedSalamoize-2;
 
 		}, vel);
 
@@ -103,7 +103,7 @@ var drawAll= function() {
       		storedSalamoize++
       	}
       }
-      if(val.radius<5) {
+      if(val.radius<10) {
       	val.radius=0;
       }
 
@@ -114,5 +114,12 @@ var drawAll= function() {
 		console.log('cane')
 	}
 }
-
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 
