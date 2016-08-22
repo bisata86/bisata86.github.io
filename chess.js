@@ -575,9 +575,9 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 		var sit = provaleTutte(arrayMosse,partita)
 		var darimuovere = [];
 		$.each(sit, function(index, val) {
-			 //console.log('----'+index+'-----');
-			 // console.log(val)
-			 //  console.log('---------');
+			 console.log('----'+index+'-----');
+			 console.log(val)
+			  console.log('---------');
 			 var simulazione;
 			 simulazione = JSON.parse(JSON.stringify(partita));
 			 simulaMuovi(simulazione,val.lamossa[0],val.lamossa[1]);
@@ -593,10 +593,10 @@ function faiCalcoliComplicatissimi(arrayMosse,partita) {
 			 		darimuovere.push(sit.indexOf(val));
 			 	}
 			 }
-			 //console.log(sit2.length-index)
-			 // $('.timer').html(sit2.length-index)
+			console.log(sit2.length-index)
+			 $('.timer').html(sit2.length-index)
 			 // $.each(sit2, function(indexo, valo) {
-			 // 	//console.log(valo);
+			 // 	console.log(valo);
 			 // 	var simulazione2;
 				//  simulazione2 = JSON.parse(JSON.stringify(simulazione));
 				//  simulaMuovi(simulazione2,valo.lamossa[0],valo.lamossa[1]);
