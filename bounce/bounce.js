@@ -69,7 +69,7 @@ var drawAll= function() {
       ctx.arc(val.x, val.y, val.radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = val.color;
       ctx.fill();
-      if(val.direction!='none') {
+      if(val.direction!='none' && val.radius!=0) {
       	if(val.direction=='n') {
       		val.y = val.y-val.radius/2
       	}
@@ -82,17 +82,17 @@ var drawAll= function() {
        	if(val.direction=='w') {
       		val.x = val.x-val.radius/2
       	}
-      	if(val.y<5-val.radius) {
+      	if(val.y<val.radius) {
       		val.direction='s'
       		val.radius = val.radius-1;
       		storedSalamoize++
       	}
-      	if(val.y>canvasHeight+val.radius) {
+      	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
       		val.radius = val.radius-1;
       		storedSalamoize++
       	}
-      	if(val.x>canvasWidth+val.radius) {
+      	if(val.x>canvasWidth-val.radius) {
       		val.direction='w'
       		val.radius = val.radius-1;
       		storedSalamoize++
