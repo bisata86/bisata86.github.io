@@ -4,7 +4,7 @@
     width:100%;
     top:0;
     opacity: 0.4;
-    display:none;
+
 }
 .percentage {
     width:100%;
@@ -14,7 +14,7 @@
 body {
     padding: 0;
     margin: 0;
-    overflow:hidden;
+
     -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none;   /* Chrome/Safari/Opera */
   -khtml-user-select: none;    /* Konqueror */

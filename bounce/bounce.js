@@ -1,10 +1,7 @@
 
-var canvas = document.createElement("canvas");
-var ctx = canvas.getContext("2d");
-var canvasWidth = $(window).width();
-var canvasHeight = $(window).height();
-canvas.width = canvasWidth;
-canvas.height = canvasHeight;
+var ctx;
+var canvasWidth ;
+var canvasHeight;
 var shapes = [];
 var initialSalamoize = 10;
 var storedSalamoize = 100
@@ -12,6 +9,12 @@ var loadInterval;
 var salamoize = initialSalamoize;
 var vel =24;
 $( document ).ready(function() {
+   canvas = document.createElement("canvas");
+   ctx = canvas.getContext("2d");
+   canvasWidth = $(window).width();
+   canvasHeight = $(window).height();
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
     $('body').append(canvas);
     $('body').append('<div class="bar"></div>');
     $('.bar').append('<div class="percentage"></div>');
@@ -26,18 +29,18 @@ $( document ).ready(function() {
 	$('body').on('touchstart', 'canvas', function(event) {
 		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:getRandomColor(),direction:'none'})
 		loadInterval =  setInterval(function(){
+      console.log(storedSalamoize)
+      if(storedSalamoize>=0) {
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
-			storedSalamoize=storedSalamoize-2;
-
+			storedSalamoize=storedSalamoize-1;
+      }
 		}, vel);
-
 	});
 	$('body').on('touchend', 'canvas', function(event) {
 		clearInterval(loadInterval)
 		salamoize = initialSalamoize;
 		//shapes.push({x:event.pageX,y:event.pageY,radius:100,color:'red',direction:'none'})
-		var temp = shapes.length
 		explode(shapes.length)
 		//setTimeout(function(){ explode(temp) }, 1000);
 	});
@@ -85,21 +88,25 @@ var drawAll= function() {
       	if(val.y<val.radius) {
       		val.direction='s'
       		val.radius = val.radius-1;
+          if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
       		val.radius = val.radius-1;
+           if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.x>canvasWidth-val.radius) {
       		val.direction='w'
       		val.radius = val.radius-1;
+           if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.x<0+val.radius) {
       		val.direction='e'
       		val.radius = val.radius-1;
+           if(storedSalamoize<100)
       		storedSalamoize++
       	}
       }
