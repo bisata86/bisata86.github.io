@@ -261,14 +261,14 @@ function run() {
         var total = grid.length*grid.length;
         if(mygroup.length > (total-mygroup.length-mygroupAi.length) && mygroup.length > (total-mygroup.length-mygroupAi2.length)) {
             console.log('hai vinto');
-            notificate('HAI VINTO <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'win')
+            notificate('YOU WIN <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'win')
             $('body').addClass('gameover');
             $('body').removeClass('gaming');
             return true;
         }
         if((mygroupAi.length > (total-mygroupAi.length-mygroupAi2.length) && mygroupAi.length > (total-mygroupAi.length-mygroup.length)) || (mygroupAi2.length > (total-mygroupAi2.length-mygroupAi.length) && mygroupAi2.length > (total-mygroupAi2.length-mygroup.length))) {
             console.log('Ai ha vinto');
-            notificate('HAI PERSO <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'reload');
+            notificate('YOU LOSE <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'reload');
             $('body').addClass('gameover');
             $('body').removeClass('gaming');
             return true;
@@ -427,13 +427,10 @@ function run() {
 
         updatePoints();
         var control = checkEndGame();
-        if(!checkEndGame()) {
+        if(!control) {
             setTimeout(function() {
-                if(!control) {
                     aiMove(mygroupAi,1);
-                    control = checkEndGame();
                     updatePoints();
-                }
             }, 1000);
         } else timer.stop();
 
@@ -446,6 +443,7 @@ function run() {
         $('.clickcounter').show();
         $('.clickcounter').addClass('enabled');
         $('.clickcounter').attr('id', action);
+
     }
     function notificateClick(text) {
         $('body').addClass('pauseGrid');

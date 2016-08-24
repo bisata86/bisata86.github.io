@@ -89,7 +89,7 @@ var drawAll= function() {
       		val.direction='s'
       		val.radius = val.radius-1;
           if(storedSalamoize<100)
-      		storedSalamoize++
+      		storedSalamoiz++
       	}
       	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
