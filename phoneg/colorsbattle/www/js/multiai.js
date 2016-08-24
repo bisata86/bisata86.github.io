@@ -7,7 +7,7 @@ function Timer(){
     var timerSeconds;
 
     var _this = this;
-    
+
     this.callback = function(){}
 
     function drawTimer(percent){
@@ -51,15 +51,15 @@ function Timer(){
     this.start = function(){
        timer = setInterval(this.run,50);
        timerFinish = new Date().getTime()+(timerSeconds*1000);
-    } 
+    }
 
     this.setTime = function(_time){
        timerSeconds      = _time;
-    }    
+    }
 
     this.setCallback = function(_callback){
         _this.callback = _callback;
-    }                 
+    }
     $('.timer').css('font-size','40px');
     timerCurrent = 0;
 }
@@ -104,9 +104,9 @@ function run() {
 
     setTimeout(function(){
         $('#logoScreen').fadeOut(200)
-    },3000)
+    },300)
 
-    
+
 
 
     timer = new Timer()
@@ -126,22 +126,26 @@ function run() {
 
     function timeout(){
         $("#powers").addClass('wait');
+        var control = checkEndGame();
+        if(!control) {
         setTimeout(function() {
-            aiMove(mygroupAi,1);
-            control = checkEndGame();
-            updatePoints();
-        }, 1000);        
+                aiMove(mygroupAi,1);
+                control = checkEndGame();
+                updatePoints();
+
+        }, 1000);
+          }  else timer.stop();
     }
 
     function win(action) {
         if(action == 'win') {
             level++;
-            
+
             if(level % 3 == 0 && maxTime > 2){
                 maxTime -= 0.5;
                 timer.setTime(maxTime);
             }else{
-                rowTiles += 1;    
+                rowTiles += 1;
             }
         }
 
@@ -152,7 +156,7 @@ function run() {
 
         basestructure = "<div class='pixel'></div>";
         structure = "";
-        
+
         for(var ki=0;ki<rowTiles;ki++) {
             for(var k=0;k<rowTiles;k++) {
                 structure = structure + basestructure;
@@ -185,8 +189,8 @@ function run() {
         $('#homeScreen').fadeOut(200,function(){
             timer.setTime(maxTime);
             timer.setCallback(timeout);
-            timer.start();               
-        });   
+            timer.start();
+        });
     }
 
     $("#start").click(start);
@@ -255,16 +259,20 @@ function run() {
     }
     function checkEndGame() {
         var total = grid.length*grid.length;
-
-
-        if(mygroup.length > (total-mygroup.length-mygroupAi.length)) {
-            notificate('WIN <br>'+ mygroup.length+':'+mygroupAi.length, 'win')
+        if(mygroup.length > (total-mygroup.length-mygroupAi.length) && mygroup.length > (total-mygroup.length-mygroupAi2.length)) {
+            console.log('hai vinto');
+            notificate('HAI VINTO <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'win')
             $('body').addClass('gameover');
             $('body').removeClass('gaming');
-            timer.stop();
             return true;
         }
-
+        if((mygroupAi.length > (total-mygroupAi.length-mygroupAi2.length) && mygroupAi.length > (total-mygroupAi.length-mygroup.length)) || (mygroupAi2.length > (total-mygroupAi2.length-mygroupAi.length) && mygroupAi2.length > (total-mygroupAi2.length-mygroup.length))) {
+            console.log('Ai ha vinto');
+            notificate('HAI PERSO <br>'+ mygroup.length+':'+mygroupAi.length+'<span id="aiscore">:'+mygroupAi2.length+'</span>', 'reload');
+            $('body').addClass('gameover');
+            $('body').removeClass('gaming');
+            return true;
+        }
         return false;
     }
 
@@ -367,7 +375,7 @@ function run() {
     $( ".pixel" ).on( clickType, function() {
         var position = $(this).prevAll('div').length;
         var positions = gridPos(position);
-        
+
         if(positions[0]==0 && positions[1]==rowTiles-1)
             notificateClick('You start from here!');
         else if(positions[0]==rowTiles-1 && positions[1]==0)
@@ -419,15 +427,16 @@ function run() {
 
         updatePoints();
         var control = checkEndGame();
-        
-        setTimeout(function() {
-            if(!control) {
-                aiMove(mygroupAi,1);
-                control = checkEndGame();
-                updatePoints();               
-            }
-        }, 1000);
-        
+        if(!checkEndGame()) {
+            setTimeout(function() {
+                if(!control) {
+                    aiMove(mygroupAi,1);
+                    control = checkEndGame();
+                    updatePoints();
+                }
+            }, 1000);
+        } else timer.stop();
+
     });
 
 
@@ -523,7 +532,7 @@ function run() {
             || navigator.userAgent.match(/Windows Phone/i)
         ){
             return true;
-        } 
+        }
         else {
             return false;
         }
