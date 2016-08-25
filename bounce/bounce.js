@@ -41,6 +41,7 @@ $( document ).ready(function() {
     if(distanceBetween2(enemy,{x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY})>enemy.radius+10) {
 		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:getRandomColor(),direction:'none'})
 		loadInterval =  setInterval(function(){
+      if(distanceBetween2(enemy,{x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY})>(shapes[shapes.length-1].radius)+enemy.radius)
       if(storedSalamoize>=0) {
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
@@ -130,7 +131,7 @@ var drawAll= function() {
       	val.radius=0;
       }
      // console.log(distanceBetween2(enemy,val))
-       if(distanceBetween2(enemy,val)<enemy.radius) {
+       if(distanceBetween2(enemy,val)<enemy.radius/2) {
         if (confirm('colpito')) window.location.reload();
       }
        if(distanceBetween2(enemy,val)<enemy.radius+10) {
