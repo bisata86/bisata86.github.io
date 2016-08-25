@@ -3,18 +3,29 @@ var ctx;
 var canvasWidth ;
 var canvasHeight;
 var shapes = [];
+var enemy = {};
 var initialSalamoize = 10;
 var storedSalamoize = 100
 var loadInterval;
 var salamoize = initialSalamoize;
+    var enemyReady = false;
+    var enemyImage;
 var vel =24;
 $( document ).ready(function() {
-   canvas = document.createElement("canvas");
-   ctx = canvas.getContext("2d");
-   canvasWidth = $(window).width();
-   canvasHeight = $(window).height();
+  enemyImage = new Image();
+  enemyImage.onload = function () {
+    enemyReady = true;
+  };
+  enemyImage.src = "./enemy.png";
+  canvas = document.createElement("canvas");
+  ctx = canvas.getContext("2d");
+  canvasWidth = $(window).width();
+  canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+  enemy.radius = 40;
+  enemy.x= canvasWidth/2
+  enemy.y= canvasHeight/2
     $('body').append(canvas);
     $('body').append('<div class="bar"></div>');
     $('.bar').append('<div class="percentage"></div>');
@@ -29,7 +40,6 @@ $( document ).ready(function() {
 	$('body').on('touchstart', 'canvas', function(event) {
 		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:getRandomColor(),direction:'none'})
 		loadInterval =  setInterval(function(){
-      console.log(storedSalamoize)
       if(storedSalamoize>=0) {
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
@@ -47,6 +57,11 @@ $( document ).ready(function() {
 
 	drawAll();
 });
+var placeEnemy = function() {
+      if (enemyReady) {
+      ctx.drawImage(enemyImage, enemy.x-enemy.radius/2, enemy.y-enemy.radius/2, enemy.radius, enemy.radius);
+  }
+}
 var explode = function(index) {
 	var e = {x:shapes[index-1].x+shapes[index-1].radius/2,y:shapes[index-1].y,radius:shapes[index-1].radius/2,color:shapes[index-1].color,direction:'e'}
 	var w = {x:shapes[index-1].x-shapes[index-1].radius/2,y:shapes[index-1].y,radius:shapes[index-1].radius/2,color:shapes[index-1].color,direction:'w'}
@@ -60,11 +75,10 @@ var drawCirlce= function(centerX,centerY,radius) {
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = 'red';
       ctx.fill();
-
 }
 var drawAll= function() {
 	$('.percentage').css({
-				width: storedSalamoize+'%'});
+	width: storedSalamoize+'%'});
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
 	$.each(shapes, function(index, val) {
@@ -87,31 +101,46 @@ var drawAll= function() {
       	}
       	if(val.y<val.radius) {
       		val.direction='s'
-      		val.radius = val.radius-1;
+      		val.radius = val.radius*0.9;
           if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
-      		val.radius = val.radius-1;
+      		val.radius = val.radius*0.9;
            if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.x>canvasWidth-val.radius) {
       		val.direction='w'
-      		val.radius = val.radius-1;
+      		val.radius = val.radius*0.9;
            if(storedSalamoize<100)
       		storedSalamoize++
       	}
       	if(val.x<0+val.radius) {
       		val.direction='e'
-      		val.radius = val.radius-1;
+      		val.radius = val.radius*0.9;
            if(storedSalamoize<100)
       		storedSalamoize++
       	}
       }
       if(val.radius<10) {
       	val.radius=0;
+      }
+     // console.log(distanceBetween2(enemy,val))
+      if(distanceBetween2(enemy,val)<enemy.radius) {
+        if(enemy.x > val.x) {
+          enemy.x = enemy.x+5;
+        }
+        if(enemy.y > val.y) {
+          enemy.y = enemy.y+5;
+        }
+        if(enemy.x < val.x) {
+          enemy.x = enemy.x-5;
+        }
+        if(enemy.y < val.y) {
+          enemy.y = enemy.y-5;
+        }
       }
 
 	});
@@ -120,6 +149,7 @@ var drawAll= function() {
 	} else {
 		console.log('cane')
 	}
+    placeEnemy();
 }
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -128,5 +158,12 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+function distanceBetween2(f,s) {
+  var x1 = f.x;
+  var y1 = f.y;
+  var x2 =  s.x;
+  var y2 =  s.y;
+  return  Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
 }
 
