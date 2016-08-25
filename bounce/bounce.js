@@ -38,6 +38,7 @@ $( document ).ready(function() {
 		//drawAll()
 	});
 	$('body').on('touchstart', 'canvas', function(event) {
+    if(distanceBetween2(enemy,{x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY})>enemy.radius+10) {
 		shapes.push({x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY,radius:salamoize,color:getRandomColor(),direction:'none'})
 		loadInterval =  setInterval(function(){
       if(storedSalamoize>=0) {
@@ -46,6 +47,7 @@ $( document ).ready(function() {
 			storedSalamoize=storedSalamoize-1;
       }
 		}, vel);
+  }
 	});
 	$('body').on('touchend', 'canvas', function(event) {
 		clearInterval(loadInterval)
