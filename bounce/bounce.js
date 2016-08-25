@@ -128,7 +128,10 @@ var drawAll= function() {
       	val.radius=0;
       }
      // console.log(distanceBetween2(enemy,val))
-      if(distanceBetween2(enemy,val)<enemy.radius) {
+       if(distanceBetween2(enemy,val)<enemy.radius) {
+        alert('colpito')
+      }
+      else if(distanceBetween2(enemy,val)<enemy.radius+5) {
         if(enemy.x > val.x) {
           enemy.x = enemy.x+val.radius;
         }
@@ -142,6 +145,7 @@ var drawAll= function() {
           enemy.y = enemy.y-val.radius;
         }
       }
+
 
 	});
 	if(ancora) {
