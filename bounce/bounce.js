@@ -129,7 +129,7 @@ var drawAll= function() {
       }
      // console.log(distanceBetween2(enemy,val))
        if(distanceBetween2(enemy,val)<enemy.radius) {
-        alert('colpito')
+        if (confirm('colpito')) window.location.reload();
       }
        if(distanceBetween2(enemy,val)<enemy.radius+5) {
         if(enemy.x > val.x) {
