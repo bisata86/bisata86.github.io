@@ -130,16 +130,16 @@ var drawAll= function() {
      // console.log(distanceBetween2(enemy,val))
       if(distanceBetween2(enemy,val)<enemy.radius) {
         if(enemy.x > val.x) {
-          enemy.x = enemy.x+5;
+          enemy.x = enemy.x+val.radius;
         }
         if(enemy.y > val.y) {
-          enemy.y = enemy.y+5;
+          enemy.y = enemy.y+val.radius;
         }
         if(enemy.x < val.x) {
-          enemy.x = enemy.x-5;
+          enemy.x = enemy.x-val.radius;
         }
         if(enemy.y < val.y) {
-          enemy.y = enemy.y-5;
+          enemy.y = enemy.y-val.radius;
         }
       }
 
