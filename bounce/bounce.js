@@ -131,7 +131,7 @@ var drawAll= function() {
        if(distanceBetween2(enemy,val)<enemy.radius) {
         if (confirm('colpito')) window.location.reload();
       }
-       if(distanceBetween2(enemy,val)<enemy.radius+5) {
+       if(distanceBetween2(enemy,val)<enemy.radius+10) {
         if(enemy.x > val.x) {
           enemy.x = enemy.x+val.radius;
         }
