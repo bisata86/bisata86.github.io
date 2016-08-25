@@ -91,16 +91,16 @@ var drawAll= function() {
       ctx.fill();
       if(val.direction!='none' && val.radius!=0) {
       	if(val.direction=='n') {
-      		val.y = val.y-val.radius/2
+      		val.y = Math.abs(val.y-val.radius/2)
       	}
        	if(val.direction=='s') {
-      		val.y = val.y+val.radius/2
+      		val.y = Math.abs(val.y+val.radius/2)
       	}
        	if(val.direction=='e') {
-      		val.x = val.x+val.radius/2
+      		val.x = Math.abs(val.x+val.radius/2)
       	}
        	if(val.direction=='w') {
-      		val.x = val.x-val.radius/2
+      		val.x = Math.abs(val.x-val.radius/2)
       	}
       	if(val.y<val.radius) {
       		val.direction='s'
@@ -147,6 +147,12 @@ var drawAll= function() {
         if(enemy.y < val.y) {
           enemy.y = enemy.y-val.radius;
         }
+      }
+      if(enemy.x<0 || enemy.y>canvasHeight || enemy.x<0 || enemy.x>canvasWidth) {
+          setTimeout(function(){
+             enemy.x= canvasWidth/2
+  enemy.y= canvasHeight/2
+           }, 1000);
       }
 
 
