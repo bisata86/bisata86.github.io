@@ -174,7 +174,7 @@ var drawAll= function() {
 	});
   if(winLevel==true && storedSalamoize <=0) {
     setTimeout(function(){ ancora = false; }, vel);
-    setTimeout(function(){ window.location.reload(); }, vel+1000);
+    setTimeout(function(){ window.location.reload(); }, 1000);
     enemyImage.src = "./enemy2.png";
   }
 	if(ancora) {
