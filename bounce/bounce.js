@@ -154,7 +154,9 @@ var drawAll= function() {
              enemy.y= canvasHeight/2
            }, 1000);
       }
-      if(val.radius=0)
+      if(val.radius<6) {
+        val.radius = 0;
+      }
 
 	});
 	if(ancora) {
