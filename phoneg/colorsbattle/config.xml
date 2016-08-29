@@ -1,4 +1,4 @@
-<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.skeletrons.colors" version="1.0.0">
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0" id="com.skeletrons.colors" version="1.1.1">
   <name>colors</name>
   <description>Let's conqueer the color grid!</description>
   <author href="http://bisata86.github.io" email="bisata@gmail.com">Skeletrons Corp.</author>
@@ -6,6 +6,7 @@
   <preference name="DisallowOverscroll" value="true"/>
   <preference name="android-minSdkVersion" value="14"/>
   <preference name="orientation" value="portrait" />
+  <preference name="permissions" value="none" />
   <!-- <plugin name="cordova-plugin-battery-status" source="npm" spec="~1.1.1"/>
   <plugin name="cordova-plugin-camera" source="npm" spec="~2.1.1"/>
   <plugin name="cordova-plugin-media-capture" source="npm" spec="~1.2.0"/>
