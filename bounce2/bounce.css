@@ -1,10 +1,10 @@
-.bar {
+.go {
     position:fixed;
-    height: 20px;
-    width:100%;
-    top:0;
-    opacity: 0.4;
-
+    height: 50px;
+    width:50%;
+    bottom:0;
+    right:0;
+    background:red;
 }
 .percentage {
     width:100%;
