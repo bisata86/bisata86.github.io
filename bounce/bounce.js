@@ -45,7 +45,7 @@ $( document ).ready(function() {
       if(storedSalamoize>=0) {
 			shapes[shapes.length-1].radius = salamoize;
 			salamoize=salamoize+1
-			storedSalamoize=storedSalamoize-1;
+			storedSalamoize=storedSalamoize-3;
       }
 		}, vel);
   }
@@ -84,6 +84,7 @@ var drawAll= function() {
 	width: storedSalamoize+'%'});
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
+  var winLevel = true;
 	$.each(shapes, function(index, val) {
 	    ctx.beginPath();
       ctx.arc(val.x, val.y, val.radius, 0, 2 * Math.PI, false);
@@ -105,34 +106,28 @@ var drawAll= function() {
       	if(val.y<val.radius) {
       		val.direction='s'
       		val.radius = val.radius*0.9;
-        //   if(storedSalamoize<100)
-      		// storedSalamoize++
       	}
       	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
       		val.radius = val.radius*0.9;
-        //    if(storedSalamoize<100)
-      		// storedSalamoize++
       	}
       	if(val.x>canvasWidth-val.radius) {
       		val.direction='w'
       		val.radius = val.radius*0.9;
-        //    if(storedSalamoize<100)
-      		// storedSalamoize++
       	}
       	if(val.x<0+val.radius) {
       		val.direction='e'
       		val.radius = val.radius*0.9;
-        //    if(storedSalamoize<100)
-      		// storedSalamoize++
       	}
       }
       if(val.radius<5) {
       	val.radius=0;
       }
-     // console.log(distanceBetween2(enemy,val))
-       if(distanceBetween2(enemy,val)<enemy.radius/2) {
-        if (confirm('colpito')) window.location.reload();
+      if(distanceBetween2(enemy,val)<enemy.radius/2) {
+        if (confirm('colpito')) {
+         ancora = false;
+         //window.location.reload();
+        }
       }
        if(distanceBetween2(enemy,val)<enemy.radius+10) {
         if(enemy.x > val.x) {
@@ -157,8 +152,16 @@ var drawAll= function() {
       if(val.radius<6) {
         val.radius = 0;
       }
+      if (val.radius>0) {
+        winLevel = false;
+      }
 
 	});
+  if(winLevel==true && storedSalamoize <=0) {
+    setTimeout(function(){ ancora = false; }, vel);
+    setTimeout(function(){ window.location.reload(); }, vel+1000);
+    enemyImage.src = "./enemy2.png";
+  }
 	if(ancora) {
 		setTimeout(function(){ drawAll() }, vel);
 	} else {
