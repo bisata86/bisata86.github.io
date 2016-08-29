@@ -85,7 +85,7 @@ var drawAll= function() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
 	$.each(shapes, function(index, val) {
-	  ctx.beginPath();
+	    ctx.beginPath();
       ctx.arc(val.x, val.y, val.radius, 0, 2 * Math.PI, false);
       ctx.fillStyle = val.color;
       ctx.fill();
@@ -105,29 +105,29 @@ var drawAll= function() {
       	if(val.y<val.radius) {
       		val.direction='s'
       		val.radius = val.radius*0.9;
-          if(storedSalamoize<100)
-      		storedSalamoize++
+        //   if(storedSalamoize<100)
+      		// storedSalamoize++
       	}
       	if(val.y>canvasHeight-val.radius) {
       		val.direction='n'
       		val.radius = val.radius*0.9;
-           if(storedSalamoize<100)
-      		storedSalamoize++
+        //    if(storedSalamoize<100)
+      		// storedSalamoize++
       	}
       	if(val.x>canvasWidth-val.radius) {
       		val.direction='w'
       		val.radius = val.radius*0.9;
-           if(storedSalamoize<100)
-      		storedSalamoize++
+        //    if(storedSalamoize<100)
+      		// storedSalamoize++
       	}
       	if(val.x<0+val.radius) {
       		val.direction='e'
       		val.radius = val.radius*0.9;
-           if(storedSalamoize<100)
-      		storedSalamoize++
+        //    if(storedSalamoize<100)
+      		// storedSalamoize++
       	}
       }
-      if(val.radius<10) {
+      if(val.radius<5) {
       	val.radius=0;
       }
      // console.log(distanceBetween2(enemy,val))
@@ -151,7 +151,7 @@ var drawAll= function() {
       if(enemy.x<0 || enemy.y>canvasHeight || enemy.x<0 || enemy.x>canvasWidth) {
           setTimeout(function(){
              enemy.x= canvasWidth/2
-  enemy.y= canvasHeight/2
+             enemy.y= canvasHeight/2
            }, 1000);
       }
 
