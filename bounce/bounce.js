@@ -8,6 +8,7 @@ var enemy = {};
 var initialSalamoize = 10;
 var storedSalamoize = 100
 var loadInterval;
+var reloadGame = false;
 var salamoize = initialSalamoize;
     var enemyReady = false;
     var enemyImage;
@@ -173,8 +174,11 @@ var drawAll= function() {
 
 	});
   if(winLevel==true && storedSalamoize <=0) {
-    setTimeout(function(){ ancora = false; }, vel);
+    if(!reloadGame) {
     setTimeout(function(){ window.location.reload(); }, 1000);
+    reloadGame = true;
+    }
+    setTimeout(function(){ ancora = false; }, vel);
     enemyImage.src = "./enemy2.png";
   }
 	if(ancora) {
