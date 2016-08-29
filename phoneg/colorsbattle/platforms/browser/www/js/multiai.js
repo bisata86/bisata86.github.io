@@ -100,11 +100,18 @@ function run() {
     changeGridDim();
     updatePoints();
     $('#grid').height($('#grid').width());
-
+    var gh = $('#grid').height()
+    var ah = $('.app').height();
+    $('#banners').height(ah-gh);
+    $('#powers').height($('#banners').height()-$('.dataDisplayed').height())
+    $('#powers').css({
+        'box-sizing': 'border-box',
+        padding: '10px'
+    });
 
     setTimeout(function(){
         $('#logoScreen').fadeOut(200)
-    },300)
+    },1000)
 
 
 

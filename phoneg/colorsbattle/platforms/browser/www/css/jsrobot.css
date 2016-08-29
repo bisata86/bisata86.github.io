@@ -48,8 +48,7 @@ body, body *{
 .dataDisplayed {
 	color: #000;
 	padding-top: 5px;
-	padding-bottom: 5px;
-	margin-bottom: 10px;
+
 	background: #F7F7F7;
 	position: relative;
 }
@@ -76,7 +75,6 @@ body, body *{
 	position: absolute;
 	top: 0px;
 	left: 0px;
-	padding-top: 30px;
 	-webkit-box-sizing:border-box;
 
 	font-size: 20px;
@@ -120,7 +118,9 @@ a {color: white;}
 	background-position: 50% 50%;
 	pointer-events:none;
 }
-.portrait #powers {  height: 75%;}
+.portrait #powers {
+
+}
 .power {
 	-moz-transition-duration: 550ms;
 	transition-duration: 550ms;}
