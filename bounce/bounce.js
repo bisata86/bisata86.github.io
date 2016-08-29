@@ -3,6 +3,7 @@ var ctx;
 var canvasWidth ;
 var canvasHeight;
 var shapes = [];
+var enemyVel = 1;
 var enemy = {};
 var initialSalamoize = 10;
 var storedSalamoize = 100
@@ -124,24 +125,38 @@ var drawAll= function() {
       	val.radius=0;
       }
       if(distanceBetween2(enemy,val)<enemy.radius/2) {
-        if (confirm('colpito')) {
+        //if (confirm('colpito')) {
+        alert('next level')
          ancora = false;
-         //window.location.reload();
-        }
+         setTimeout(function(){
+            shapes = [];
+            enemy.x= canvasWidth/2
+             enemy.y= canvasHeight/2
+            enemyVel = enemyVel*2;
+            storedSalamoize = 100;
+            drawAll();
+
+          },1000);
+
+        //}
       }
        if(distanceBetween2(enemy,val)<enemy.radius+10) {
+
+
+
         if(enemy.x > val.x) {
-          enemy.x = enemy.x+val.radius;
+          enemy.x = enemy.x+enemyVel//+val.radius+;
         }
         if(enemy.y > val.y) {
-          enemy.y = enemy.y+val.radius;
+          enemy.y = enemy.y+enemyVel//val.radius;
         }
         if(enemy.x < val.x) {
-          enemy.x = enemy.x-val.radius;
+          enemy.x = enemy.x-enemyVel//-val.radius;
         }
         if(enemy.y < val.y) {
-          enemy.y = enemy.y-val.radius;
+          enemy.y = enemy.y-enemyVel//-val.radius;
         }
+
       }
       if(enemy.x<0 || enemy.y>canvasHeight || enemy.y<0 || enemy.x>canvasWidth) {
           setTimeout(function(){
