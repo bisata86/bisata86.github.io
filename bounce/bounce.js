@@ -148,13 +148,13 @@ var drawAll= function() {
           enemy.y = enemy.y-val.radius;
         }
       }
-      if(enemy.x<0 || enemy.y>canvasHeight || enemy.x<0 || enemy.x>canvasWidth) {
+      if(enemy.x<0 || enemy.y>canvasHeight || enemy.y<0 || enemy.x>canvasWidth) {
           setTimeout(function(){
              enemy.x= canvasWidth/2
              enemy.y= canvasHeight/2
            }, 1000);
       }
-
+      if(val.radius=0)
 
 	});
 	if(ancora) {
