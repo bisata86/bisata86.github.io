@@ -92,9 +92,12 @@ $( document ).ready(function() {
   $('body').on('touchstart', '.volante', function(event) {
       startEventVolante = {x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY}
   });
+  $('body').on('touchend', '.volante', function(event) {
+      startEventVolante = {x:0,y:0}
+  });
   $('body').on('touchmove', '.volante', function(event) {
+      if(startEventVolante.x!=0)
       enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
-
   });
 	drawAll();
 });
