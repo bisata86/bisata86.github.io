@@ -69,6 +69,7 @@ $( document ).ready(function() {
 
 	});
 	$('body').on('touchstart', '.go', function(event) {
+      event.preventDefault()
       enemy.moving = true;
 	});
 	$('body').on('touchend', '.go', function(event) {
@@ -96,7 +97,6 @@ $( document ).ready(function() {
   //     startEventVolante = {x:0,y:0}
   // });
   $('body').on('touchmove', '.volante', function(event) {
-      console.log('no')
       if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90)
       enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
   });
