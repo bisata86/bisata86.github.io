@@ -9,6 +9,7 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 50px;
+    border-top: 3px solid black;
 }
 .right {
     position:fixed;
@@ -21,6 +22,7 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 40px;
+    border-top: 3px solid black;
 }
 .left {
     position:fixed;
@@ -33,6 +35,7 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 40px;
+    border-top: 3px solid black;
 }
 .volante {
    position:fixed;
@@ -45,10 +48,11 @@
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 40px;
+    border-top: 3px solid black;
 }
 .metri {
     position: fixed;
-    height: 60px;
+    height: 65px;
     width: 100%;
     bottom: 0;
     padding-top: 15px;
@@ -57,11 +61,12 @@
     background-image: url('./crus.png');
     background-repeat: no-repeat;
     background-position: 50% 0%;
-    background-size: 50px;
+    background-size: 56px;
     z-index: 2;
     pointer-events: none;
     color: black;
-    font-size: 12px;
+    font-size: 15px;
+    font-weight:bold;
 }
 body {
     padding: 0px;
