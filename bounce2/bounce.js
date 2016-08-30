@@ -3,6 +3,7 @@ var ctx;
 var canvasWidth ;
 var canvasHeight;
 var shapes = [];
+var obstacles = [];
 var enemyVel = 1;
 var enemy = {};
 var initialSalamoize = 10;
@@ -10,8 +11,8 @@ var storedSalamoize = 100
 var loadInterval;
 var reloadGame = false;
 var salamoize = initialSalamoize;
-    var enemyReady = false;
-    var enemyImage;
+var enemyReady = false;
+var enemyImage;
 var vel =23;
 $( document ).ready(function() {
   enemyImage = new Image();
@@ -25,12 +26,9 @@ $( document ).ready(function() {
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
- // shapes = [{x:canvasWidth/2,y:0},{x:canvasWidth/2,y:100},{x:canvasWidth/2,y:200},{x:canvasWidth/2,y:300},{x:canvasWidth/2,y:400},{x:canvasWidth/2,y:500}];
   var lines = canvasHeight/50;
-
   for (var i = lines; i >= 0; i--) {
-    console.log(lines)
-    shapes.push({x:canvasWidth/2,y:i*10*lines})
+    shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
   };
 
   enemy.radius = 40;
@@ -64,7 +62,6 @@ $( document ).ready(function() {
   $('body').on('touchend', '.left', function(event) {
      clearInterval(leftInterval)
   });
-
 	drawAll();
 });
 var placeEnemy = function() {
@@ -81,7 +78,6 @@ var placeEnemy = function() {
 var drawCirlce= function(centerX,centerY,radius) {
       ctx.beginPath();
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
-      ctx.fillStyle = 'red';
       ctx.fill();
 }
 var drawRect= function(x,y,dim1,dim2) {
@@ -92,12 +88,15 @@ var modifier = 1;
 var drawAll= function() {
   counter++;
   if(counter%100==0) modifier++;
+  if(counter%50==0) {
+    obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
+  }
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
   enemy.y = enemy.y+modifier
   if(enemy.moving) {
-      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*10
-      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*10
+      enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*1.5
+      enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*1.5
   }
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,10,50)
@@ -105,7 +104,14 @@ var drawAll= function() {
         val.y=-100;
       } else
       val.y=val.y+modifier;
-
+  });
+  $.each(obstacles, function(index, val) {
+      drawCirlce(val.x,val.y,20)
+      val.y=val.y+modifier;
+      if(distanceBetween2(enemy,val)<20) {
+        ancora=false;
+        alert('hai perso')
+      }
   });
 
   placeEnemy();
@@ -118,7 +124,6 @@ var drawAll= function() {
   if(ancora) {
     setTimeout(function(){ drawAll() }, vel);
   } else {
-    console.log('cane')
   }
 }
 function getRandomColor() {
@@ -139,4 +144,6 @@ function distanceBetween2(f,s) {
 function degreesToRadians (degrees) {
    return degrees * (Math.PI/180);
 }
-
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
