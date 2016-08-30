@@ -57,6 +57,7 @@ $( document ).ready(function() {
   enemy.direction = 0;
     $('body').append(canvas);
     $('body').append("<div class='go'></div>");
+    $('body').append("<div class='metri'></div>");
 
   if(isMobile) {
     $('body').append("<div class='volante'></div>");
@@ -123,8 +124,10 @@ var drawRect= function(x,y,dim1,dim2) {
 }
 var counter = 0;
 var modifier = 1;
+var metri = 1;
 var drawAll= function() {
   counter++;
+  $('.metri').html(parseInt(metri)+' mt')
   if(counter%100==0) modifier++;
   if(counter%50==0) {
     obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
@@ -132,6 +135,7 @@ var drawAll= function() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
   enemy.y = enemy.y+modifier
+  metri=metri+1*modifier/10
   if(enemy.moving) {
       enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*1.5
       enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*1.5
