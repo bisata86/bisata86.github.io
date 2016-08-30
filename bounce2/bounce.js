@@ -53,8 +53,14 @@ $( document ).ready(function() {
   enemy.direction = 0;
     $('body').append(canvas);
     $('body').append("<div class='go'></div>");
+
+  if(isMobile) {
+    $('body').append("<div class='volante'></div>");
+  }
+  else {
     $('body').append("<div class='left'></div>");
     $('body').append("<div class='right'></div>");
+  }
 	$('body').on('click', 'canvas', function(event) {
 
 	});
@@ -77,6 +83,15 @@ $( document ).ready(function() {
   });
   $('body').on('touchend', '.left', function(event) {
      clearInterval(leftInterval)
+  });
+  var startEventVolante;
+  $('body').on('touchstart', '.volante', function(event) {
+      startEventVolante = {x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY}
+  });
+  $('body').on('touchmove', '.volante', function(event) {
+      console.log(event.originalEvent.touches[0].pageX-startEventVolante.x)
+      enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
+
   });
 	drawAll();
 });
@@ -146,13 +161,13 @@ var drawAll= function() {
   } else {
   }
   if(!isMobile) {
-  if (65 in keysDown) { // Player holding left
+  if (37 in keysDown) { // left
     enemy.direction = enemy.direction-2
   }
-  if (83 in keysDown) { // Player holding right
+  if (39 in keysDown) { //  right
     enemy.direction = enemy.direction+2
   }
-  if (38 in keysDown) { // Shooting up
+  if (38 in keysDown) { //  up
       enemy.moving=true
   } else enemy.moving=false
   }
