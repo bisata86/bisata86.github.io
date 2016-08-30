@@ -96,7 +96,8 @@ $( document ).ready(function() {
   //     startEventVolante = {x:0,y:0}
   // });
   $('body').on('touchmove', '.volante', function(event) {
-      if(startEventVolante.x!=0)
+      console.log('no')
+      if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90)
       enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
   });
 	drawAll();
