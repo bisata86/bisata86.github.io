@@ -85,8 +85,8 @@ var drawAll= function() {
 	var ancora = true;
   enemy.y = enemy.y+1
   if(enemy.moving) {
-        enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*2
-        enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*2
+        enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*3
+        enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*3
     // console.log(enemy.direction)
             // drawCirlce(enemy.x+(Math.cos(enemy.direction)*20),(enemy.y-30)+(Math.sin(enemy.direction)*20),10)
             //             drawCirlce(enemy.x,(enemy.y-30),10)

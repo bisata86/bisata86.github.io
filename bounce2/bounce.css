@@ -5,6 +5,10 @@
     bottom:0;
     right:0;
     background:green;
+              background-image: url('./up.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
 }
 .right {
     position:fixed;
@@ -13,6 +17,10 @@
     bottom:0;
     right:50%;
     background:red;
+          background-image: url('./right.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
 }
 .left {
     position:fixed;
@@ -21,6 +29,10 @@
     bottom:0;
     right:75%;
     background:yellow;
+      background-image: url('./left.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
 }
 .percentage {
     width:100%;
