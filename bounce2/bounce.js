@@ -113,14 +113,14 @@ var drawAll= function() {
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
-        alert('hai perso')
+        alert('hai perso, '+counter/2+' metri')
       }
   });
 
   placeEnemy();
   if(enemy.x<0 || enemy.x>canvasWidth || enemy.y<0 || enemy.y>canvasHeight) {
       ancora = false;
-      if (confirm('hai perso')) {
+      if (confirm('hai perso, '+counter/2+' metri')) {
         window.location.reload();
       }
   }
