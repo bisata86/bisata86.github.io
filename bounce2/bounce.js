@@ -60,7 +60,7 @@ $( document ).ready(function() {
     $('body').append("<div class='metri'></div>");
 
   if(isMobile) {
-    $('body').append("<div class='volante'></div>");
+    $('body').append("<div class='volante'><div class='vol'></div></div>");
   }
   else {
     $('body').append("<div class='left'></div>");
@@ -106,6 +106,10 @@ $( document ).ready(function() {
   $('body').on('touchmove', '.volante', function(event) {
       if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90)
       enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
+      $('.vol').css({
+        '-moz-transform':'rotate('+enemy.direction+'deg)',
+        '-webkit-transform':'rotate('+enemy.direction+'deg)'
+      });
   });
 	drawAll();
 });

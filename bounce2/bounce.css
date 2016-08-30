@@ -46,11 +46,19 @@
     bottom:0;
     right:50%;
     background-color: white;
-      background-image: url('./volante.png');
-    background-repeat: no-repeat;
-    background-position: 50% 5px;
-    background-size: 80px;
+
     border-top: 3px solid black;
+}
+.vol {
+position: fixed;
+    height: 85px;
+    width: 80px;
+    left: 15%;
+    pointer-events: none;
+    background-image: url('./volante.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 100%;
 }
 .metri {
     position: fixed;
