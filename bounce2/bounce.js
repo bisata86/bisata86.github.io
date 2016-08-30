@@ -42,9 +42,13 @@ $( document ).ready(function() {
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  var lines = canvasHeight/50;
-  for (var i = lines; i >= 0; i--) {
-    shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
+  var lines = (canvasHeight)/8;
+  // for (var i = lines; i >= 0; i--) {
+  //   console.log(i);
+  //   shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
+  // };
+  for (var i = 0; i < canvasHeight; i=i+lines) {
+    shapes.push({x:(canvasWidth/2)-4,y:i})
   };
 
   enemy.radius = 70;
@@ -89,7 +93,6 @@ $( document ).ready(function() {
       startEventVolante = {x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY}
   });
   $('body').on('touchmove', '.volante', function(event) {
-      console.log(event.originalEvent.touches[0].pageX-startEventVolante.x)
       enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
 
   });
@@ -133,19 +136,19 @@ var drawAll= function() {
     enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*.9
   }
   $.each(shapes, function(index, val) {
-      drawRect(val.x,val.y,10,50)
-      if(val.y>canvasHeight) {
-        val.y=-100;
+      drawRect(val.x,val.y,8,50)
+      if(val.y+50>canvasHeight) {
+        val.y=-50;
       } else
       val.y=val.y+modifier;
   });
   $.each(obstacles, function(index, val) {
-      //drawCirlce(val.x,val.y,20)
       ctx.drawImage(holeImage, val.x-15, val.y-15, 30, 30);
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
         alert('hai perso, '+counter/2+' metri')
+        window.location.reload();
       }
   });
 
