@@ -70,11 +70,11 @@ $( document ).ready(function() {
 
 	});
 	$('body').on('touchstart', '.go', function(event) {
-      // event.preventDefault()
-      // enemy.moving = true;
-      // $(this).css({
-      //   'background-position': '50% 25px'
-      // });
+      event.preventDefault()
+      enemy.moving = true;
+      $(this).css({
+        'background-position': '50% 25px'
+      });
 	});
 	$('body').on('touchend', '.go', function(event) {
 		 enemy.moving = false;
