@@ -12,7 +12,9 @@ var loadInterval;
 var reloadGame = false;
 var salamoize = initialSalamoize;
 var enemyReady = false;
+var holeReady = false;
 var enemyImage;
+var holeImage;
 var vel =23;
 $( document ).ready(function() {
   enemyImage = new Image();
@@ -20,6 +22,11 @@ $( document ).ready(function() {
     enemyReady = true;
   };
   enemyImage.src = "./car.png";
+  holeImage = new Image();
+  holeImage.onload = function () {
+    holeReady = true;
+  };
+  holeImage.src = "./hole.png";
   canvas = document.createElement("canvas");
   ctx = canvas.getContext("2d");
   canvasWidth = $(window).width();
@@ -109,7 +116,8 @@ var drawAll= function() {
       val.y=val.y+modifier;
   });
   $.each(obstacles, function(index, val) {
-      drawCirlce(val.x,val.y,20)
+      //drawCirlce(val.x,val.y,20)
+      ctx.drawImage(holeImage, val.x-15, val.y-15, 30, 30);
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
@@ -120,7 +128,7 @@ var drawAll= function() {
   placeEnemy();
   if(enemy.x<0 || enemy.x>canvasWidth || enemy.y<0 || enemy.y>canvasHeight) {
       ancora = false;
-      if (confirm('hai perso, '+counter/2+' metri')) {
+      if (confirm('hai perso, '+counter+' metri')) {
         window.location.reload();
       }
   }
