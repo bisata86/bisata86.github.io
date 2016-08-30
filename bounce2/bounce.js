@@ -25,6 +25,7 @@ $( document ).ready(function() {
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
+  shapes = [{x:canvasWidth/2,y:0},{x:canvasWidth/2,y:100},{x:canvasWidth/2,y:200},{x:canvasWidth/2,y:300},{x:canvasWidth/2,y:400},{x:canvasWidth/2,y:500}];
   enemy.radius = 40;
   enemy.x= canvasWidth/2
   enemy.y= canvasHeight*3/4;
@@ -79,34 +80,25 @@ var drawCirlce= function(centerX,centerY,radius) {
       ctx.fillStyle = 'red';
       ctx.fill();
 }
+var drawRect= function(x,y,dim1,dim2) {
+      ctx.fillRect(x,y,dim1,dim2);
+}
 var drawAll= function() {
-//  console.log(enemy.direction)
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
   enemy.y = enemy.y+1
   if(enemy.moving) {
-        enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*3
-        enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*3
-    // console.log(enemy.direction)
-            // drawCirlce(enemy.x+(Math.cos(enemy.direction)*20),(enemy.y-30)+(Math.sin(enemy.direction)*20),10)
-            //             drawCirlce(enemy.x,(enemy.y-30),10)
-
-        // var x1 = mainFigure.points[mainFigure.lines[mainFigure.points[index][7]][0]][0];
-        // var y1 = mainFigure.points[mainFigure.lines[mainFigure.points[index][7]][0]][1];
-        // var x2 = mainFigure.points[mainFigure.lines[mainFigure.points[index][7]][1]][0];
-        // var y2 = mainFigure.points[mainFigure.lines[mainFigure.points[index][7]][1]][1];
-        // var m = (y1-y2)/(x1-x2);
-        // var n = (-x1*m)+y1;
-        // var h = mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][0]][0];
-        // var k = mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][0]][1];
-        // var ar = mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][0]][0] - mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][1]][0]
-        // var ba = mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][0]][1] - mainFigure.points[mainFigure.circles[mainFigure.points[index][8]][1]][1]
-        // var r = Math.sqrt( ar*ar + ba*ba );
-        // var intersections = findCircleLineIntersections(r, h, k, m, n);
-        // console.log(intersections)
-
+      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*10
+      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*10
   }
-  //drawCirlce(10,10,10)
+  $.each(shapes, function(index, val) {
+      drawRect(val.x,val.y,10,50)
+      if(val.y>canvasHeight) {
+        val.y=-50;
+      } else
+      val.y=val.y+1;
+
+  });
 	if(ancora) {
 		setTimeout(function(){ drawAll() }, vel);
 	} else {
@@ -131,23 +123,5 @@ function distanceBetween2(f,s) {
 }
 function degreesToRadians (degrees) {
    return degrees * (Math.PI/180);
-}
-function findCircleLineIntersections(r, h, k, m, b) {
-  var A,B,C;
-    A = 1 + m * m;
-    B = -2 * h + 2 * m * b - 2 * k * m;
-    C = h * h + b * b + k * k - 2 * k * b - r * r;
-    delta = B * B - 4 * A * C;
-    if (delta < 0) {
-        console.log("No points of intersections");
-        return false;
-    }
-    if (delta >= 0) {
-        x1 = (-B + Math.sqrt(delta)) / (2 * A);
-        x2 = (-B - Math.sqrt(delta)) / (2 * A);
-        y1 = m * x1 + b;
-        y2 = m * x2 + b;
-        return [[x1,y1],[x2,y2]];
-    }
 }
 
