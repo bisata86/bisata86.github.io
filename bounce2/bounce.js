@@ -105,13 +105,12 @@ $( document ).ready(function() {
 });
 var placeEnemy = function() {
       if (enemyReady) {
-    ctx.save();
-    ctx.translate( enemy.x, enemy.y );
-    ctx.rotate( degreesToRadians(enemy.direction) );
-    ctx.translate( -enemy.x, -enemy.y );
-    ctx.drawImage(enemyImage, enemy.x-enemy.radius/2, enemy.y-enemy.radius/2, enemy.radius, enemy.radius+10);
-    ctx.restore();
-
+      ctx.save();
+      ctx.translate( enemy.x, enemy.y );
+      ctx.rotate( degreesToRadians(enemy.direction) );
+      ctx.translate( -enemy.x, -enemy.y );
+      ctx.drawImage(enemyImage, enemy.x-enemy.radius/2, enemy.y-enemy.radius/2, enemy.radius, enemy.radius);
+      ctx.restore();
   }
 }
 var drawCirlce= function(centerX,centerY,radius) {
@@ -127,7 +126,7 @@ var modifier = 1;
 var metri = 1;
 var drawAll= function() {
   counter++;
-  $('.metri').html(parseInt(metri)+' mt')
+  $('.metri').html(parseInt(metri)+'<div> mt</div>')
   if(counter%100==0) modifier++;
   if(counter%50==0) {
     obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
