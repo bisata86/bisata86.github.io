@@ -42,7 +42,7 @@ $( document ).ready(function() {
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  var lines = (canvasHeight)/8;
+  var lines = (canvasHeight)/5;
   // for (var i = lines; i >= 0; i--) {
   //   console.log(i);
   //   shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
