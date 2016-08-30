@@ -25,7 +25,14 @@ $( document ).ready(function() {
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  shapes = [{x:canvasWidth/2,y:0},{x:canvasWidth/2,y:100},{x:canvasWidth/2,y:200},{x:canvasWidth/2,y:300},{x:canvasWidth/2,y:400},{x:canvasWidth/2,y:500}];
+ // shapes = [{x:canvasWidth/2,y:0},{x:canvasWidth/2,y:100},{x:canvasWidth/2,y:200},{x:canvasWidth/2,y:300},{x:canvasWidth/2,y:400},{x:canvasWidth/2,y:500}];
+  var lines = canvasHeight/50;
+
+  for (var i = lines; i >= 0; i--) {
+    console.log(lines)
+    shapes.push({x:canvasWidth/2,y:i*10*lines})
+  };
+
   enemy.radius = 40;
   enemy.x= canvasWidth/2
   enemy.y= canvasHeight*3/4;
@@ -94,7 +101,7 @@ var drawAll= function() {
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,10,50)
       if(val.y>canvasHeight) {
-        val.y=-50;
+        val.y=-100;
       } else
       val.y=val.y+1;
 
