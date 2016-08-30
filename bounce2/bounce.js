@@ -47,7 +47,7 @@ $( document ).ready(function() {
     shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
   };
 
-  enemy.radius = 40;
+  enemy.radius = 70;
   enemy.x= canvasWidth/2
   enemy.y= canvasHeight*3/4;
   enemy.direction = 0;
@@ -101,7 +101,7 @@ var placeEnemy = function() {
     ctx.translate( enemy.x, enemy.y );
     ctx.rotate( degreesToRadians(enemy.direction) );
     ctx.translate( -enemy.x, -enemy.y );
-    ctx.drawImage(enemyImage, enemy.x-enemy.radius/2, enemy.y-enemy.radius/2, enemy.radius, enemy.radius+25);
+    ctx.drawImage(enemyImage, enemy.x-enemy.radius/2, enemy.y-enemy.radius/2, enemy.radius, enemy.radius+10);
     ctx.restore();
 
   }
