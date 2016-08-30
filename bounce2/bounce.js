@@ -16,7 +16,16 @@ var holeReady = false;
 var enemyImage;
 var holeImage;
 var vel =23;
+    var keysDown = {};
+var isMobile = detectmob();
 $( document ).ready(function() {
+
+  addEventListener("keydown", function (e) {
+    keysDown[e.keyCode] = true;
+  }, false);
+  addEventListener("keyup", function (e) {
+    delete keysDown[e.keyCode];
+  }, false);
   enemyImage = new Image();
   enemyImage.onload = function () {
     enemyReady = true;
@@ -136,6 +145,17 @@ var drawAll= function() {
     setTimeout(function(){ drawAll() }, vel);
   } else {
   }
+  if(!isMobile) {
+  if (65 in keysDown) { // Player holding left
+    enemy.direction = enemy.direction-2
+  }
+  if (83 in keysDown) { // Player holding right
+    enemy.direction = enemy.direction+2
+  }
+  if (38 in keysDown) { // Shooting up
+      enemy.moving=true
+  } else enemy.moving=false
+  }
 }
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
@@ -157,4 +177,19 @@ function degreesToRadians (degrees) {
 }
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function detectmob() {
+ if( navigator.userAgent.match(/Android/i)
+ || navigator.userAgent.match(/webOS/i)
+ || navigator.userAgent.match(/iPhone/i)
+ || navigator.userAgent.match(/iPad/i)
+ || navigator.userAgent.match(/iPod/i)
+ || navigator.userAgent.match(/BlackBerry/i)
+ || navigator.userAgent.match(/Windows Phone/i)
+ ){
+    return true;
+  }
+ else {
+    return false;
+  }
 }
