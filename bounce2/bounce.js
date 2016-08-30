@@ -155,7 +155,7 @@ var drawAll= function() {
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
-        alert('hai perso, '+metri+' metri')
+        alert('hai perso, '+parseInt(metri)+' metri')
         window.location.reload();
       }
   });
@@ -163,7 +163,7 @@ var drawAll= function() {
   placeEnemy();
   if(enemy.x<0 || enemy.x>canvasWidth || enemy.y<0 || enemy.y>canvasHeight) {
       ancora = false;
-      if (confirm('hai perso, '+metri+' metri')) {
+      if (confirm('hai perso, '+parseInt(metri)+' metri')) {
         window.location.reload();
       }
   }
