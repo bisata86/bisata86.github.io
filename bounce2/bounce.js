@@ -97,6 +97,9 @@ var drawAll= function() {
   if(enemy.moving) {
       enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*1.5
       enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*1.5
+  } else {
+    enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*.9
+    enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*.9
   }
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,10,50)
