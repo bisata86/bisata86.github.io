@@ -69,10 +69,7 @@ $( document ).ready(function() {
 });
 var placeEnemy = function() {
       if (enemyReady) {
-    //enemy.y--;
-
     ctx.save();
-
     ctx.translate( enemy.x, enemy.y );
     ctx.rotate( degreesToRadians(enemy.direction) );
     ctx.translate( -enemy.x, -enemy.y );
@@ -95,8 +92,8 @@ var drawAll= function() {
 	var ancora = true;
   enemy.y = enemy.y+1
   if(enemy.moving) {
-      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*10
-      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*10
+      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*2
+      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*2
   }
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,10,50)
