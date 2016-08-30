@@ -52,14 +52,14 @@ $( document ).ready(function() {
 	});
   var rightInterval;
   $('body').on('touchstart', '.right', function(event) {
-     rightInterval = setInterval(function(){ enemy.direction = enemy.direction+1 }, 10);
+     rightInterval = setInterval(function(){ enemy.direction = enemy.direction+2 }, 10);
   });
   $('body').on('touchend', '.right', function(event) {
      clearInterval(rightInterval)
   });
   var leftInterval;
   $('body').on('touchstart', '.left', function(event) {
-     leftInterval = setInterval(function(){ enemy.direction = enemy.direction-1 }, 10);
+     leftInterval = setInterval(function(){ enemy.direction = enemy.direction-2 }, 10);
   });
   $('body').on('touchend', '.left', function(event) {
      clearInterval(leftInterval)
@@ -87,28 +87,39 @@ var drawCirlce= function(centerX,centerY,radius) {
 var drawRect= function(x,y,dim1,dim2) {
       ctx.fillRect(x,y,dim1,dim2);
 }
+var counter = 0;
+var modifier = 1;
 var drawAll= function() {
+  counter++;
+  if(counter%100==0) modifier++;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	var ancora = true;
-  enemy.y = enemy.y+1
+  enemy.y = enemy.y+modifier
   if(enemy.moving) {
-      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*2
-      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*2
+      enemy.x = enemy.x+(Math.sin(degreesToRadians(enemy.direction)))*10
+      enemy.y = enemy.y-(Math.cos(degreesToRadians(enemy.direction)))*10
   }
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,10,50)
       if(val.y>canvasHeight) {
         val.y=-100;
       } else
-      val.y=val.y+1;
+      val.y=val.y+modifier;
 
   });
-	if(ancora) {
-		setTimeout(function(){ drawAll() }, vel);
-	} else {
-		console.log('cane')
-	}
-    placeEnemy();
+
+  placeEnemy();
+  if(enemy.x<0 || enemy.x>canvasWidth || enemy.y<0 || enemy.y>canvasHeight) {
+      ancora = false;
+      if (confirm('hai perso')) {
+        window.location.reload();
+      }
+  }
+  if(ancora) {
+    setTimeout(function(){ drawAll() }, vel);
+  } else {
+    console.log('cane')
+  }
 }
 function getRandomColor() {
     var letters = '0123456789ABCDEF';
