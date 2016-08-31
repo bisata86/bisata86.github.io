@@ -348,8 +348,9 @@ function readAjax() {
   $('#start').hide();
   $('.popup').append('<div class="contentloader"><div class="loader"></div></div>');
   $.ajax({
-      url : "http://siluro.comli.com/read.php",
+      url : "//siluro86.byethost15.com/read.php",
       type: "GET",
+      crossDomain: true,
       success: function(data, textStatus, jqXHR)
       {
           $('.popup .contentloader').html(data);
