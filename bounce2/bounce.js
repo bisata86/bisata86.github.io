@@ -37,38 +37,16 @@ $( document ).ready(function() {
   };
   holeImage.src = "./hole.png";
   canvas = document.createElement("canvas");
+
   ctx = canvas.getContext("2d");
   canvasWidth = $(window).width();
   canvasHeight = $(window).height();
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
   var lines = (canvasHeight)/5;
-  // for (var i = lines; i >= 0; i--) {
-  //   console.log(i);
-  //   shapes.push({x:(canvasWidth/2)-5,y:i*10*lines})
-  // };
-  for (var i = 0; i < canvasHeight; i=i+lines) {
-    shapes.push({x:(canvasWidth/2)-4,y:i})
-  };
-
-  enemy.radius = 70;
-  enemy.x= canvasWidth/2
-  enemy.y= canvasHeight*3/4;
-  enemy.direction = 0;
-    $('body').append(canvas);
-    $('body').append("<div class='go'></div>");
-    $('body').append("<div class='metri'></div>");
-
-  if(isMobile) {
-    $('body').append("<div class='volante'><div class='vol'></div></div>");
-  }
-  else {
-    $('body').append("<div class='left'></div>");
-    $('body').append("<div class='right'></div>");
-  }
-	$('body').on('click', 'canvas', function(event) {
-
-	});
+  $('body').append(canvas);
+  $('body').append("<div class='popup'></div>");
+  $('.popup').append("<div class='content'></div>");
 	$('body').on('touchstart', '.go', function(event) {
       event.preventDefault()
       enemy.moving = true;
@@ -96,6 +74,28 @@ $( document ).ready(function() {
   $('body').on('touchend', '.left', function(event) {
      clearInterval(leftInterval)
   });
+  $('body').on('click', '.start', function(event) {
+     $('.popup').fadeOut('200');
+        obstacles = [];
+        shapes = [];
+        for (var i = 0; i < canvasHeight; i=i+lines) {
+          shapes.push({x:(canvasWidth/2)-4,y:i})
+        };
+
+        enemy.radius = 70;
+        enemy.x= canvasWidth/2
+        enemy.y= canvasHeight*3/4;
+        enemy.direction = 0;
+       counter = 0;
+       modifier = 1;
+       metri = 1;
+        $('.vol').css({
+              '-moz-transform':'rotate('+enemy.direction+'deg)',
+              '-webkit-transform':'rotate('+enemy.direction+'deg)'
+            });
+      addControls();
+       drawAll();
+  });
   var startEventVolante;
   $('body').on('touchstart', '.volante', function(event) {
       startEventVolante = {x:event.originalEvent.touches[0].pageX,y:event.originalEvent.touches[0].pageY}
@@ -111,8 +111,22 @@ $( document ).ready(function() {
         '-webkit-transform':'rotate('+enemy.direction+'deg)'
       });
   });
-	drawAll();
+  alert('<div class="start">START</div>')
 });
+
+var addControls = function() {
+    $('body').append("<div class='go'></div>");
+  $('body').append("<div class='metri'></div>");
+
+  if(isMobile) {
+    $('body').append("<div class='volante'><div class='vol'></div></div>");
+  }
+  else {
+    $('body').append("<div class='left'></div>");
+    $('body').append("<div class='right'></div>");
+  }
+}
+
 var placeEnemy = function() {
       if (enemyReady) {
       ctx.save();
@@ -142,6 +156,8 @@ var drawAll= function() {
     obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
   }
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawRect(0,0,15,canvasHeight)
+  drawRect(canvasWidth-15,0,15,canvasHeight)
 	var ancora = true;
   enemy.y = enemy.y+modifier
   metri=metri+1*modifier/10
@@ -164,17 +180,16 @@ var drawAll= function() {
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
-        alert('hai perso, '+parseInt(metri)+' metri')
-        window.location.reload();
+        alert('<div class="start">'+parseInt(metri)+' meters</div>')
+        //window.location.reload();
       }
   });
 
   placeEnemy();
   if(enemy.x<0 || enemy.x>canvasWidth || enemy.y<0 || enemy.y>canvasHeight) {
       ancora = false;
-      if (confirm('hai perso, '+parseInt(metri)+' metri')) {
-        window.location.reload();
-      }
+       alert('<div class="start">'+parseInt(metri)+' meters</div>')
+        //window.location.reload();
   }
   if(ancora) {
     setTimeout(function(){ drawAll() }, vel);
@@ -189,7 +204,15 @@ var drawAll= function() {
   }
   if (38 in keysDown) { //  up
       enemy.moving=true
-  } else enemy.moving=false
+           $('.go').css({
+        'background-position': '50% 25px'
+      });
+  } else {
+    enemy.moving=false
+         $('.go').css({
+        'background-position': '50% 5px'
+      });
+  }
   }
 }
 function getRandomColor() {
@@ -227,4 +250,8 @@ function detectmob() {
  else {
     return false;
   }
+}
+function alert(content) {
+  $('.content').html(content);
+  $('.popup').fadeIn(200);
 }
