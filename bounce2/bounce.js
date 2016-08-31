@@ -125,9 +125,9 @@ $( document ).ready(function() {
       if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90) {
 
         if(hits==2)
-        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/15
+        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/3
         else if(hits==1)
-        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/5
+        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/2
         else  enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
         $('.vol').css({
           '-moz-transform':'rotate('+enemy.direction+'deg)',
@@ -209,11 +209,19 @@ var drawAll= function() {
   enemy.y = enemy.y+modifier
   metri=metri+1*modifier/10
   if(enemy.moving) {
-      enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*1.5
-      enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*1.5
+      var modifier2;
+      if(hits==0) modifier2 = 1.5
+      if(hits==1) modifier2 = 1.3
+      if(hits==2) modifier2 = 1.1
+      enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*modifier2
+      enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*modifier2
   } else {
-    enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*.9
-    enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*.9
+    var modifier2;
+    if(hits==0) modifier2 = 0.9
+    if(hits==1) modifier2 = 0.8
+    if(hits==2) modifier2 = 0.7
+    enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*modifier2
+    enemy.y = enemy.y-((Math.cos(degreesToRadians(enemy.direction))))*modifier*modifier2
   }
   $.each(shapes, function(index, val) {
       drawRect(val.x,val.y,8,50)
@@ -335,3 +343,4 @@ function alert(content) {
   $('.content').html(content);
   $('.popup').fadeIn(200);
 }
+
