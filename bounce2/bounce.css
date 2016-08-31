@@ -96,7 +96,7 @@ html {
 }
 .popup {
     display:none;
-    background: white;
+    background: rgba(255,255,255,0.9);
     z-index:3;
     position:fixed;
     width:100%;
@@ -105,11 +105,18 @@ html {
     text-align:center;
 }
 .content {
-    padding:20%;
+    padding: 5%;
+    margin: 25%;
+    background: white;
+    border: 3px solid black;
+    margin-top: 50px;
 }
 .car {
     background-image: url('./car.png');
 }
 .car2 {
     background-image: url('./car2.png');
+}
+.car3 {
+    background-image: url('./car3.png');
 }
