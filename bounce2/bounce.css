@@ -114,6 +114,7 @@ html {
 }
 .contentloader {
     border:0;
+    background:transparent;
 }
 .car {
     background-image: url('./car.png');

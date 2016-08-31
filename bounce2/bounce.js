@@ -187,7 +187,7 @@ var fatto2 = true;
 var drawAll= function() {
   counter++;
   $('.metri').html(parseInt(metri)+'<div> mt</div>')
-  if(metri%10==0) modifier++;
+  if(counter%150==0) modifier++;
   if(parseInt(metri)%30==0) {
     if(fatto) {
     obstacles.push({x:getRandomInt(20,canvasWidth-20),y:0})
