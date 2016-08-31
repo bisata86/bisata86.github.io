@@ -60,8 +60,6 @@ $( document ).ready(function() {
   $('body').append(canvas);
   $('body').append("<div class='popup'></div>");
   $('.popup').append("<div class='content'></div>");
-    alert('<div class="start">START</div>')
-  readAjax();
 	$('body').on('touchstart', '.go', function(event) {
       event.preventDefault()
       enemy.moving = true;
@@ -137,6 +135,7 @@ $( document ).ready(function() {
         });
       }
   });
+  alert('<div class="start">START</div>')
 });
 
 var addControls = function() {
@@ -187,7 +186,7 @@ var fatto2 = true;
 var drawAll= function() {
   counter++;
   $('.metri').html(parseInt(metri)+'<div> mt</div>')
-  if(metri%100==0) modifier++;
+  if(counter%100==0) modifier++;
   if(parseInt(metri)%30==0) {
     if(fatto) {
     obstacles.push({x:getRandomInt(20,canvasWidth-20),y:0})
@@ -211,7 +210,7 @@ var drawAll= function() {
   metri=metri+1*modifier/10
   if(enemy.moving) {
       var modifier2;
-      if(hits==0) modifier2 = 1.4
+      if(hits==0) modifier2 = 1.5
       if(hits==1) modifier2 = 1.3
       if(hits==2) modifier2 = 1.1
       enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*modifier2
@@ -344,33 +343,4 @@ function alert(content) {
   $('.content').html(content);
   $('.popup').fadeIn(200);
 }
-function readAjax() {
-  $('#start').hide();
-  $('.popup').append('<div class="contentloader"><div class="loader"></div></div>');
-  $.ajax({
-      url : "./read.php",
-      type: "POST",
-      success: function(data, textStatus, jqXHR)
-      {
-          $('.popup .contentloader').html(data).removeClass('green').removeClass('red').show();
-          $('#start').show().addClass('animated bounceIn');
-      },
-      error: function (jqXHR, textStatus, errorThrown)
-      {
-     }
-  });
-}
-function writeAjax(formData) {
-$.ajax({
-    url : "./write.php",
-    type: "POST",
-    data : formData,
-    success: function(data, textStatus, jqXHR)
-    {
-        readAjax();
-    },
-    error: function (jqXHR, textStatus, errorThrown)
-    {
-    }
-});
-}
+
