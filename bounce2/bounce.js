@@ -150,15 +150,19 @@ var counter = 0;
 var modifier = 1;
 var metri = 1;
 var pedonali = [];
+  var fatto = true;
 var drawAll= function() {
   counter++;
   $('.metri').html(parseInt(metri)+'<div> mt</div>')
   if(counter%100==0) modifier++;
-  if(counter%50==0) {
+  if(parseInt(metri)%50==0) {
+    if(fatto) {
     obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
-  }
-  if(counter%350==0) {
-    pedonali.push({x:50,y:0})
+    fatto = false;
+    }
+  } else fatto = true;
+  if(parseInt(metri)%200==0) {
+    pedonali.push({x:50,y:-100})
   }
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRect(0,0,15,canvasHeight)
@@ -182,7 +186,7 @@ var drawAll= function() {
   });
   $.each(pedonali, function(index, val) {
       for (var i = canvasWidth; i >= -100; i=i-20) {
-            drawRect(val.x+i,val.y,10,40)
+            drawRect(val.x+i,val.y,10,50)
       };
       val.y=val.y+modifier;
   });
@@ -207,10 +211,10 @@ var drawAll= function() {
   }
   if(!isMobile) {
   if (37 in keysDown) { // left
-    enemy.direction = enemy.direction-2
+    enemy.direction = enemy.direction-5
   }
   if (39 in keysDown) { //  right
-    enemy.direction = enemy.direction+2
+    enemy.direction = enemy.direction+5
   }
   if (38 in keysDown) { //  up
       enemy.moving=true
