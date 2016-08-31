@@ -115,12 +115,18 @@ $( document ).ready(function() {
   //     startEventVolante = {x:0,y:0}
   // });
   $('body').on('touchmove', '.volante', function(event) {
-      if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90)
-      enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
-      $('.vol').css({
-        '-moz-transform':'rotate('+enemy.direction+'deg)',
-        '-webkit-transform':'rotate('+enemy.direction+'deg)'
-      });
+      if(Math.abs(event.originalEvent.touches[0].pageX-startEventVolante.x)<90) {
+
+        if(hits==2)
+        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/15
+        if(hits==1)
+        enemy.direction = (event.originalEvent.touches[0].pageX-startEventVolante.x)/5
+        else  enemy.direction = event.originalEvent.touches[0].pageX-startEventVolante.x
+        $('.vol').css({
+          '-moz-transform':'rotate('+enemy.direction+'deg)',
+          '-webkit-transform':'rotate('+enemy.direction+'deg)'
+        });
+      }
   });
   alert('<div class="start">START</div>')
 });
@@ -172,16 +178,16 @@ var drawAll= function() {
   if(counter%100==0) modifier++;
   if(parseInt(metri)%50==0) {
     if(fatto) {
-    obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
+    obstacles.push({x:getRandomInt(20,canvasWidth-20),y:0})
     fatto = false;
     }
   } else fatto = true;
   if(parseInt(metri)%250==0) {
     pedonali.push({x:50,y:-100})
   }
-  if(parseInt(metri)%160==0) {
+  if(parseInt(metri)%350==0) {
     if(fatto2) {
-    bonus.push({x:getRandomInt(10,canvasWidth-10),y:0})
+    bonus.push({x:getRandomInt(20,canvasWidth-20),y:0})
     fatto2 = false;
     }
   } else fatto2 = true;
@@ -220,8 +226,6 @@ var drawAll= function() {
           val.x = -100;
           hits = 0;
           enemyImage.src = "./car.png";
-
-
       }
   });
   $.each(obstacles, function(index, val) {
@@ -230,10 +234,12 @@ var drawAll= function() {
       if(distanceBetween2(enemy,val)<20) {
         val.x = -100;
         hits++;
-        if(hits==2) {
+        if(hits==3) {
         ancora=false;
         alert('<div class="start">'+parseInt(metri)+' meters</div>')
-        } else {
+        } else if(hits==2) {
+          enemyImage.src = "./car3.png";
+        } else if(hits==1) {
           enemyImage.src = "./car2.png";
         }
 
@@ -252,10 +258,18 @@ var drawAll= function() {
   }
   if(!isMobile) {
   if (37 in keysDown) { // left
-    enemy.direction = enemy.direction-5
+    if(hits==2)
+    enemy.direction = enemy.direction-1
+    if(hits==1)
+    enemy.direction = enemy.direction-3
+    else  enemy.direction = enemy.direction-5
   }
   if (39 in keysDown) { //  right
-    enemy.direction = enemy.direction+5
+     if(hits==2)
+    enemy.direction = enemy.direction+1
+    if(hits==1)
+    enemy.direction = enemy.direction+3
+    else  enemy.direction = enemy.direction+5
   }
   if (38 in keysDown) { //  up
       enemy.moving=true
