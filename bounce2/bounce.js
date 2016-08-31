@@ -187,7 +187,7 @@ var fatto2 = true;
 var drawAll= function() {
   counter++;
   $('.metri').html(parseInt(metri)+'<div> mt</div>')
-  if(metri%100==0) modifier++;
+  if(metri%50==0) modifier++;
   if(parseInt(metri)%30==0) {
     if(fatto) {
     obstacles.push({x:getRandomInt(20,canvasWidth-20),y:0})
@@ -211,7 +211,7 @@ var drawAll= function() {
   metri=metri+1*modifier/10
   if(enemy.moving) {
       var modifier2;
-      if(hits==0) modifier2 = 1.4
+      if(hits==0) modifier2 = 1.5
       if(hits==1) modifier2 = 1.3
       if(hits==2) modifier2 = 1.1
       enemy.x = enemy.x+((Math.sin(degreesToRadians(enemy.direction))))*modifier*modifier2
