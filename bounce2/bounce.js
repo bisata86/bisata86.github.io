@@ -349,11 +349,10 @@ function readAjax() {
   $('.popup').append('<div class="contentloader"><div class="loader"></div></div>');
   $.ajax({
       url : "./read.php",
-      type: "POST",
+      type: "GET",
       success: function(data, textStatus, jqXHR)
       {
-          $('.popup .contentloader').html(data).removeClass('green').removeClass('red').show();
-          $('#start').show().addClass('animated bounceIn');
+          $('.popup .contentloader').html(data);
       },
       error: function (jqXHR, textStatus, errorThrown)
       {
