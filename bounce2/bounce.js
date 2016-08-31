@@ -348,7 +348,7 @@ function readAjax() {
   $('#start').hide();
   $('.popup').append('<div class="contentloader"><div class="loader"></div></div>');
   $.ajax({
-      url : "./read.php",
+      url : "http://siluro.comli.com/read.php",
       type: "GET",
       success: function(data, textStatus, jqXHR)
       {
