@@ -77,6 +77,7 @@ $( document ).ready(function() {
   $('body').on('click touchstart', '.popup', function(event) {
      $('.popup').fadeOut('200');
         obstacles = [];
+        pedonali = [];
         shapes = [];
         for (var i = 0; i < canvasHeight; i=i+lines) {
           shapes.push({x:(canvasWidth/2)-4,y:i})
@@ -148,12 +149,16 @@ var drawRect= function(x,y,dim1,dim2) {
 var counter = 0;
 var modifier = 1;
 var metri = 1;
+var pedonali = [];
 var drawAll= function() {
   counter++;
   $('.metri').html(parseInt(metri)+'<div> mt</div>')
   if(counter%100==0) modifier++;
   if(counter%50==0) {
     obstacles.push({x:getRandomInt(10,canvasWidth-10),y:0})
+  }
+  if(counter%350==0) {
+    pedonali.push({x:50,y:0})
   }
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawRect(0,0,15,canvasHeight)
@@ -175,13 +180,18 @@ var drawAll= function() {
       } else
       val.y=val.y+modifier;
   });
+  $.each(pedonali, function(index, val) {
+      for (var i = canvasWidth; i >= -100; i=i-20) {
+            drawRect(val.x+i,val.y,10,40)
+      };
+      val.y=val.y+modifier;
+  });
   $.each(obstacles, function(index, val) {
       ctx.drawImage(holeImage, val.x-15, val.y-15, 30, 30);
       val.y=val.y+modifier;
       if(distanceBetween2(enemy,val)<20) {
         ancora=false;
         alert('<div class="start">'+parseInt(metri)+' meters</div>')
-        //window.location.reload();
       }
   });
 
