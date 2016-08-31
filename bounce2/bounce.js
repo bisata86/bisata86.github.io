@@ -140,8 +140,10 @@ var placeEnemy = function() {
 }
 var drawCirlce= function(centerX,centerY,radius) {
       ctx.beginPath();
+      ctx.fillcolor = 'red';
       ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
       ctx.fill();
+      ctx.fillcolor = 'gray';
 }
 var drawRect= function(x,y,dim1,dim2) {
       ctx.fillRect(x,y,dim1,dim2);
@@ -161,7 +163,7 @@ var drawAll= function() {
     fatto = false;
     }
   } else fatto = true;
-  if(parseInt(metri)%200==0) {
+  if(parseInt(metri)%250==0) {
     pedonali.push({x:50,y:-100})
   }
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -187,6 +189,8 @@ var drawAll= function() {
   $.each(pedonali, function(index, val) {
       for (var i = canvasWidth; i >= -100; i=i-20) {
             drawRect(val.x+i,val.y,10,50)
+            // if(i==canvasWidth)
+            // drawCirlce(val.x,val.y+25,20)
       };
       val.y=val.y+modifier;
   });
