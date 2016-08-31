@@ -74,7 +74,7 @@ $( document ).ready(function() {
   $('body').on('touchend', '.left', function(event) {
      clearInterval(leftInterval)
   });
-  $('body').on('click, touchstart', '.popup', function(event) {
+  $('body').on('click touchstart', '.popup', function(event) {
      $('.popup').fadeOut('200');
         obstacles = [];
         shapes = [];
