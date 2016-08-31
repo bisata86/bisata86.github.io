@@ -107,3 +107,9 @@ html {
 .content {
     padding:20%;
 }
+.car {
+    background-image: url('./car.png');
+}
+.car2 {
+    background-image: url('./car2.png');
+}
