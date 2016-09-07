@@ -850,7 +850,7 @@ function gertRandomShape(){
 		var mindim = squareh >= squarew ?  squarew : squareh;
 		var initinerzia = 0;
 		var eraserc;
-		if(objects.length%2==0 && objects.length != 0) eraserc = true; else eraserc = false;
+		if(objects.length%6==0 && objects.length != 0) eraserc = true; else eraserc = false;
 		if(eraserc) {
 		  squareh = 25;
 		  squarew = 25;
