@@ -3,9 +3,14 @@
 <title>HEZ!</title>
 <style type="text/css">
   body {padding:0;margin:0;}
+  .level {font-family: helvetica;
+    font-weight: lighter;    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: xx-large;}
 </style>
 <script type="text/javascript">
- 
+  var level = 0;
   var canvas = document.createElement("canvas");
     var ctx = canvas.getContext("2d");
     var w = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -129,8 +134,7 @@
           }
           //console.log(themedia/number)
           max = getAverageVolume(given_typed_array);
-          console.log('-----')
-
+        
 
           // if(max>10) {
           //     if(Math.abs(prevVolume - max)>20) {
@@ -145,6 +149,7 @@
           //if(given_typed_array[index]>20) 
           //max =  given_typed_array[10]
           $('.debug').html(' volume: '+max)
+          $('.level').html('Level: '+level)
 
 
           if(max<20) {
@@ -163,6 +168,7 @@
 
 
           if(currx>=w)  {
+            level++
             currx = 0;
             var cur = obstacles.length;
             var unit = w/(cur+1);
@@ -268,8 +274,9 @@ function getRandomColor() {
 </head>
 <body>
 
-    <!-- <p class="debug">Volume</p>
-    <input id="volume" type="range" min="0" max="1" step="0.1" value="0"/> --> 
+    <!-- <p class="debug">Volume</p> -->
+    <p class="level"></p>
+   <!--  <input id="volume" type="range" min="0" max="1" step="0.1" value="0"/> --> 
 
 </body>
 </html>
