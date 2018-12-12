@@ -370,12 +370,12 @@
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
 					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe src="+savedPages[i]+"></iframe></div>");
-					// let script = document.createElement('script');
-					// script.src = savedPages[i]
-					// document.head.append(script);
-					// script.onerror = function() {
-					//   $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
-					// };
+					let script = document.createElement('script');
+					script.src = savedPages[i]
+					document.head.append(script);
+					script.onerror = function() {
+					  $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
+					};
 				}
 			}
 
@@ -394,21 +394,21 @@
 
 				if(e.keyCode==13) {
 					var savedPages = localStorage.getItem('homePages');
-					// if(savedPages) {
-					// 	savedPages = JSON.parse(savedPages); 
-					// 	if(savedPages.indexOf(cUrl)!=-1) {
-					// 		return alert('already present')
-					// 	}
-					// }
+					if(savedPages) {
+						savedPages = JSON.parse(savedPages); 
+						if(savedPages.indexOf(cUrl)!=-1) {
+							return alert('already present')
+						}
+					}
 
 					$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe src='"+cUrl+"'></iframe></div>");
 
-					// let script = document.createElement('script');
-					// script.src = $(this).val();
-					// document.head.append(script);
-					// script.onerror = function() {
-					//   $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
-					// };
+					let script = document.createElement('script');
+					script.src = $(this).val();
+					document.head.append(script);
+					script.onerror = function() {
+					  $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
+					};
 
 
 					bind();
