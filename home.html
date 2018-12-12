@@ -394,12 +394,12 @@
 
 				if(e.keyCode==13) {
 					var savedPages = localStorage.getItem('homePages');
-					if(savedPages) {
-						savedPages = JSON.parse(savedPages); 
-						if(savedPages.indexOf(cUrl)!=-1) {
-							return alert('already present')
-						}
-					}
+					// if(savedPages) {
+					// 	savedPages = JSON.parse(savedPages); 
+					// 	if(savedPages.indexOf(cUrl)!=-1) {
+					// 		return alert('already present')
+					// 	}
+					// }
 
 					$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe src='"+cUrl+"'></iframe></div>");
 
