@@ -398,12 +398,12 @@
 
 					$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'>"+$(this).val()+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe src='"+$(this).val()+"'></iframe></div>");
 
-					let script = document.createElement('script');
-					script.src = $(this).val();
-					document.head.append(script);
-					script.onerror = function() {
-					  $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
-					};
+					// let script = document.createElement('script');
+					// script.src = $(this).val();
+					// document.head.append(script);
+					// script.onerror = function() {
+					//   $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
+					// };
 
 
 					bind();
