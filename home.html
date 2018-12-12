@@ -370,12 +370,12 @@
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
 					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe src="+savedPages[i]+"></iframe></div>");
-					let script = document.createElement('script');
-					script.src = savedPages[i]
-					document.head.append(script);
-					script.onerror = function() {
-					  $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
-					};
+					// let script = document.createElement('script');
+					// script.src = savedPages[i]
+					// document.head.append(script);
+					// script.onerror = function() {
+					//   $('iframe[src="'+this.src.substring(0,this.src.length-1)+'"]').closest('.c').remove();
+					// };
 				}
 			}
 
