@@ -380,23 +380,28 @@
 			}
 
 			$('body').append("<div class='c newOne'><div class='new'></div></div>");
-			$('body').append("<input class='src' type='text' value='http://'></input>");
+			$('body').append("<input class='src' type='url' value='http://'></input>");
 			//$('body').append("<div class='load'>Add</div>");
 			$('body').append("<div class='back'><div></div></div>");
 			//$('body').append("<div class='save'>Save</div>");
 			//$('body').append("<div class='clear'>Clear</div>");
 			//$('body').append("<div class='toggle'><div></div></div>");
 			$('.src').on('keyup', function(e){
+
+				var cUrl = $(this).val();
+				cUrl = cUrl.substring(cUrl.indexOf('//'),cUrl.length)
+				console.log(cUrl);
+
 				if(e.keyCode==13) {
 					var savedPages = localStorage.getItem('homePages');
 					if(savedPages) {
 						savedPages = JSON.parse(savedPages); 
-						if(savedPages.indexOf($(this).val())!=-1) {
+						if(savedPages.indexOf(cUrl)!=-1) {
 							return alert('already present')
 						}
 					}
 
-					$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'>"+$(this).val()+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe src='"+$(this).val()+"'></iframe></div>");
+					$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe src='"+cUrl+"'></iframe></div>");
 
 					// let script = document.createElement('script');
 					// script.src = $(this).val();
