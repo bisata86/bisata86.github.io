@@ -19,8 +19,9 @@
   			width: 50%;
   			display: inline-block;
   			position: relative;
-  			padding: 10px;
-    		box-sizing: border-box;
+  			    /* padding: 10px; */
+		    box-sizing: border-box;
+		    border: 20px solid ghostwhite;
   		}
   		@media only screen and (min-width: 800px) and (max-width: 1000px)  {
 		    div.c {
@@ -33,7 +34,7 @@
 	  		}
 		}
   		.indicator {
-  			display:none;
+  			nodisplay:none;
   			position: absolute;
   			bottom:5px;
   			left:5px;
@@ -56,6 +57,7 @@
   		.one .full.c {
   			padding:0;
   			display: inline-block;
+  			border:0;
   		}
   		iframe {
   			display: block;
@@ -317,7 +319,7 @@
 		.one .remove, .one .addContainer, .one .toggle, .one .indicator {
   			display: none !important;
   		}
-  		.loading .remove, .loading .addContainer,  .loading .indicator {
+  		.loading .remove, .loading .addContainer {
   			display: none !important;
   		}
   		.new {
@@ -370,7 +372,7 @@
 			if(savedPages) {
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
-					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe src="+savedPages[i]+"></iframe></div>");
+					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe data-src="+savedPages[i]+"></iframe></div>");
 					let script = document.createElement('script');
 					script.src = savedPages[i]
 					document.head.append(script);
@@ -381,7 +383,7 @@
 			}
 
 			$('body').append("<div class='c newOne'><div class='new'></div></div>");
-			$('body').append("<input class='src' type='url' value='http://'></input>");
+			$('.newOne').prepend("<input class='src' type='url' value='https://' mask='sadasd'></input>");
 			//$('body').append("<div class='load'>Add</div>");
 			$('body').append("<div class='back'><div></div></div>");
 			//$('body').append("<div class='save'>Save</div>");
@@ -419,14 +421,15 @@
 			bind()
 			function bind() {
 				$('iframe').off('load').on('load', function(){
-					$('.openable').off('click').on('click', function(){
+					$(this).closest('.openable').off('click').on('click', function(){
 						$(this).addClass('full')
 						$('body').addClass('one')
 					});
 					$(this).closest('.c').removeClass('loading')
-					
-					
 				});
+				$('.loading').off('click').on('click', function(){
+					$(this).find('iframe').attr('src',$(this).find('iframe').attr('data-src'))
+				})
 
 				$('.remove').off('click').on('click',function(e){
 					e.preventDefault();
