@@ -20,6 +20,11 @@ $(document).ready(function(){
 		} else {
 			$('#stepb').removeClass('disabled')
 		}
+		if(currentpos==14) {
+			$('#stepf').addClass('disabled')
+		} else {
+			$('#stepf').removeClass('disabled')
+		}
 		$('#counter').html(currentpos)
 	});
 	$('#controls .move > div').on('mouseenter',function(){
@@ -161,7 +166,7 @@ $(document).ready(function(){
 	for (var i = 0; i < 14; i++) {
 		$('#shape').append('<div class="line"></div>')
 	}
-
+	$('#y1').click();
 	// setTimeout(function(){
 	// 	$('.line').eq(0).addClass('complete');
 	// 	setTimeout(function(){
