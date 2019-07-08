@@ -17,10 +17,19 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     }
     #controls .move > div {
       display: inline-block;
-      width: 50px
-      height:50px;
-      background:red;
-      margin:0 10px;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    .selected {
+      background-color: blue !important;
     }
     .disabled {
       opacity: .5;
@@ -54,9 +63,7 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 
 #container {
   width: 100%;
-  -webkit-perspective: 800px;
-  -moz-perspective: 800px;
-  perspective: 800px;
+
   position: relative;
   z-index: -1;
 }
@@ -70,6 +77,7 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
   -webkit-transform-style: preserve-3d;
   -moz-transform-style: preserve-3d;
   transform-style: preserve-3d;
+  transform-origin:  50% 50% 100px;
 /*  -webkit-transform: rotateX(-5deg) rotateY(-30deg);
   -moz-transform: rotateX(-5deg) rotateY(-30deg);
   transform: rotateX(-5deg) rotateY(-30deg);*/
@@ -94,6 +102,10 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     position: absolute;
     top: 0;
     transform-style: preserve-3d;
+
+}
+.faces .face {
+      background-color: rgba(200,200,200,.4);
 }
 
 #shape .face3 {
@@ -213,6 +225,12 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 .line.complete::after, .line.complete::before {
     height: 100%;
 }
+#counter {
+  height: 40px;
+  font-size: 20px;
+  margin: 0 10px;
+  vertical-align: bottom;
+}
 
 </style>
 </head>
@@ -223,6 +241,7 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
         <div id="x1">x1</div><div id="x2">x2</div>
         <div id="y1">y1</div><div id="y2">y2</div>
         <div id="z1">z1</div><div id="z2">z2</div>
+        <div id="reset">reset</div><div id="faces">faces</div>
       </div>
       <div class="linesControls">
         <div id="stepb"></div><div id="counter"></div><div id="stepf"></div>
@@ -230,8 +249,8 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     </div>
 
 		<div id="container">
-			<div id="shape" data-x="0" data-y="0" data-z="0">
-        <div class="face1">
+			<div id="shape" data-x="-15" data-y="15" data-z="0">
+        <div class="face1 face">
           <div class="point"></div>
           <div class="point"></div>
           <div class="point"></div>
@@ -242,7 +261,7 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
           <div class="point"></div>
           <div class="point"></div>
         </div>
-        <div class="face2">
+        <div class="face2 face">
           <div class="point"></div>
           <div class="point"></div>
           <div class="point"></div>
@@ -253,7 +272,7 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
           <div class="point"></div>
           <div class="point"></div>
         </div>
-        <div class="face3">
+        <div class="face3 face">
           <div class="point"></div>
           <div class="point"></div>
           <div class="point"></div>
