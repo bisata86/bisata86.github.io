@@ -92,7 +92,7 @@ $(document).ready(function(){
 			$('#shape').attr('data-y',15)
 			$('#shape').attr('data-z',0)
 			moving = {};
-			$('.selected').removeClass('selected')
+			$('.move .selected').removeClass('selected')
 		} else {
 				if(cid=='x1') {
 					if(moving.x1) {
@@ -101,6 +101,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.x1 = true;
+						moving.x2 = false;
+						$('#x2').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
@@ -111,6 +113,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.x2 = true;
+						moving.x1 = false;
+						$('#x1').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
@@ -121,6 +125,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.y1 = true;
+						moving.y2 = false;
+						$('#y2').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
@@ -131,6 +137,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.y2 = true;
+						moving.y1 = false;
+						$('#y1').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
@@ -141,6 +149,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.z1 = true;
+						moving.z2 = false;
+						$('#z2').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
@@ -151,6 +161,8 @@ $(document).ready(function(){
 					}
 					else {
 						moving.z2 = true;
+						moving.z1	 = false;
+						$('#z1').removeClass('selected')
 						$(this).addClass('selected')
 					}
 				}
