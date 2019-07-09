@@ -3,10 +3,9 @@
 $(document).ready(function(){
 	var currentpos = 0
 	$('#stepb').addClass('disabled')
-	$('#counter').html(currentpos)
+	$('#counter span').eq(0).html(currentpos)
 	$('.linesControls > div').click(function(){
 		var cid = $(this).attr('id');
-
 		if(cid=='stepf') {
 			$('.line').eq(currentpos).addClass('complete');
 			currentpos++;
@@ -25,7 +24,7 @@ $(document).ready(function(){
 		} else {
 			$('#stepf').removeClass('disabled')
 		}
-		$('#counter').html(currentpos)
+		$('#counter span').eq(0).html(currentpos)
 	});
 	$('#controls .move > div').on('mouseenter',function(){
 		clearInterval(hoverInterval)
@@ -54,6 +53,31 @@ $(document).ready(function(){
 	});
 	$('#controls .move > div').on('mouseleave',function(){
 		clearInterval(hoverInterval)
+	});
+	$('.type').on('change',function(){
+		$('.line').remove();
+		currentpos = 0
+		$('#stepb').addClass('disabled')
+		$('#stepf').removeClass('disabled')
+		$('#counter span').eq(0).html(currentpos)
+		console.log($(this).val())
+		var cVal = $(this).val();
+		if(cVal=='trivial') {
+			$('.noint').remove();
+			$('#counter span').eq(1).html(14)
+			$('#shape').append('<div class="trivial"></div>')
+			for (var i = 0; i < 14; i++) {
+				$('.trivial').append('<div class="line"></div>')
+			}
+		}
+		if(cVal=='nointersection') {
+			$('.trivial').remove();
+			$('#counter span').eq(1).html(14)
+			$('#shape').append('<div class="noint"></div>')
+			for (var i = 0; i < 14; i++) {
+				$('.noint').append('<div class="line"></div>')
+			}
+		}
 	});
 	$('#controls .move > div').on('click',function(){
 		//clearInterval(spininterval);
@@ -163,10 +187,12 @@ $(document).ready(function(){
 		$('#shape').css('-webkit-transform','rotateX('+$('#shape').attr('data-x')+'deg) rotateY('+$('#shape').attr('data-y')+'deg) rotateZ('+$('#shape').attr('data-z')+'deg) translateZ(100px)')
 	}
 
+	$('#shape').append('<div class="trivial"></div>')
 	for (var i = 0; i < 14; i++) {
-		$('#shape').append('<div class="line"></div>')
+		$('.trivial').append('<div class="line"></div>')
 	}
 	$('#y1').click();
+	$('.type').val('nointersection').trigger('change');
 	// setTimeout(function(){
 	// 	$('.line').eq(0).addClass('complete');
 	// 	setTimeout(function(){
