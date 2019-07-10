@@ -8,7 +8,8 @@ $(document).ready(function(){
 	$('.linesControls > div').click(function(){
 		var cid = $(this).attr('id');
 		if(cid=='stepf') {
-			$('.line').eq(currentpos).addClass('complete');
+			$('.line').eq(currentpos).addClass('complete').css('height',50*trasf(nointlengths[currentpos+1])+'%');
+			console.log()
 			currentpos++;
 		}
 		if(cid=='stepb') {
@@ -117,7 +118,7 @@ $(document).ready(function(){
 			$('#shape').attr('data-y',15)
 			$('#shape').attr('data-z',0)
 			moving = {};
-			$('.move .selected').removeClass('selected')
+			$('.move .selected[id!="faces"]').removeClass('selected')
 		} else {
 				if(cid=='x1') {
 					if(moving.x1) {
@@ -191,6 +192,16 @@ $(document).ready(function(){
 						$(this).addClass('selected')
 					}
 				}
+				if(cid=='zin') {
+					if(parseFloat($('#shape').attr('data-s'))<1.5) {
+						$('#shape').attr('data-s',parseFloat($('#shape').attr('data-s'))+.1)
+					}
+				}
+				if(cid=='zout') {
+					if(parseFloat($('#shape').attr('data-s'))>.5) {
+						$('#shape').attr('data-s',parseFloat($('#shape').attr('data-s'))-.1)
+					}
+				}
 		}
 	});
 	$('.play').on('click',function(){
@@ -240,6 +251,7 @@ $(document).ready(function(){
 	},100)
 	function updateCube() {
 		$('#shape').css('-webkit-transform','rotateX('+$('#shape').attr('data-x')+'deg) rotateY('+$('#shape').attr('data-y')+'deg) rotateZ('+$('#shape').attr('data-z')+'deg) translateZ(100px)')
+		$('#container').css('-webkit-transform', 'scale('+$('#shape').attr('data-s')+')')
 	}
 
 	$('#shape').append('<div class="trivial"></div>')
