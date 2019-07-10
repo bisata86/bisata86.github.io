@@ -2,6 +2,7 @@
 
 $(document).ready(function(){
 	var currentpos = 0
+	var nointlengths = [0,2,2,3,'2*radq(2)',2,'2*radq(2)',3,2,3,'2*radq(3)',2,1,2,'radq(2)']
 	$('#stepb').addClass('disabled')
 	$('#counter span').eq(0).html(currentpos)
 	$('.linesControls > div').click(function(){
@@ -25,6 +26,30 @@ $(document).ready(function(){
 			$('#stepf').removeClass('disabled')
 		}
 		$('#counter span').eq(0).html(currentpos)
+		if(nointlengths[currentpos]) {
+			$('#counter div').eq(0).html('Len: '+nointlengths[currentpos])
+			$('#counter div').eq(1).html('Sum: '+sums(currentpos) )
+		}
+		else 
+			$('#counter div').html('')
+
+		function trasf(s) {
+			if(s=='2*radq(2)') s = Math.sqrt(8);
+			if(s=='2*radq(3)') s = 2*Math.sqrt(3);
+			if(s=='radq(2)') s = Math.sqrt(2);
+			return parseFloat(s).toFixed(3)
+		}
+
+		function sums(c){
+			var sum = 0;
+			for (var i = 0; i <= c; i++) {
+				sum += parseFloat(trasf(nointlengths[i]))
+
+			}
+			console.log(sum)
+			return sum.toFixed(3);
+		}
+
 	});
 	$('#controls .move > div').on('mouseenter',function(){
 		clearInterval(hoverInterval)
@@ -168,6 +193,25 @@ $(document).ready(function(){
 				}
 		}
 	});
+	$('.play').on('click',function(){
+		$('.line').removeClass('complete');
+		$('#stepf').hide();
+		$('#stepb').hide();
+		$('.play').hide();
+		var count = 0
+		currentpos = 0;
+		var d = setInterval(function(){
+			$('#stepf').click();
+			count++;
+			if(count==14) {
+				clearInterval(d);
+				$('#stepf').show();
+				$('#stepb').show();
+				$('.play').show();
+			}
+		},1000)
+		
+	});
 	var moving = {};
 	var spininterval;
 	spininterval = setInterval(function(){
@@ -189,7 +233,6 @@ $(document).ready(function(){
 		if(moving.z2) {
 			$('#shape').attr('data-z',parseInt($('#shape').attr('data-z'))-1)
 		}
-		console.log('aaaa')
 	},100)
 	var hoverInterval;
 	var mainInterval = setInterval(function(){

@@ -399,13 +399,26 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 }
 #counter {
   height: 40px;
-  font-size: 20px;
+  font-size: 15px;
   margin: 0 10px;
   vertical-align: bottom;
+      min-width: 150px;
+}
+#counter div {
+  text-align: left;
 }
 .type {
   z-index: 2;
   position: absolute;
+}
+.play {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  position: absolute;
+  top:50px;
+        background: url('./play.png');
+      background-size: 100% 100%;
 }
 
 </style>
@@ -420,12 +433,13 @@ initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
         <div id="reset">reset</div><div id="faces">faces</div>
       </div>
       <div class="linesControls">
-        <div id="stepb"></div><div id="counter"><span>0</span>/<span>14</span></div><div id="stepf"></div>
+        <div id="stepb"></div><div id="counter"><span>0</span>/<span>14</span><div></div><div></div></div><div id="stepf"></div>
       </div>
       <select class="type">
         <option value="trivial">trivial</option>
         <option value="nointersection">no intersection</option>
       </select>
+      <div class="play"></div>
     </div>
 
 		<div id="container">
