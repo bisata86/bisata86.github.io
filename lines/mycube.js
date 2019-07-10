@@ -117,6 +117,14 @@ $(document).ready(function(){
 			$('#shape').attr('data-x',-15)
 			$('#shape').attr('data-y',15)
 			$('#shape').attr('data-z',0)
+			$('#shape').attr('data-s',1)
+			$('.line').removeClass('complete')
+			currentpos = 0;
+			$('#counter span').eq(0).html(currentpos)
+			$('#counter div').eq(0).html('')
+			$('#counter div').eq(1).html('')
+			$('#stepb').addClass('disabled')
+
 			moving = {};
 			$('.move .selected[id!="faces"]').removeClass('selected')
 		} else {
