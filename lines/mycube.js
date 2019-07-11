@@ -228,7 +228,7 @@ $(document).ready(function(){
 				$('#stepb').show();
 				$('.play').show();
 			}
-		},1000)
+		},2000)
 		
 	});
 	var moving = {};
