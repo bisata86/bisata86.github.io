@@ -215,6 +215,7 @@ $(document).ready(function(){
 	$('.play').on('click',function(){
 		$('.line').removeClass('complete');
 		$('#stepf').hide();
+		$('#controls').hide();
 		$('#stepb').hide();
 		$('.play').hide();
 		var count = 0
