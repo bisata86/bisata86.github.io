@@ -3179,15 +3179,18 @@
           font-family: Roboto, Arial, sans-serif;
         }
         .card {
-          width: 90%;
-          margin: auto;
-          top:10px;
-          transition: 0.6s;
-          transform-style: preserve-3d;
-          position: relative;
+            margin: auto;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            transition: 0.6s;
+            transform-style: preserve-3d;
+            position: absolute;
         }
         img {
           width: 100%;
+          height: 100%;
           transition-duration: .6s;
         }
 
@@ -3289,6 +3292,11 @@
                     cNumber = '1'
                   }
                 }
+                if(percX>95) {
+                  if(percY>95) {
+                    cNumber = '13'
+                  }
+                }
                 cObj.number = cNumber
                 step++;
                 step2();
@@ -3320,13 +3328,16 @@
             function step1() {
               $('.card').remove();
               $('body').append('<div class="card hover"><div class="front"></div><div class="back"></div></div>');
+              var uno = $('body').width()*90/100
+              if(uno>500) uno = 300;
+              $('.card').css('width',uno);
+              $('.card').css('height',uno*150/100);
               $('.card .back').append('<img src="./cards/back.png"></img>')
             }
             function step2() {
-              
-
               if(localStorage.getItem('reveal')) {
-                $('.card .front').append('<img src="'+localStorage.getItem('reveal')+'"></img>')
+                $('.card .front').append('<img src="'+localStorage.getItem('reveal')+'"></img>');
+                $('.card').removeClass('hover');
               } else {
                 var cSrc = './cards/'+cObj.number+'_of_'+cObj.seme+'.png'
                 $('.card .front').append('<img src="'+cSrc+'"></img>');
