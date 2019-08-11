@@ -1,0 +1,187 @@
+
+
+
+<html lang="it">
+  <head>
+      <title>REVEAL</title>
+      <meta name="theme-color" content="black">
+      <meta name="msapplication-navbutton-color" content="black">
+      <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+      <style type="text/css">
+        ::-webkit-scrollbar { 
+            display: none; 
+        }
+        body {
+          padding:0;
+          margin:0;
+          font-size: 10px;
+          font-family: Roboto, Arial, sans-serif;
+        }
+        .card {
+          width: 90%;
+          margin: auto;
+          transition: 0.6s;
+          transform-style: preserve-3d;
+          position: relative;
+        }
+        img {
+          width: 100%;
+          transition-duration: .6s;
+        }
+
+        .card {
+          background-color: transparent;
+          perspective: 1000px; /* Remove this if you don't want the 3D effect */
+        }
+
+        /* This container is needed to position the front and back side */
+        .flip-card-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          text-align: center;
+          transition: transform 0.8s;
+          transform-style: preserve-3d;
+        }
+
+        /* Do an horizontal flip when you move the mouse over the flip box container */
+        .card.hover {
+          transform: rotateY(180deg);
+        }
+
+        /* Position the front and back side */
+        .front, .back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+        }
+
+        /* Style the front side (fallback if image is missing) */
+        .front {
+        }
+
+        /* Style the back side */
+        .back {
+          transform: rotateY(180deg);
+        }
+        .open {
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              margin: auto;
+              width: fit-content;
+              height: fit-content;
+              font-size: 20px;
+        }
+
+
+      </style>
+      <script type="text/javascript">
+        var isMobile;
+          $(function() {
+            detectMobile();
+            $( window ).resize(function() {
+                detectMobile();
+            });
+            var cObj = {};
+            var step = 0;
+            $('body').on('click',function(e){
+              var percY = e.pageY * 100 / $('body').height()
+              var percX = e.pageX * 100 / $('body').width()
+              if(step==1) {
+                var cNumber;
+                if(percX>66) {
+                  if(percY>75) {
+                    cNumber = '12'
+                  } else if(percY>50) {
+                    cNumber = '9'
+                  } else if(percY>25) {
+                    cNumber = '6'
+                  } else {
+                    cNumber = '3'
+                  }
+                } else if(percX>33)  {
+                  if(percY>75) {
+                    cNumber = '11'
+                  } else if(percY>50) {
+                    cNumber = '8'
+                  } else if(percY>25) {
+                    cNumber = '5'
+                  } else {
+                    cNumber = '2'
+                  }
+                } else {
+                  if(percY>75) {
+                    cNumber = '10'
+                  } else if(percY>50) {
+                    cNumber = '7'
+                  } else if(percY>25) {
+                    cNumber = '4'
+                  } else {
+                    cNumber = '1'
+                  }
+                }
+                cObj.number = cNumber
+                step++;
+                step2();
+              }
+              if(step==0) {
+                var cSeme;
+                if(percX>50) {
+                  if(percY>50) {
+                    cSeme = 'spades'
+                  } else {
+                    cSeme = 'diamonds'
+                  }
+                } else {
+                  if(percY>50) {
+                    cSeme = 'clubs'
+                  } else {
+                    cSeme = 'hearts'
+                  }
+                }
+                cObj.seme = cSeme
+                step++;
+                step1();
+              }
+              //console.log(string)
+              console.log(cObj)
+
+
+            })
+            function step1() {
+              $('.card').remove();
+              $('body').append('<div class="card hover"><div class="front"></div><div class="back"></div></div>');
+              $('.card .back').append('<img src="./cards/back.png"></img>')
+            }
+            function step2() {
+              $('.card').removeClass('hover');
+
+              if(localStorage.getItem('reveal')) {
+                $('.card .front').append('<img src="'+localStorage.getItem('reveal')+'"></img>')
+              } else {
+                var cSrc = './cards/'+cObj.number+'_of_'+cObj.seme+'.png'
+                $('.card .front').append('<img src="'+cSrc+'"></img>');
+                localStorage.setItem('reveal',cSrc);
+              }
+            }
+          });
+          function detectMobile() {
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                isMobile = true;
+                $('body').addClass('mobile');
+            } else {
+                isMobile = false;
+                $('body').removeClass('mobile');
+            }
+        }
+      </script>
+  </head>
+  <body>
+    <div class="open">REVEAL</div>
+  </body>
+</html>
