@@ -3465,6 +3465,7 @@ $(function() {
         $('.box').on('touchmove',function(e){
             clearTimeout(pressTimer)
             var newTop = e.originalEvent.touches[0].pageY - moveBox.y + $('.box').position().top;
+            if(newTop>($(window).height()/2)) newTop = $(window).height()-50;
             $('.box').css('top',newTop)
         })
         $('.card').on('click',function(e){
