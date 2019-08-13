@@ -3292,7 +3292,7 @@ $(function() {
     }
     step0()
     function step0() {
-        var uno = $('body').width() * 90 / 100
+        var uno = $('body').width() * 80 / 100
         if (uno > 500) uno = 300;
         $('.card').css('width', uno);
         $('.card').css('height', uno * 150 / 100);
@@ -3440,6 +3440,7 @@ $(function() {
 
         })
         $('.box').on('touchmove',function(e){
+            clearTimeout(pressTimer)
             var newTop = e.originalEvent.touches[0].pageY - moveBox.y + $('.box').position().top;
             $('.box').css('top',newTop)
         })
@@ -3453,6 +3454,7 @@ $(function() {
     }).on('touchstart', function(e) {
         pressTimer = window.setTimeout(function() {
             localStorage.removeItem('reveal');
+            window.location.reload();
         }, 500)
     });
 });
