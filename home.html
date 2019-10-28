@@ -34,20 +34,21 @@
 	  		}
 		}
   		.indicator {
-  			 nodisplay: none;
+  			nodisplay: none;
 		    position: absolute;
 		    bottom: 0px;
 		    /* left: 5px; */
 		    z-index: 100;
-		    /* background: white; */
-		    /* color: sienna; */
-		    width: calc(100% - 37px);
+		    background: rgba(255,255,255,.7);
+		    /* color: white; */
+		    height: 32px;
+		    width: calc(100% - 32px);
 		    overflow: hidden;
 		    text-overflow: ellipsis;
 		    font-size: x-small;
 		}
   		.justAdded .indicator {
-		    width: calc(100% - 69px);
+		    width: calc(100% - 64px);
   		}
   		div.c:hover .indicator {
   			display: inline-block;
@@ -373,7 +374,7 @@
 			if(savedPages) {
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
-					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe src=https:"+savedPages[i]+"></iframe></div>");
+					$('body').append("<div class='c openable loading'><div class='indicator'>"+savedPages[i]+"</div><div class='remove'></div><iframe src="+savedPages[i]+"></iframe></div>");
 					let script = document.createElement('script');
 					script.src = savedPages[i]
 					document.head.append(script);
@@ -393,7 +394,7 @@
 			$('.src').on('keyup', function(e){
 
 				var cUrl = $(this).val();
-				cUrl = cUrl.substring(cUrl.indexOf('//'),cUrl.length)
+				cUrl = cUrl;//.substring(cUrl.indexOf('//'),cUrl.length)
 				console.log(cUrl);
 
 				if(e.keyCode==13) {
@@ -477,6 +478,14 @@
 					$('.src').focus();
 
 				})
+				console.log($('.openable').length)
+				if($('.c.openable').length==2) {
+					$('.c.openable').css('width','100%');
+					$('.c.openable').css('height','33vh');
+				} else {
+					$('.c.openable').removeAttr('style');
+					$('.c.openable').removeAttr('style');
+				}
 			}
 			
 			$('.back').on('click', function(){
