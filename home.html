@@ -369,11 +369,7 @@
 		$( document ).ready(function() {
 			
 			var savedPages = localStorage.getItem('homePages');
-			/*if(!savedPages || (savedPages && savedPages=='[]')) {
-				savedPages = ['https://aracon.freegestcrm.com/app','https://aracon.freegestcrm.com'];
-				savedPages = JSON.stringify(savedPages);
-				localStorage.setItem('homePages',savedPages)
-			}*/
+	
 			if(savedPages) {
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
@@ -388,7 +384,7 @@
 			}
 
 			$('body').append("<div class='c newOne'><div class='new'></div></div>");
-			$('.newOne').prepend("<input class='src' type='url' value='https://' mask='sadasd'></input>");
+			$('.newOne').prepend("<input class='src' type='url' value='' mask=''></input>");
 			//$('body').append("<div class='load'>Add</div>");
 			$('body').append("<div class='back'><div></div></div>");
 			//$('body').append("<div class='save'>Save</div>");
@@ -484,11 +480,11 @@
 				})
 				console.log($('.openable').length)
 				if($('.c.openable').length==2) {
-					$('.c.openable').css('width','100%');
-					$('.c.openable').css('height','33vh');
+					$('.c').css('width','100%');
+					$('.c').css('height','33vh');
 				} else {
-					$('.c.openable').removeAttr('style');
-					$('.c.openable').removeAttr('style');
+					$('.c').removeAttr('style');
+					$('.c').removeAttr('style');
 				}
 			}
 			
