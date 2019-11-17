@@ -3,19 +3,29 @@
      document.getElementById('canvas').width  = $(window).width();
      document.getElementById('canvas').height  = $(window).height();
      addMenu();
-     
+     var prev = {};
+     var color = '';
      function addMenu() {
         $('body').append('<div class="menu"></div>')
         $('.menu').append('<div class="handDraw">handdraw</div>')
         $('.handDraw').on('click',function(){
+          $(this).addClass('selected')
+          $('body').append('<div class="settings"></div>')
+          $('.settings').append('<div class="color"><input type="color" value="#000000"/></div><div class="thick">thick</div>')
+          $('.color input').on('change',function(e){
+              color = $(this).val();
+          })
           var write = false;
           $('body').on(events.move,function(e){
               if(e.touches) 
                   e = e.touches[0];
               if(write) {
+
                 var ctx = document.getElementById('canvas').getContext('2d');
-                console.log(e, e.clientX, e.clientY)
-                point(e.clientX, e.clientY, ctx)
+                var curr = {x:e.clientX,y:e.clientY}
+                line(curr,prev,ctx, color)
+                prev = {x:e.clientX,y:e.clientY}
+                //point(e.clientX, e.clientY, ctx)
               }
           })
           $('body').on(events.start,function(e){
@@ -23,6 +33,7 @@
           })
           $('body').on(events.end,function(e){
               write = false
+              prev  = {};
           })
         })
      }
@@ -36,8 +47,18 @@
 
   function point(x, y, canvas){
     canvas.beginPath();
-    canvas.moveTo(x, y);
+    canvas.moveTo(x,y);
     canvas.lineTo(x+1, y+1);
+    canvas.stroke();
+  }
+
+  function line(c, p, canvas, color){
+    console.log(color)
+    canvas.strokeStyle = color;
+    canvas.lineWidth = 5;
+    canvas.beginPath();
+    canvas.moveTo(c.x,c.y);
+    canvas.lineTo(p.x,p.y);
     canvas.stroke();
   }
 
