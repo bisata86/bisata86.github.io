@@ -73,10 +73,14 @@
               $('.settings').remove();
           })
           $('#imgCanvas').on(events.start,function(e){
+            if(e.touches) 
+                  e = e.touches[0];
               move = true;
               hMove = {x:e.clientX,y:e.clientY}
           })
           $('#imgCanvas').on(events.end,function(e){
+            if(e.touches) 
+                  e = e.touches[0];
               move = false
               cpos = {x:e.clientX- hMove.x+cpos.x,y:e.clientY-hMove.y+cpos.y}
           })
