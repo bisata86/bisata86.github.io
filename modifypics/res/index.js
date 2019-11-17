@@ -8,7 +8,7 @@
      function addMenu() {
         $('body').append('<div class="menu"></div>')
         $('.menu').append('<div class="handDraw">handdraw</div>')
-        $('.menu').append('<input type="file" id="input" class="selectImage"></input>');
+        $('.menu').append('<input type="file" id="input" class="selectImage inputfile"></input>');
         $('.handDraw').on('click',function(){
           $(this).addClass('selected')
           $('body').append('<div class="settings"></div>')
