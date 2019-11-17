@@ -13,24 +13,9 @@
         <script src="./res/index.js?v=0.0.1"></script>
     </head>
     <body>
-    <script>
-    window.onload = function() {
-        var input = document.getElementById('input');
-        input.addEventListener('change', handleFiles);
-    }
-
-    function handleFiles(e) {
-        var ctx = document.getElementById('canvas').getContext('2d');
-        var url = URL.createObjectURL(e.target.files[0]);
-        var img = new Image();
-        img.onload = function() {
-            ctx.drawImage(img, 20, 20);    
-        }
-        img.src = url;   
-    }
-    </script>
     <body>
-        <input type="file" id="input" class="selectImage"/>
-        <canvas width="400" height="300" id="canvas"/>
+        <canvas id="canvas"></canvas>
+        
+       
     </body>
 </html>
