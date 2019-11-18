@@ -14,15 +14,24 @@ canvas {
   position: absolute;
 }
 .menu {
-  position: absolute;
-    top: 50%;
-    right: 0;
+    position: absolute;
+    bottom: 5px;
+    /* right: 0px; */
+    /* left: 0px; */
     z-index: 10;
+    /* margin: auto; */
+    text-align: center;
+    width: 100%;
 }
 .settings {
-  position: absolute;
-  bottom: 0%;
-  right: 50%;
+    position: absolute;
+    bottom: 5px;
+    /* right: 0px; */
+    /* left: 0px; */
+    z-index: 10;
+    /* margin: auto; */
+    text-align: center;
+    width: 100%;
 }
 .selected {
 	background:red;
@@ -35,14 +44,14 @@ canvas {
     height: 50px;
     background: url('./handdraw.png');
     background-size: 100% 100%;
-    display: block;
+    display: inline-block;
 }
 label[for="input"] {
     width: 50px;
     height: 50px;
     background: url('./file.ico');
     background-size: 100% 100%;
-    display: block;
+    display: inline-block;
 }
 .inputfile {
 	display:none;
@@ -51,3 +60,30 @@ label[for="input"] {
 	padding: 10px;
 	background-color: red;
 }
+.color, .thick {
+	display: inline-block;
+}
+
+.button {
+	box-shadow:inset 0px 39px 0px -24px #e67a73;
+	background-color:#e4685d;
+	border-radius:4px;
+	border:1px solid #ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:6px 15px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+	    min-width: 50px;
+}
+.button:hover {
+	background-color:#eb675e;
+}
+.button:active {
+	position:relative;
+	top:1px;
+}
+

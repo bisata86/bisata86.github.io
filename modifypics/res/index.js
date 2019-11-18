@@ -1,7 +1,7 @@
   var events = {};
   $( document ).ready(function() {
      document.getElementById('canvas').width  = $(window).width();
-     document.getElementById('canvas').height  = $(window).height();
+     document.getElementById('canvas').height  = $(window).height()*9/10;
      addMenu();
      var prev = {};
      var color = '';
@@ -10,13 +10,23 @@
         $('.menu').append('<div class="handDraw"></div>')
         $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
         $('.handDraw').on('click',function(){
-          $(this).addClass('selected')
-          $('body').append('<div class="settings"></div>')
-          $('.settings').append('<div class="color"><input type="color" value="#000000"/></div><div class="thick"><input id="linew" type="range" value="5" max="10" min="1" step="1"/></div>')
+          $('.menu').hide();
+          if($('.settings').length==0)
+            $('body').append('<div class="settings"></div>')
+          $('.settings').append('<div class="button back">back</div><div class="color"><input type="color" value="#000000"/></div><div class="thick"><input id="linew" type="range" value="5" max="10" min="1" step="1"/></div>')
           $('.color input').on('change',function(e){
               color = $(this).val();
           })
           var write = false;
+          $('.back').on('click',function(e){
+              $('.settings').remove();
+              write = false
+              $('.menu').show();
+              $('body').off(events.move)
+              $('body').off(events.start)
+              $('body').off(events.end)
+          })
+          
           $('body').on(events.move,function(e){
               if(e.touches) 
                   e = e.touches[0];
@@ -50,7 +60,7 @@
   function handleFiles(e) {
       $('body').append('<canvas id="imgCanvas"></canvas>')
       document.getElementById('imgCanvas').width  = $(window).width();
-      document.getElementById('imgCanvas').height  = $(window).height();
+      document.getElementById('imgCanvas').height  = $(window).height()*9/10;;
       var ctx = $('#imgCanvas')[0].getContext('2d');
       var url = URL.createObjectURL(e.target.files[0]);
       var img = new Image();
@@ -58,7 +68,8 @@
       img.onload = function(e) {
           if($('.settings').length==0)
               $('body').append('<div class="settings"></div>')
-          $('.settings').html('<div class="setImg">ok</div>')
+          $('.settings').html('<div class="button back">back</div><div class="setImg button">ok</div>');
+          $('.menu').hide();
           var w = $('#tempImg').width();
           var h = $('#tempImg').height();
           ctx.drawImage(img, 0, 0, w, h);   
@@ -68,10 +79,16 @@
           var cpos = {x:0,y:0};
           var temppos = {x:0,y:0};
           var final = {};
+          $('.back').on('click',function(e){
+              $('#imgCanvas').remove();
+              $('.settings').remove();
+              $('.menu').show();
+          })
           $('.setImg').on('click',function(){
               $('#imgCanvas').remove();
               $('#canvas')[0].getContext('2d').drawImage(img, final.x,final.y, w, h); 
               $('.settings').remove();
+              $('.menu').show();
           })
           $('#imgCanvas').on(events.start,function(e){
             if(e.touches) 
