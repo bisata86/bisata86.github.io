@@ -3,6 +3,10 @@ body {
   margin:0;
   overflow: hidden;
 }
+html {
+	height: 90vh;
+    overflow: hidden;
+}
 canvas {
     width: 100vw;
     position: absolute;
