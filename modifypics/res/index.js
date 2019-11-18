@@ -1,14 +1,14 @@
   var events = {};
   $( document ).ready(function() {
      document.getElementById('canvas').width  = $(window).width();
-     document.getElementById('canvas').height  = $(window).height()*90/100;
+     document.getElementById('canvas').height  = $(window).height();
      addMenu();
      var prev = {};
      var color = '';
      function addMenu() {
         $('body').append('<div class="menu"></div>')
-        $('.menu').append('<div class="handDraw">handdraw</div>')
-        $('.menu').append('<input type="file" id="input" class="selectImage inputfile"></input>');
+        $('.menu').append('<div class="handDraw"></div>')
+        $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
         $('.handDraw').on('click',function(){
           $(this).addClass('selected')
           $('body').append('<div class="settings"></div>')
@@ -57,8 +57,9 @@
       var img = new Image();
       $('body').append('<img id="tempImg" src="'+url+'"></img>')
       img.onload = function(e) {
-          $('body').append('<div class="settings"></div>')
-          $('.settings').append('<div class="setImg">ok</div>')
+          if($('.settings').length==0)
+              $('body').append('<div class="settings"></div>')
+          $('.settings').html('<div class="setImg">ok</div>')
           var w = $('#tempImg').width();
           var h = $('#tempImg').height();
           ctx.drawImage(img, 0, 0, w, h);   
@@ -66,6 +67,7 @@
           var move = false;
           var hMove = {x:0,y:0};
           var cpos = {x:0,y:0};
+          var temppos = {x:0,y:0};
           var final = {};
           $('.setImg').on('click',function(){
               $('#imgCanvas').remove();
@@ -79,8 +81,12 @@
               hMove = {x:e.clientX,y:e.clientY}
           })
           $('#imgCanvas').on(events.end,function(e){
-            if(e.touches) 
-                  e = e.touches[0];
+            console.log(e)
+            if(e.touches) {
+                  e.clientX = temppos.x;
+                  e.clientY = temppos.y;
+              }
+            console.log(e.clientX)
               move = false
               cpos = {x:e.clientX- hMove.x+cpos.x,y:e.clientY-hMove.y+cpos.y}
           })
@@ -91,6 +97,7 @@
                 ctx.clearRect(0,0,$(window).width(),$(window).height())
                 ctx.drawImage(img, e.clientX- hMove.x+cpos.x,e.clientY-hMove.y+cpos.y, w, h); 
                 final = {x:e.clientX- hMove.x+cpos.x,y:e.clientY-hMove.y+cpos.y}
+                temppos = {x:e.clientX,y:e.clientY}
               }
           })
       }
