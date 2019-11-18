@@ -57,6 +57,14 @@ canvas {
 
     background-color: white;
 }
+.text {
+    width: 50px;
+    height: 50px;
+    background: url('./text.png');
+    background-size: 100% 100%;
+    display: inline-block;
+    background-color: white;
+}
 .clear {
     width: 50px;
     height: 50px;

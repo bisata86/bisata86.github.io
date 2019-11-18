@@ -4,11 +4,13 @@
      document.getElementById('canvas').height  = $(window).height()*9/10;
      addMenu();
      var prev = {};
-     var color = '';
+     var color = 'black';
+     var linew = 5;
      function addMenu() {
         $('body').append('<div class="menu"></div>')
         $('.menu').append('<div class="handDraw"></div>')
         $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
+        //$('.menu').append('<div class="text"></div>')
         $('.menu').append('<div class="save"></div>')
         $('.menu').append('<div class="clear"></div>')
         $('.save').on('click',function(){
@@ -18,11 +20,15 @@
             if(confirm('clear all?'))
               $('#canvas')[0].getContext('2d').clearRect(0,0,$(window).width(),$(window).height())
         })
+        $('.text').on('click',function(){
+          $('.menu').hide();
+          $('body').append('<input class="textMark" value="cane"></input>')
+        });
         $('.handDraw').on('click',function(){
           $('.menu').hide();
           if($('.settings').length==0)
             $('body').append('<div class="settings"></div>')
-          $('.settings').append('<div class="button back">back</div><div class="color"><input type="color" value="#000000"/></div><div class="thick"><input id="linew" type="range" value="5" max="100" min="1" step="1"/></div>')
+          $('.settings').append('<div class="button back">back</div><div class="color"><input type="color" value="'+color+'"/></div><div class="thick"><input id="linew" type="range" value="'+linew+'" max="100" min="1" step="1"/></div>')
           $('.color input').on('change',function(e){
               color = $(this).val();
           })
@@ -41,8 +47,8 @@
               if(e.touches) {
                   //e = e.touches[0];
                   var rect = e.target.getBoundingClientRect();
-                  e.pageX = e.targetTouches[0].pageX - rect.left;
-                  e.pageY = e.targetTouches[0].pageY - rect.top;
+                  e.pageX = (e.targetTouches[0].pageX - rect.left);
+                  e.pageY = (e.targetTouches[0].pageY - rect.top);
               }
               if(write) {
 
@@ -53,7 +59,8 @@
 
 
                 var curr = {x:e.pageX,y:e.pageY}
-                line(curr,prev,ctx, color, $('#linew').val())
+                linew = $('#linew').val()
+                line(curr,prev,ctx, color, linew)
                 prev = {x:e.pageX,y:e.pageY}
 
 
@@ -80,7 +87,7 @@
   function handleFiles(e) {
       $('body').append('<canvas id="imgCanvas"></canvas>')
       document.getElementById('imgCanvas').width  = $(window).width();
-      document.getElementById('imgCanvas').height  = $(window).height()*9/10;;
+      document.getElementById('imgCanvas').height  = $(window).height()*9/10;
       var ctx = $('#imgCanvas')[0].getContext('2d');
       var url = URL.createObjectURL(e.target.files[0]);
       var img = new Image();
