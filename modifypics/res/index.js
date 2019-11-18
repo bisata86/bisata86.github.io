@@ -22,7 +22,7 @@
           $('.menu').hide();
           if($('.settings').length==0)
             $('body').append('<div class="settings"></div>')
-          $('.settings').append('<div class="button back">back</div><div class="color"><input type="color" value="#000000"/></div><div class="thick"><input id="linew" type="range" value="5" max="10" min="1" step="1"/></div>')
+          $('.settings').append('<div class="button back">back</div><div class="color"><input type="color" value="#000000"/></div><div class="thick"><input id="linew" type="range" value="5" max="100" min="1" step="1"/></div>')
           $('.color input').on('change',function(e){
               color = $(this).val();
           })
@@ -36,22 +36,23 @@
               $('body').off(events.end)
           })
           
-          $('body').on(events.move,function(e){
+          $('#canvas').on(events.move,function(e){
+
               if(e.touches) 
                   e = e.touches[0];
               if(write) {
 
                 var ctx = document.getElementById('canvas').getContext('2d');
-                var curr = {x:e.clientX,y:e.clientY}
+                var curr = {x:e.pageX,y:e.pageY}
                 line(curr,prev,ctx, color, $('#linew').val())
-                prev = {x:e.clientX,y:e.clientY}
+                prev = {x:e.pageX,y:e.pageY}
                 //point(e.clientX, e.clientY, ctx)
               }
           })
-          $('body').on(events.start,function(e){
+          $('#canvas').on(events.start,function(e){
               write = true;
           })
-          $('body').on(events.end,function(e){
+          $('#canvas').on(events.end,function(e){
               write = false
               prev  = {};
           })
