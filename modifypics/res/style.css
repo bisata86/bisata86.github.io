@@ -6,7 +6,9 @@ body {
 canvas {
     width: 100vw;
     position: absolute;
-    height: 100vh;
+    height: 90vh;
+    border: 1px solid black;
+    box-sizing: border-box;
 }
 .selectImage {
   position: absolute;

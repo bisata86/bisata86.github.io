@@ -41,14 +41,6 @@
         input.addEventListener('change', handleFiles);
      }
     isMobile()
-    $( window ).on('scroll',function() {
-        e.preventDefault();
-        e.stopPropagation();
-    })
-    $('body, html').on('scroll',function() {
-        e.preventDefault();
-        e.stopPropagation();
-    })
     $( window ).resize(function() {
         isMobile()
     })
