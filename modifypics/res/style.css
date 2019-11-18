@@ -6,7 +6,7 @@ body {
 canvas {
     width: 100vw;
     position: absolute;
-    height: 99vh;
+    height: 90vh;
     background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==);
 }
 .selectImage {
@@ -45,6 +45,8 @@ canvas {
     background-size: 100% 100%;
     display: inline-block;
     background-color: white;
+    border-left: 10px solid white;
+    border-radius: 20px 0 0 0;
 }
 .save {
     width: 50px;
@@ -52,6 +54,7 @@ canvas {
     background: url('./save.png');
     background-size: 100% 100%;
     display: inline-block;
+
     background-color: white;
 }
 .clear {
@@ -61,6 +64,8 @@ canvas {
     background-size: 100% 100%;
     display: inline-block;
     background-color: white;
+    border-right: 10px solid white;
+    border-radius: 0 20px 0 0;
 }
 label[for="input"] {
     width: 50px;
