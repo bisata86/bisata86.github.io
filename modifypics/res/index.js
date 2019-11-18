@@ -1,7 +1,7 @@
   var events = {};
   $( document ).ready(function() {
      document.getElementById('canvas').width  = $(window).width();
-     document.getElementById('canvas').height  = $(window).height()*90/100;
+     document.getElementById('canvas').height  = $(window).height();
      addMenu();
      var prev = {};
      var color = '';
@@ -41,10 +41,17 @@
         input.addEventListener('change', handleFiles);
      }
     isMobile()
+    $( window ).on('scroll',function() {
+        e.preventDefault();
+        e.stopPropagation();
+    })
+    $('body, html').on('scroll',function() {
+        e.preventDefault();
+        e.stopPropagation();
+    })
     $( window ).resize(function() {
         isMobile()
     })
-
 
   })
 
