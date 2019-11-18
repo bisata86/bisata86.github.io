@@ -43,9 +43,9 @@
               if(write) {
 
                 var ctx = document.getElementById('canvas').getContext('2d');
-                var curr = {x:e.pageX,y:e.pageY}
+                var curr = {x:e.pageX,y:e.pageY*90/100}
                 line(curr,prev,ctx, color, $('#linew').val())
-                prev = {x:e.pageX,y:e.pageY}
+                prev = {x:e.pageX,y:e.pageY*90/100}
                 //point(e.clientX, e.clientY, ctx)
               }
           })

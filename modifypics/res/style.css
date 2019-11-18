@@ -7,6 +7,7 @@ canvas {
     width: 100vw;
     position: absolute;
     height: 90vh;
+    background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==);
 }
 .selectImage {
   position: absolute;
@@ -102,4 +103,9 @@ label[for="input"] {
 	position:relative;
 	top:1px;
 }
-
+.version {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
+	font-size: 8px;
+}
