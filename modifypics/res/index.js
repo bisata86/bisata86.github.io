@@ -1,10 +1,7 @@
   var events = {};
   $( document ).ready(function() {
-    $("html, body, #wrapper").css({
-        height: $(window).height()
-    });
      document.getElementById('canvas').width  = $(window).width();
-     document.getElementById('canvas').height  = $(window).height();
+     document.getElementById('canvas').height  = $(window).height()*90/100;
      addMenu();
      var prev = {};
      var color = '';

@@ -3,23 +3,10 @@ body {
   margin:0;
   overflow: hidden;
 }
-html {
-  overflow: hidden;
-  width: 100%;
-}
-
-body {
-      height: 100%;
-    width: 100%;
-    position: fixed;
-    overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  /* iOS velocity scrolling */
-}
 canvas {
-      width: 100vw;
+    width: 100vw;
     position: absolute;
-    height: 100vh;
+    height: 90vh;
 }
 .selectImage {
   position: absolute;
