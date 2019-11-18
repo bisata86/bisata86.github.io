@@ -9,6 +9,10 @@
         $('body').append('<div class="menu"></div>')
         $('.menu').append('<div class="handDraw"></div>')
         $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
+        $('.menu').append('<div class="save"></div>')
+        $('.save').on('click',function(){
+            downloadCanvasAsImage();
+        })
         $('.handDraw').on('click',function(){
           $('.menu').hide();
           if($('.settings').length==0)
@@ -78,7 +82,7 @@
           var hMove = {x:0,y:0};
           var cpos = {x:0,y:0};
           var temppos = {x:0,y:0};
-          var final = {};
+          var final = {x:0,y:0};;
           $('.back').on('click',function(e){
               $('#imgCanvas').remove();
               $('.settings').remove();
@@ -119,6 +123,16 @@
       }
       img.src = url;   
   }
+
+  function downloadCanvasAsImage(){
+    let downloadLink = document.createElement('a');
+    downloadLink.setAttribute('download', 'image.png');
+    let canvas = document.getElementById('canvas');
+    let dataURL = canvas.toDataURL('image/png');
+    let url = dataURL.replace(/^data:image\/png/,'data:application/octet-stream');
+    downloadLink.setAttribute('href', url);
+    downloadLink.click();
+}
 
   function point(x, y, canvas){
     canvas.beginPath();
