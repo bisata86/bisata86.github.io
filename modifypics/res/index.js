@@ -38,15 +38,25 @@
           
           $('#canvas').on(events.move,function(e){
 
-              if(e.touches) 
-                  e = e.touches[0];
+              if(e.touches) {
+                  //e = e.touches[0];
+                  var rect = e.target.getBoundingClientRect();
+                  e.pageX = e.targetTouches[0].pageX - rect.left;
+                  e.pageY = e.targetTouches[0].pageY - rect.top;
+              }
               if(write) {
 
                 var ctx = document.getElementById('canvas').getContext('2d');
-                var curr = {x:e.pageX,y:e.pageY*90/100}
+                // var curr = {x:e.pageX,y:e.pageY*90/100}
+                // line(curr,prev,ctx, color, $('#linew').val())
+                // prev = {x:e.pageX,y:e.pageY*90/100}
+
+
+                var curr = {x:e.pageX,y:e.pageY}
                 line(curr,prev,ctx, color, $('#linew').val())
-                prev = {x:e.pageX,y:e.pageY*90/100}
-                //point(e.clientX, e.clientY, ctx)
+                prev = {x:e.pageX,y:e.pageY}
+
+
               }
           })
           $('#canvas').on(events.start,function(e){
