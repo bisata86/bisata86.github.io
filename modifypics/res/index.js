@@ -74,11 +74,12 @@
       var ctx = $('#imgCanvas')[0].getContext('2d');
       var url = URL.createObjectURL(e.target.files[0]);
       var img = new Image();
+      var mult = 1;
       $('body').append('<img id="tempImg" src="'+url+'"></img>')
       img.onload = function(e) {
           if($('.settings').length==0)
               $('body').append('<div class="settings"></div>')
-          $('.settings').html('<div class="button back">back</div><div class="setImg button">ok</div>');
+          $('.settings').html('<div class="button back">back</div><div class="setImg button">ok</div><div class="plus button">+</div><div class="minus button">-</div>');
           $('.menu').hide();
           var w = $('#tempImg').width();
           var h = $('#tempImg').height();
@@ -96,9 +97,19 @@
           })
           $('.setImg').on('click',function(){
               $('#imgCanvas').remove();
-              $('#canvas')[0].getContext('2d').drawImage(img, final.x,final.y, w, h); 
+              $('#canvas')[0].getContext('2d').drawImage(img, final.x,final.y, w*mult, h*mult); 
               $('.settings').remove();
               $('.menu').show();
+          })
+          $('.plus').on('click',function(){
+              mult = mult+.1
+              ctx.clearRect(0,0,$(window).width(),$(window).height())
+              ctx.drawImage(img, final.x,final.y, w*mult, h*mult); 
+          })
+          $('.minus').on('click',function(){
+              mult = mult-.1
+              ctx.clearRect(0,0,$(window).width(),$(window).height())
+              ctx.drawImage(img, final.x,final.y, w*mult, h*mult); 
           })
           $('#imgCanvas').on(events.start,function(e){
             if(e.touches) 
@@ -121,7 +132,7 @@
                 if(e.touches) 
                     e = e.touches[0];
                 ctx.clearRect(0,0,$(window).width(),$(window).height())
-                ctx.drawImage(img, e.clientX- hMove.x+cpos.x,e.clientY-hMove.y+cpos.y, w, h); 
+                ctx.drawImage(img, e.clientX- hMove.x+cpos.x,e.clientY-hMove.y+cpos.y, w*mult, h*mult); 
                 final = {x:e.clientX- hMove.x+cpos.x,y:e.clientY-hMove.y+cpos.y}
                 temppos = {x:e.clientX,y:e.clientY}
               }
