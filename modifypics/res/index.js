@@ -1,5 +1,8 @@
   var events = {};
   $( document ).ready(function() {
+    $("html, body, #wrapper").css({
+        height: $(window).height()
+    });
      document.getElementById('canvas').width  = $(window).width();
      document.getElementById('canvas').height  = $(window).height();
      addMenu();
