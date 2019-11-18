@@ -3,14 +3,10 @@ body {
   margin:0;
   overflow: hidden;
 }
-html {
-	height: 90vh;
-    overflow: hidden;
-}
 canvas {
     width: 100vw;
     position: absolute;
-    height: calc(100vh - 1px);
+    height: 90vh;
     background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==);
 }
 .selectImage {
