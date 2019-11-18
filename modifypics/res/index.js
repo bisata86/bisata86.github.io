@@ -1,7 +1,7 @@
   var events = {};
   $( document ).ready(function() {
      document.getElementById('canvas').width  = $(window).width();
-     document.getElementById('canvas').height  = $(window).height()*9/10;
+     document.getElementById('canvas').height  = $(window).height();
      addMenu();
      var prev = {};
      var color = '';
@@ -43,9 +43,9 @@
               if(write) {
 
                 var ctx = document.getElementById('canvas').getContext('2d');
-                var curr = {x:e.pageX,y:e.pageY*90/100}
+                var curr = {x:e.pageX,y:e.pageY}
                 line(curr,prev,ctx, color, $('#linew').val())
-                prev = {x:e.pageX,y:e.pageY*90/100}
+                prev = {x:e.pageX,y:e.pageY}
                 //point(e.clientX, e.clientY, ctx)
               }
           })
