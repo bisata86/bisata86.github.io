@@ -10,8 +10,13 @@
         $('.menu').append('<div class="handDraw"></div>')
         $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
         $('.menu').append('<div class="save"></div>')
+        $('.menu').append('<div class="clear"></div>')
         $('.save').on('click',function(){
             downloadCanvasAsImage();
+        })
+        $('.clear').on('click',function(){
+            if(confirm('clear all?'))
+              $('#canvas')[0].getContext('2d').clearRect(0,0,$(window).width(),$(window).height())
         })
         $('.handDraw').on('click',function(){
           $('.menu').hide();
