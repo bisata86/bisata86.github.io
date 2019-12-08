@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>HOME</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, 
+initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<!-- <script type="text/javascript" src="./cube.js"></script> -->
+	<script type="text/javascript" src="./jquery.js"></script>
+	<script type="text/javascript" src="./mycube.js"></script>
+	<script type="text/javascript" src="./testret.js"></script>
+	<style type="text/css">
+
+		body {
+  margin: 0;
+  padding: 0;
+  background-color: #f1f1f1;
+}
+#main {
+/*  margin: 0;
+  padding: 0;
+  border: 1px solid #ddd;
+  background-color: white;
+  width: 800px;
+  height: 500px;
+  margin: 10px auto;*/
+}
+.btn-group-wraper {
+/*  position: absolute;
+  top: 30px;
+  left: 65px;*/
+}
+.shadow {
+  position: absolute;
+  width: 100px;
+  height: 100px; /*border-radius:15px;*/
+  box-shadow: 0 0 15px white;
+  box-shadow: inset 0 0 155px white;
+  background-color: #000 !important;
+  opacity: 0.15 !important;
+  -webkit-transform: rotateX(90deg) translateZ(-100px);
+  -moz-transform: rotateX(90deg) translateZ(-100px);
+}
+#container {
+  width: 100%;
+  -webkit-perspective: 800px;
+  -moz-perspective: 800px;
+  perspective: 800px;
+  position: relative;
+}
+
+#shape {
+  position: relative;
+  margin: 0 auto;
+  top: 170px;
+  width: 125px;
+  height: 125px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-transform: rotateX(-5deg) rotateY(-30deg);
+  -moz-transform: rotateX(-5deg) rotateY(-30deg);
+  transform: rotateX(-5deg) rotateY(-30deg);
+  -webkit-transition: -webkit-transform 2s;
+  -moz-transition: -moz-transform 2s;
+  transition: transform 2s;
+}
+@-webkit-keyframes spin {
+  /*from { -webkit-transform: rotateX(0) rotateY(0); }*/
+  to {
+    -webkit-transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+@-moz-keyframes spin {
+  /*from { -moz-transform: rotateX(0) rotateY(0); }*/
+  to {
+    -moz-transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+@keyframes spin {
+  /*from { transform: rotateX(0) rotateY(0); }*/
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+#shape > div {
+  position: absolute;
+  width: 125px;
+  height: 125px;
+  border: 1px solid white;
+  background-color: #999;
+  opacity: 0.5;
+}
+#shape a {
+  color: black;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 30px;
+  display: block;
+  font-size: 50px;
+}
+#shape .ft {
+  -webkit-transform: translateZ(63px);
+  -moz-transform: translateZ(63px);
+  transform: translateZ(63px);
+}
+#shape .rt {
+  -webkit-transform: rotateY(90deg) translateZ(63px);
+  -moz-transform: rotateY(90deg) translateZ(63px);
+  transform: rotateY(90deg) translateZ(63px);
+}
+#shape .bk {
+  -webkit-transform: rotateY(180deg) translateZ(63px);
+  -moz-transform: rotateY(180deg) translateZ(63px);
+  transform: rotateY(180deg) translateZ(63px);
+}
+#shape .lt {
+  -webkit-transform: rotateY(270deg) translateZ(63px);
+  -moz-transform: rotateY(270deg) translateZ(63px);
+  transform: rotateY(270deg) translateZ(63px);
+}
+#shape .tp {
+  -webkit-transform: rotateX(90deg) translateZ(63px);
+  -moz-transform: rotateX(90deg) translateZ(63px);
+  transform: rotateX(90deg) translateZ(63px);
+}
+#shape .bm {
+  -webkit-transform: rotateX(270deg) rotateY(0deg) translateZ(63px);
+  -moz-transform: rotateX(270deg) rotateY(0deg) translateZ(63px);
+  transform: rotateX(270deg) rotateY(0deg) translateZ(63px);
+}
+
+/*transitions*/
+#shape.show-ft {
+  -webkit-transform: translateZ(63px);
+  -moz-transform: translateZ(63px);
+  transform: translateZ(63px);
+}
+#shape.show-rt {
+  -webkit-transform: rotateX(360deg) rotateY(-90deg);
+  -moz-transform: rotateX(360deg) rotateY(-90deg);
+  transform: rotateX(360deg) rotateY(-90deg);
+}
+#shape.show-bk {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+#shape.show-lt {
+  -webkit-transform: rotateY(90deg);
+  -moz-transform: rotateY(90deg);
+  transform: rotateY(90deg);
+}
+#shape.show-tp {
+  -webkit-transform: scale(1.5);
+  -moz-transform: scale(1.5);
+  -webkit-transform: rotateX(-90deg) rotateY(-360deg);
+  -moz-transform: rotateX(-90deg) rotateY(-360deg);
+  transform: rotateX(-90deg) rotateY(-360deg);
+}
+#shape.show-bm {
+  -webkit-transform: rotateX(90deg) rotateY(360deg);
+  -moz-transform: rotateX(90deg) rotateY(360deg);
+  transform: rotateX(90deg) rotateY(360deg);
+}
+/*zoom in*/
+#shape.zi {
+  -webkit-transform: scale(1.5, 1.5);
+  -moz-transform: scale(1.5, 1.5);
+  transform: scale(1.5, 1.5);
+}
+/*animations*/
+#shape.spin {
+  -webkit-animation: spin 5s infinite linear;
+  -moz-animation: spin 5s infinite linear;
+  animation: spin 5s infinite linear;
+}
+#shape {
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  transition: all 1s;
+  -webkit-transform: scale(1);
+  -webkit-transform: rotateX(-5deg) rotateY(-30deg);
+  -moz-transform: scale(1);
+  -moz-transform: rotateX(-5deg) rotateY(-30deg);
+  transform: scale(1);
+  transform: rotateX(-5deg) rotateY(-30deg);
+}
+#shape  div a {
+	position: relative;
+    margin: 0;
+}
+#shape  div div {
+	width: 50%;
+	height: 50%;
+	position: absolute;
+}
+#shape  div div:nth-child(1) {
+	left: 0;
+	top:0;
+}
+#shape  div div:nth-child(2) {
+	right: 0;
+	top:0;
+}
+#shape  div div:nth-child(3) {
+	left: 0;
+	bottom:0;
+}
+#shape  div div:nth-child(4) {
+	right: 0;
+	bottom:0;
+}
+
+</style>
+</head>
+<body>
+<!-- <div id="screen"> 
+<canvas id="canvas">HTML5 CANVAS</canvas> 
+<div id="info"> 
+	<div class="background"></div> 
+		<div class="content"> 
+			<h1>3D Cubes</h1> 
+			<table> 
+				<tr><td class="w">drag</td><td>→ rotate X,Y axis</td></tr> 
+				<tr><td class="w">wheel</td><td>→ rotate Z axis</td></tr> 
+				<tr><td class="w">click</td><td>→ create cube</td></tr> 
+			</table> 
+			<hr> 
+			<input type="checkbox" id="white"><label for="white"> white background</label><br> 
+			<input type="checkbox" id="alpha"><label for="alpha"> transparency</label><br> 
+			<input type="checkbox" id="autor"><label for="autor"> auto rotation</label><br> 
+			<input type="checkbox" id="destroy"><label for="destroy"> destroy cubes</label><br> 
+			<hr> 
+			- <span id="fps" class="w">00</span> FPS<br> 
+			- <span id="npoly" class="w">00</span> Faces<br> 
+			<p align="center"><input type="button" value="RESET" id="reset" class="button"></input><input type="button" value="STOP" id="stopgo" class="button"></input></p> 
+		</div> 
+	</div> 
+</div>  -->
+			<!-- <div class="positions">positions <span></span></div> -->
+			<!-- <div class="tries">tries <span></span></div> -->
+<!-- 			
+			<div class="alreadythere">alreadythere <span></span></div>
+			<div class="solved">solved <span></span></div> -->
+			<div id="main">
+		
+		<div id="container">
+			<div class="btn-group-wraper">
+				<div>
+					<button class="btn gray zi">zoom in</button><button class="btn gray zo">zoom out</button>
+				</div>
+				<div>
+					<button class="ft">1</button><button class="rt">2</button><button class="bk">3</button><button class="lt">4</button><button class="tp">5</button><button class="bm">6</button>
+				</div>
+				<div>
+					<button class="spinstart">spin start</button><button class="spinstop">spin stop</button>
+				</div>
+				<button class="btn gray movea">movea</button>
+				<button class="btn gray moveb">moveb</button>
+				<button class="btn gray movec">movec</button>
+				<button class="btn gray moved">moved</button>
+        <button class="btn gray movee">movee</button>
+        <button class="btn gray movef">movef</button>
+				<div></div>
+				<button class="btn gray moveai">moveai</button>
+				<button class="btn gray movebi">movebi</button>
+				<button class="btn gray moveci">moveci</button>
+				<button class="btn gray movedi">movedi</button>
+        <button class="btn gray moveei">moveei</button>
+        <button class="btn gray movefi">movefi</button>
+        <div></div>
+        <button class="btn gray scrumble">scrumble</button>
+        <button class="btn gray solve">solve</button>
+        <div></div>
+			</div>
+			<div id="shape">
+				<div class="ft">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+				<div class="rt">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+				<div class="bk">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+				<div class="lt">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+				<div class="tp">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+				<div class="bm">
+					<a href="#!">
+						<div></div>
+						<div></div>
+						<div></div>
+						<div></div>	
+					</a>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+ 
+</body>
+</html>
