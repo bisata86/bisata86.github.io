@@ -1,0 +1,537 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>3x5x5</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, 
+initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<!-- <script type="text/javascript" src="./cube.js"></script> -->
+	<script type="text/javascript" src="./jquery.js"></script>
+	<script type="text/javascript" src="./335.js?v=1.1.8"></script>
+	<style type="text/css">
+
+		body {
+      margin: 0;
+      padding: 0;
+      background-color: #f1f1f1;
+      height: 100vh;
+       background-image: linear-gradient(yellow, green)
+    }
+    #controls .move > div {
+      display: inline-block;
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+    }
+    .selected {
+      background-color: blue !important;
+    }
+    .disabled {
+      opacity: .5;
+      pointer-events: none;
+    }
+    .linesControls {
+      position: absolute;
+      top:10px;
+      width: 100%;
+      text-align: center;
+    }
+    .linesControls > div {
+      display: inline-block;
+    }
+    #stepf {
+      background: url('./f.png');
+      background-size: 100% 100%;
+      width: 50px;
+      height: 40px;
+    }
+    #stepb {
+      background: url('./b.png');
+      background-size: 100% 100%;
+      width: 50px;
+      height: 40px;
+    }
+    .move {
+      position: absolute;
+      bottom: 100px;
+    }
+
+#container {
+  width: 100%;
+
+  position: relative;
+  z-index: -1;
+}
+
+#shape {
+  position: relative;
+  margin: 0 auto;
+  top: 170px;
+  width: 150px;
+  height: 150px;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  transform-origin:  50% 50% 100px;
+/*  -webkit-transform: rotateX(-5deg) rotateY(-30deg);
+  -moz-transform: rotateX(-5deg) rotateY(-30deg);
+  transform: rotateX(-5deg) rotateY(-30deg);*/
+/*  -webkit-transition: -webkit-transform 2s;
+  -moz-transition: -moz-transform 2s;
+  transition: transform 2s;*/
+   transition: transform .2s;
+  -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+}
+#shape .face1 {
+    width: 100%;
+    height: 100%;
+    transform: translateZ(35px);
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+}
+#shape .face2 {
+    width: 100%;
+    height: 100%;
+    transform: translateZ(-35px);
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+}
+#shape .face4 {
+    width: 70px;
+    height: 100%;
+    position: absolute;
+    top: 0; 
+    transform-style: preserve-3d;
+    transform: rotateY(90deg) translateZ(-35px);
+}
+#shape .face5 {
+    width: 70px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: rotateY(90deg) translateZ(115px);
+}
+#shape .face6 {
+    width: 100%;
+    height: 70px;
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(90deg) translateZ(35px);
+}
+#shape .face7 {
+    width: 100%;
+    height: 70px;
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(90deg) translateZ(-115px);
+}
+.faces .face {
+      background-color: rgba(200,200,200,.4);
+}
+.faces .face7, .faces .face6 {
+      background-color: rgba(200,200,200,.2);
+}
+.faces .face1, .faces .face2  {
+      background-color: rgba(200,200,200,.9);
+}
+
+#shape .face3 {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transform-style: preserve-3d;
+    background-color: rgba(200,200,200,0) !important;
+}
+.point {
+  width: 5px;
+  height: 5px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+      transform-style: preserve-3d;
+}
+.point::after {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  transform: rotateY(90deg);
+}
+.point::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  background-color: black;
+  border-radius: 100%;
+  position: absolute;
+  transform: rotateX(90deg);
+}
+
+.point:nth-child(1) {
+  left:calc(0% - 2.5px);
+  top:calc(0% - 2.5px);
+}
+.point:nth-child(2) {
+  left:calc(0% - 2.5px);
+  top:calc(25% - 2.5px);
+}
+.point:nth-child(3) {
+  left:calc(0% - 2.5px);
+  top:calc(50% - 2.5px);
+}
+.point:nth-child(4) {
+  left:calc(0% - 2.5px);
+  top:calc(75% - 2.5px);
+}
+.point:nth-child(5) {
+  left:calc(0% - 2.5px);
+  top:calc(100% - 2.5px);
+}
+.point:nth-child(6) {
+  left:calc(25% - 2.5px);
+  top:calc(0% - 2.5px);
+}
+.point:nth-child(7) {
+  left:calc(25% - 2.5px);
+  top:calc(25% - 2.5px);
+}
+.point:nth-child(8) {
+  left:calc(25% - 2.5px);
+  top:calc(50% - 2.5px);
+}
+.point:nth-child(9) {
+  left:calc(25% - 2.5px);
+  top:calc(75% - 2.5px);
+}
+.point:nth-child(10) {
+  left:calc(25% - 2.5px);
+  top:calc(100% - 2.5px);
+}
+.point:nth-child(11) {
+  left:calc(50% - 2.5px);
+  top:calc(0% - 2.5px);
+}
+.point:nth-child(12) {
+  left:calc(50% - 2.5px);
+  top:calc(25% - 2.5px);
+}
+.point:nth-child(13) {
+  left:calc(50% - 2.5px);
+  top:calc(50% - 2.5px);
+}
+.point:nth-child(14) {
+  left:calc(50% - 2.5px);
+  top:calc(75% - 2.5px);
+}
+.point:nth-child(15) {
+  left:calc(50% - 2.5px);
+  top:calc(100% - 2.5px);
+}
+.point:nth-child(16) {
+  left:calc(75% - 2.5px);
+  top:calc(0% - 2.5px);
+}
+.point:nth-child(17) {
+  left:calc(75% - 2.5px);
+  top:calc(25% - 2.5px);
+}
+.point:nth-child(18) {
+  left:calc(75% - 2.5px);
+  top:calc(50% - 2.5px);
+}
+.point:nth-child(19) {
+  left:calc(75% - 2.5px);
+  top:calc(75% - 2.5px);
+}
+.point:nth-child(20) {
+  left:calc(75% - 2.5px);
+  top:calc(100% - 2.5px);
+}
+.point:nth-child(21) {
+  left:calc(100% - 2.5px);
+  top:calc(0% - 2.5px);
+}
+.point:nth-child(22) {
+  left:calc(100% - 2.5px);
+  top:calc(25% - 2.5px);
+}
+.point:nth-child(23) {
+  left:calc(100% - 2.5px);
+  top:calc(50% - 2.5px);
+}
+.point:nth-child(24) {
+  left:calc(100% - 2.5px);
+  top:calc(75% - 2.5px);
+}
+.point:nth-child(25) {
+  left:calc(100% - 2.5px);
+  top:calc(100% - 2.5px);
+}
+
+
+
+.line {
+    position: absolute;
+    top:0;
+    width: 2px;
+    height: 100%;
+    display: inline-block;
+    transform-style: preserve-3d;
+    transition-duration: 1s;
+}
+
+ .line::after {
+    position: absolute;
+    content: '';
+    transform: rotateY(90deg);
+    width: 2px;
+    height: 0%;
+    background: red;
+    display: inline-block;
+    transition-duration: 1s
+}
+ .line::before {
+    position: absolute;
+    content: '';
+    width: 2px;
+     height: 0%;
+    background: red;
+    display: inline-block;
+    transition-duration: 1s
+}
+.line.complete::after, .line.complete::before {
+    height: 100%;
+}
+.noint .line {
+    transform-origin: 0 0 0;
+}
+.noint .line:nth-child(1) {
+    transform: translateZ(35px) translateX(150px) translateY(150px) rotateY(0deg) rotateZ(90deg) rotateX(0deg);
+    height: 150%;
+}
+.noint .line:nth-child(2) {
+    transform: translateZ(35px) translateX(-35px) translateY(150px) rotateY(25deg) rotateZ(209deg) rotateX(0deg);
+}
+.noint .line:nth-child(3) {
+    transform: translateZ(-35px) translateX(112px) translateY(-150px) rotateY(0deg) rotateZ(0deg) rotateX(0deg);
+}
+.noint .line:nth-child(4) {
+    transform: translateZ(-35px) translateX(115px) translateY(150px) rotateY(0deg) rotateZ(135deg) rotateX(18deg);
+}
+.noint .line:nth-child(5) {
+    transform: translateZ(35px) translateX(-35px) translateY(2px) rotateY(0deg) rotateZ(-90deg) rotateX(0deg);
+}
+.noint .line:nth-child(6) {
+    transform: translateZ(35px) translateX(188px) translateY(0px) rotateY(0deg) rotateZ(45deg) rotateX(-18deg);
+}
+.noint .line:nth-child(7) {
+    transform: translateZ(-150px) translateX(150px) translateY(150px) rotateY(0deg) rotateZ(0deg) rotateX(90deg);
+    height: 150%;
+}
+.noint .line:nth-child(8) {
+    transform: translateZ(75px) translateX(150px) translateY(150px) rotateY(-90deg) rotateZ(0deg) rotateX(90deg);
+}
+.noint .line:nth-child(9) {
+    transform: translateZ(76px) translateX(0px) translateY(150px) rotateY(0deg) rotateZ(0deg) rotateX(180deg);
+    height: 150%;
+}
+.noint .line:nth-child(10) {
+    transform: translateZ(75px) translateX(0px) translateY(-75px) rotateY(45deg) rotateZ(-54deg) rotateX(0deg);
+    height: 174%;
+}
+.noint .line:nth-child(11) {
+    transform: translateZ(-75px) translateX(150px) translateY(75px) rotateY(0deg) rotateZ(0deg) rotateX(90deg);
+}
+.noint .line:nth-child(12) {
+    transform: translateZ(75px) translateX(150px) translateY(75px) rotateY(0deg) rotateZ(90deg) rotateX(0deg);
+    height: 50%;
+}
+.noint .line:nth-child(13) {
+    transform: translateZ(75px) translateX(75px) translateY(75px) rotateY(0deg) rotateZ(0deg) rotateX(-90deg);
+    height: 100%;
+}
+.noint .line:nth-child(14) {
+    transform: translateZ(-75px) translateX(75px) translateY(75px) rotateY(0deg) rotateZ(0deg) rotateX(46deg);
+    height: 72%;
+}
+.noint .line:nth-child(4)::after, .noint .line:nth-child(5)::after, .noint .line:nth-child(6)::after, .noint .line:nth-child(9)::after {
+    background: blue;
+}
+.noint .line:nth-child(4)::before, .noint .line:nth-child(5)::before, .noint .line:nth-child(6)::before, .noint .line:nth-child(9)::before {
+    background: blue;
+}
+.noint .line:nth-child(10)::after, .noint .line:nth-child(11)::after {
+    background: green;
+}
+.noint .line:nth-child(10)::before, .noint .line:nth-child(11)::before {
+    background: green;
+}
+.noint .line:nth-child(12)::after {
+    background: violet;
+}
+.noint .line:nth-child(12)::before {
+    background: violet;
+}
+.noint .line:nth-child(13)::after, .noint .line:nth-child(14)::after {
+    background: cyan;
+}
+.noint .line:nth-child(13)::before, .noint .line:nth-child(14)::before {
+    background: cyan;
+}
+#counter {
+  height: 40px;
+  font-size: 15px;
+  margin: 0 10px;
+  vertical-align: bottom;
+      min-width: 150px;
+}
+#counter div {
+  text-align: left;
+}
+.type {
+  z-index: 2;
+  position: absolute;
+  display: none;
+}
+.play {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  position: absolute;
+  top:10px;
+  left:10px;
+        background: url('./play.png');
+      background-size: 100% 100%;
+}
+
+</style>
+</head>
+<body>
+	<div id="main">
+		<div id="controls">
+      <div class="move">
+        <div id="x1">x1</div><div id="x2">x2</div>
+        <div id="y1">y1</div><div id="y2">y2</div>
+        <div id="z1">z1</div><div id="z2">z2</div>
+        <div id="zin">zoomin</div><div id="zout">zoomout</div>
+        <div id="reset">reset</div><div id="faces">faces</div>
+      </div>
+      <div class="linesControls">
+        <div id="stepb"></div><div id="counter"><span>0</span>/<span>14</span><div></div><div></div></div><div id="stepf"></div>
+      </div>
+      <select class="type">
+        <option value="trivial">trivial</option>
+        <option value="nointersection">no intersection</option>
+      </select>
+      <div class="play"></div>
+    </div>
+
+		<div id="container">
+			<div id="shape" data-x="-15" data-y="15" data-z="0" data-s='1'>
+        <div class="face1 face">
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div> 
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+        </div>
+        <div class="face2 face">
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div> 
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+        </div>
+        <div class="face3 face">
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div> 
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div>
+          <div class="point"></div> 
+        </div>
+        <div class="face4 face"></div>
+        <div class="face5 face"></div>
+        <div class="face6 face"></div>
+        <div class="face7 face"></div>
+			</div>
+		</div>
+		
+	</div>
+ 
+</body>
+</html>
