@@ -42,7 +42,7 @@ $(document).ready(function(){
 
 
 	var currentpos = 0
-	var nointlengths = [0,3,'asda',2,Math.sqrt(5),2,'asdasd',9.5,'uuyyu',2,Math.sqrt(2), 2,'fall',5,'ultimo',2,'asdasd',Math.sqrt(2),2,(2/5*4),2,10,10]
+	var nointlengths = [0,3,'asda',2,Math.sqrt(5),2,'asdasd',9.5,'uuyyu',2,Math.sqrt(2), 2,'fall',5,'ultimo',2.5,'asdasd',Math.sqrt(2),2,(2/5*4),2,10,10]
 	$('#stepb').addClass('disabled')
 	$('#counter span').eq(0).html(currentpos)
 	$('.linesControls > div').click(function(){
