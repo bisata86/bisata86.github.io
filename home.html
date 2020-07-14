@@ -463,14 +463,14 @@
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
 					$('body').append("<div class='c openable loading'><div class='indicator'><a target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</a></div><div class='remove'></div><iframe src="+savedPages[i]+" intonse="+savedPages[i]+"></iframe></div>");
-					let script = document.createElement('script');
-					script.src = savedPages[i]
-					script.intonse = savedPages[i]
-					document.head.append(script);
-					script.onerror = function(e) {
-					  console.log(e)
-					  //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
-					};
+					// let script = document.createElement('script');
+					// script.src = savedPages[i]
+					// script.intonse = savedPages[i]
+					// document.head.append(script);
+					// script.onerror = function(e,a) {
+					//   console.log(e,a)
+					//   //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
+					// };
 				}
 			}
 
@@ -511,14 +511,14 @@
 
 				$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'><a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>");
 
-				let script = document.createElement('script');
-				script.src = cUrl;
-				script.intonse = cUrl;
-				document.head.append(script);
-				script.onerror = function(e) {
-					console.log(e)
-				  //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
-				};
+				// let script = document.createElement('script');
+				// script.src = cUrl;
+				// script.intonse = cUrl;
+				// document.head.append(script);
+				// script.onerror = function(e) {
+				// 	console.log(e)
+				//   //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
+				// };
 
 
 				bind();
@@ -563,7 +563,11 @@
 					} else {
 
 					}
-					$(this).closest('.c').remove();
+					var that = $(this);
+					setTimeout(function(){
+						that.closest('.c').remove();
+					},500)
+						that.closest('.c').fadeOut();
 					bind();
 
 				})
