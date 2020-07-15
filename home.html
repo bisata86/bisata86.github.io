@@ -66,6 +66,9 @@
   		.one div.c {
   			display: none;
   		}
+  		div.c.newOne {
+  			    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  		}
   		.one .flip-card {
   			display: none;
   		}
@@ -113,19 +116,19 @@
 		}
 		.src {
 			position: absolute;
-		    top: 0;
-		    width: 100%;
-		    left: 0;
-		    z-index: 1;
-		    margin: 0;
-		    border: 0;
-		    width: calc(100% - 0px);
-		    text-indent: 10px;
-		    padding: 0;
-		    border-bottom: 0;
-    		box-sizing: border-box;
-    		transition-duration: 100ms;
-    		height: 0;
+    top: 10px;
+    width: 100%;
+    left: 10px;
+    z-index: 1;
+    margin: 0;
+    border: 0;
+    width: calc(100% - 20px);
+    text-indent: 10px;
+    padding: 0;
+    border-bottom: 0;
+    box-sizing: border-box;
+    transition-duration: 100ms;
+    height: 0;
 		}
 		.bar .src {
 			height: 30px;
@@ -542,6 +545,13 @@
 		    width: fit-content;
 		    word-break: break-word;
 		}
+		.remove, span[target='_BLANK'] {
+			text-decoration: underline;
+		    width: 100%;
+		    word-break: break-word;
+		    margin-top: 10px;
+		    display: inline-block;
+		}
   	</style>
   	<script type="text/javascript">
 
@@ -560,7 +570,7 @@
 					    		"<iframe intonse="+savedPages[i]+" src='"+savedPages[i]+"'></iframe>"+
 					    	"</div>"+
 						     "<div class='indicator'>"+
-						     	"<div class='flipit' target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</div>"+
+						     	"<div class='flipit'>"+savedPages[i]+"</div>"+
 						    '</div>'+
 					    '</div>'+
 					    '<div class="flip-card-back">'+
@@ -644,13 +654,16 @@
 				var str = '<div class="flip-card">'+
 					  '<div class="flip-card-inner">'+
 					    '<div class="flip-card-front">'+
-					    	"<div class='c openable loading justAdded'><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>"+
-					     "<div class='indicator'><div class='flipit' target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div></div>"+
+					    	"<div class='c openable loading justAdded'>"+
+					    		"<iframe intonse="+cUrl+" src='"+cUrl+"'></iframe>"+
+					    	"</div>"+
+						     "<div class='indicator'>"+
+						     	"<div class='flipit'>"+cUrl+"</div>"+
+						    '</div>'+
 					    '</div>'+
-
 					    '<div class="flip-card-back">'+
-					    	"<a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</a>"+
-					      "<div class='remove'></div><div class='hiddenadd'></div>"+
+					    	"<span target='_BLANK' href='"+cUrl+"'>"+cUrl+"</span>"+
+					      "<div class='remove'>remove</div>"+
 					  '</div>'+
 					'</div>';
 
@@ -737,6 +750,12 @@
 					},500)
 					that.closest('.flip-card').fadeOut();
 					bind();
+
+				})
+				$('[target="_BLANK"]').off('click').on('click',function(e){
+					e.preventDefault();
+					e.stopPropagation()
+					window.open($(this).attr('href'))
 
 				})
 				$('.hiddenadd').off('click').on('click',function(e){
