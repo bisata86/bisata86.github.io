@@ -1,52 +1,53 @@
 
 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
+  	<link rel="icon" href="https://iconarchive.com/download/i85581/graphicloads/100-flat/home.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="https://iconarchive.com/download/i85581/graphicloads/100-flat/home.ico" type="image/x-icon" />
   	<title>HOME</title>
   	    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   	<style type="text/css">
   		:root {
 		  --main-bg-color: coral;
 		  --main-green: #5cb85c;
-		  --main-col1: orangered;
+		  --main-col1: orange;
 		  --main-col2: white;
+		  --main-col3: orangered;
+		  --main-error: orangered;
 		}
   		body {
 			margin: 0;
 			padding: 0;
   		}
-  		div.c {
+  		div.c, .flip-card {
   			height: 50vw;
   			width: 50vw;
   			display: inline-block;
   			position: relative;
-		    box-sizing: border-box;
-		    border: 10px solid transparent;
-		    -webkit-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
-			-moz-box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
-			box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.75);
+		    
   		}
   		@media only screen and (min-width: 800px) and (max-width: 1000px)  {
-		    div.c {
+		    div.c, .flip-card {
 	  			height: 33vw;
 	  			width: 33vw;
 	  		}
 		}
 		@media only screen and (min-width: 1000px) {
-		    div.c {
+		    div.c, .flip-card {
 	  			width: 20vw;
 	  			height: 20vw;
 	  		}
 		}
   		.indicator {
-		    position: absolute;
+  			position: absolute;
 		    bottom: 0px;
-		    z-index: 100;
 		    background: rgba(255,255,255,.7);
 		    height: 32px;
-		    width: calc(100% - 32px);
+		    width: 100%;
 		    overflow: hidden;
 		    text-overflow: ellipsis;
 		    font-size: 12px;
@@ -64,6 +65,18 @@
   		}
   		.one div.c {
   			display: none;
+  		}
+  		.one .flip-card {
+  			display: none;
+  		}
+  		.one .flip-card {
+  			display: none;
+  		}
+  		.one .full.flip-card {
+  			padding:0;
+  			display: inline-block;
+  			border:0;
+  			width: 100%;
   		}
   		.one .full.c {
   			padding:0;
@@ -225,20 +238,19 @@
 		    transform: rotate(135deg);
 		    -webkit-transform: rotate(135deg);
 		}
-		.remove {
+		.removeo {
 		  position: absolute;
 		  width: 32px;
 		  height: 32px;
 		      opacity: 0.5;
-    		background: red;
-    		z-index: 10;
+    		background: var(--main-col3);
 		    bottom: 0;
 		    right: 0;
 		}
-		.remove:hover {
+		.removeo:hover {
 		  opacity: 1;
 		}
-		.remove:before, .remove:after {
+		.removeo:before, .removeo:after {
 		  position: absolute;
 		  left: 15px;
 		  content: ' ';
@@ -247,10 +259,10 @@
 		  background-color: white;
 		  border-radius: 10px;
 		}
-		.remove:before {
+		.removeo:before {
 		  transform: rotate(45deg);
 		}
-		.remove:after {
+		.removeo:after {
 		  transform: rotate(-45deg);
 		}
 		.addContainer {
@@ -258,7 +270,7 @@
 		  width: 32px;
 		  height: 32px;
 		      opacity: 0.5;
-    		background: green;
+    		background: var(--main-green);
     		z-index: 10;
 		    bottom: 0;
 		    right: 32px;
@@ -452,6 +464,84 @@
 		.backs:hover {
 		  opacity: 1;
 		}
+		::-webkit-scrollbar {
+		  display: none;
+		}
+		.message {
+			position: absolute;
+			height: fit-content;
+			width: fit-content;
+			text-align: center;
+			background: var(--main-error);
+			left:0px;
+			right:0px;
+			bottom:0px;
+			top:0px;
+			margin:auto;
+			padding:10px;
+			color:white;
+			border-radius: 5px;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.hidden {
+			display: none;
+		}
+		.flip-card {
+		  	background-color: transparent;
+		      
+		      display: inline-block;
+		 		perspective: 1000px;
+		}
+
+		.flip-card-inner {
+		  position: relative;
+		  width: 100%;
+		  height: 100%;
+		  text-align: center;
+		  transition: transform 0.6s;
+		  transform-style: preserve-3d;
+		  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+		}
+
+		.flip-card.hover .flip-card-inner {
+		  transform: rotateY(180deg);
+		}
+
+		.flip-card-front, .flip-card-back {
+		  position: absolute;
+		  width: 100%;
+		  height: 100%;
+		  -webkit-backface-visibility: hidden;
+		  backface-visibility: hidden;
+		}
+
+		.hover .flip-card-front {
+			pointer-events: none;
+		}
+
+		.flip-card-front {
+		  background-color: #bbb;
+		  color: black;
+		}
+
+		.flip-card-back {
+		  background-color: #2980b9;
+		  color: white;
+		  transform: rotateY(180deg);
+		  z-index: 2;
+		}
+		.flip-card-back a{
+			position: absolute;
+		    margin: auto;
+		    left: 0;
+		    right: 0;
+		    top: 0;
+		    bottom: 0;
+		    height: fit-content;
+		    width: fit-content;
+		    word-break: break-word;
+		}
   	</style>
   	<script type="text/javascript">
 
@@ -462,7 +552,25 @@
 			if(savedPages) {
 				savedPages = JSON.parse(savedPages);
 				for (var i = 0; i < savedPages.length; i++) {
-					$('body').append("<div class='c openable loading'><div class='indicator'><a target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</a></div><div class='remove'></div><iframe src="+savedPages[i]+" intonse="+savedPages[i]+"></iframe></div>");
+
+					var str = '<div class="flip-card">'+
+					  '<div class="flip-card-inner">'+
+					    '<div class="flip-card-front">'+
+					    	"<div class='c openable loading justAdded'>"+
+					    		"<iframe intonse="+savedPages[i]+" src='"+savedPages[i]+"'></iframe>"+
+					    	"</div>"+
+						     "<div class='indicator'>"+
+						     	"<div class='flipit' target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</div>"+
+						    '</div>'+
+					    '</div>'+
+					    '<div class="flip-card-back">'+
+					    	"<span target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</span>"+
+					      "<div class='remove'>remove</div>"+
+					  '</div>'+
+					'</div>';
+
+
+					$('body').append(str);
 					// let script = document.createElement('script');
 					// script.src = savedPages[i]
 					// script.intonse = savedPages[i]
@@ -486,12 +594,22 @@
 				cUrl = cUrl;
 				if(e.keyCode==13) {
 					setNewOne(cUrl);
+					$('.src').blur();
 				}
 			})
 			$('.backs').off("click").on('click', function(e){
 				$("body").removeClass("bar");
 				bind();
 			})
+
+			window.alert = function(d) {
+				console.log(d)
+				$(".message").remove();
+				$("body").append("<div class='message'>"+d+"</div>");
+				setTimeout(function(){
+					$(".message").fadeOut();
+				},500)
+			}
 
 
 			function setNewOne(cUrl) {
@@ -509,16 +627,50 @@
 					}
 				}
 
-				$('.newOne').before("<div class='c openable loading justAdded'><div class='indicator'><a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>");
 
-				// let script = document.createElement('script');
-				// script.src = cUrl;
-				// script.intonse = cUrl;
-				// document.head.append(script);
-				// script.onerror = function(e) {
-				// 	console.log(e)
-				//   //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
-				// };
+				/*var str = '<div class="flip-card">'+
+				  '<div class="flip-card-inner">'+
+				    '<div class="flip-card-front">'+
+				    	"<div class='c openable loading justAdded'><div class='indicator'><a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>"+
+				      '<img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">'+
+				    '</div>'+
+				    '<div class="flip-card-back">'+
+				      '<h1>John Doe</h1>'+
+				      '<p>Architect & Engineer</p>'+
+				      '<p>We love that guy</p>'+
+				    '</div>'+
+				  '</div>'+
+				'</div>';*/
+				var str = '<div class="flip-card">'+
+					  '<div class="flip-card-inner">'+
+					    '<div class="flip-card-front">'+
+					    	"<div class='c openable loading justAdded'><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>"+
+					     "<div class='indicator'><div class='flipit' target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div></div>"+
+					    '</div>'+
+
+					    '<div class="flip-card-back">'+
+					    	"<a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</a>"+
+					      "<div class='remove'></div><div class='hiddenadd'></div>"+
+					  '</div>'+
+					'</div>';
+
+
+
+				$('.newOne').before(str);
+
+				$(".openable").last().hide();
+				$(".openable").last().fadeIn('slow');
+				let script = document.createElement('script');
+				script.src = cUrl;
+				script.intonse = cUrl;
+				document.head.append(script);
+				script.onerror = function(e) {
+					console.log(e)
+				  	$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+				};
+				script.onload = function(e) {
+				  	$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+				};
 
 
 				bind();
@@ -526,14 +678,17 @@
 			}
 
 
+
 			bind()
 			function bind() {
+				$("body").removeClass("bar")
 				$('.toConfirm').removeClass('toConfirm');
 				$('iframe').off('load').on('load', function(){
 					$(this).closest('.openable').off('click').on('click', function(e){
 						console.log(e.target);
 						if($(e.target).hasClass('openable')) {
 							$(this).addClass('full')
+							$(this).closest(".flip-card").addClass('full')
 							$('body').addClass('one')
 						}
 						
@@ -544,10 +699,23 @@
 					$(this).find('iframe').attr('src',$(this).find('iframe').attr('data-src'))
 				})
 
+				$('.flipit').off('click').on('click', function(){
+					$(this).closest(".flip-card").addClass("hover")
+					$('*').off('mousedown').on('mousedown', function(event) {
+						console.log(event.target)
+						if(!$(event.target).hasClass('remove'))
+						$('.flip-card').removeClass("hover");
+						
+
+						$('*').off('mousedown');
+					});
+
+				})
+
 				$('.remove').off('click').on('click',function(e){
 					e.preventDefault();
 					e.stopPropagation()
-					var cSrc = $(this).closest('.c').find('iframe').attr('src');
+					var cSrc = $(this).closest('.flip-card').find('iframe').attr('src');
 					var savedPages = localStorage.getItem('homePages');
 					if(savedPages) {
 						console.log(cSrc)
@@ -565,16 +733,16 @@
 					}
 					var that = $(this);
 					setTimeout(function(){
-						that.closest('.c').remove();
+						that.closest('.flip-card').remove();
 					},500)
-						that.closest('.c').fadeOut();
+					that.closest('.flip-card').fadeOut();
 					bind();
 
 				})
-				$('.addContainer').off('click').on('click',function(e){
+				$('.hiddenadd').off('click').on('click',function(e){
 					e.preventDefault();
 					e.stopPropagation()
-					var cSrc = $(this).closest('.c').find('iframe').attr('src');
+					var cSrc = $(this).closest('.flip-card').find('iframe').attr('src');
 					var savedPages = localStorage.getItem('homePages');
 					if(savedPages) {
 						savedPages = JSON.parse(savedPages);
