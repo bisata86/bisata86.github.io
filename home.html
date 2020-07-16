@@ -691,13 +691,15 @@
 
 			function setNewOne(cUrl) {
 
+				if(!cUrl || cUrl=='') {
+					return alert(cUrl+' not valid')
+				}
+
 				if(cUrl.indexOf('http')!=0) {
 					cUrl = 'http://'+cUrl
 				}
 
-				if(!cUrl || cUrl=='') {
-					return alert(cUrl+' not valid')
-				}
+				
 
 
 				var savedPages = localStorage.getItem('homePages');
@@ -809,7 +811,7 @@
 							setTimeout(function(){
 								$('.flip-card').removeClass("hover")
 								$('*').off('mousedown');
-							},500)
+							},200)
 						} else {
 							$('*').off('mousedown');
 						}
