@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<link rel="icon" href="https://iconarchive.com/download/i85581/graphicloads/100-flat/home.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="https://iconarchive.com/download/i85581/graphicloads/100-flat/home.ico" type="image/x-icon" />
+  	<link rel="icon" href="./images/home.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="./images/home.ico" type="image/x-icon" />
   	<title>HOME</title>
   	    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 
@@ -599,18 +599,13 @@
   	<script type="text/javascript">
 
 		$( document ).ready(function() {
-			
-			var savedPages = localStorage.getItem('homePages');
-	
-			if(savedPages) {
-				savedPages = JSON.parse(savedPages);
-				for (var i = 0; i < savedPages.length; i++) {
-
-					var str = '<div class="flip-card">'+
+				
+			function getTileHtml(a) {
+				return '<div class="flip-card">'+
 					  '<div class="flip-card-inner">'+
 					    '<div class="flip-card-front">'+
 					    	"<div class='c openable loading justAdded'>"+
-					    		"<iframe intonse="+savedPages[i]+" src='"+savedPages[i]+"'></iframe>"+
+					    		"<iframe intonse="+a+" src='"+a+"'></iframe>"+
 					    	"</div>"+
 						     "<div class='indicator flipit'>"+
 						     	//"<div class='flipit'>"+savedPages[i]+"</div>"+
@@ -620,10 +615,21 @@
 						    '</div>'+
 					    '</div>'+
 					    '<div class="flip-card-back">'+
-					    	"<span class='alink' target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</span>"+
+					    	"<span class='alink' target='_BLANK' href='"+a+"'>"+a+"</span>"+
 					      "<div class='remove'><div class='rem'></div></div>"+
 					  '</div>'+
 					'</div>';
+			}			
+
+
+			var savedPages = localStorage.getItem('homePages');
+	
+			if(savedPages) {
+				savedPages = JSON.parse(savedPages);
+				for (var i = 0; i < savedPages.length; i++) {
+
+					
+					var str = getTileHtml(savedPages[i]);
 
 
 					$('body').append(str);
@@ -682,24 +688,7 @@
 						return alert('already present')
 					}
 				}
-
-				var str = '<div class="flip-card">'+
-					  '<div class="flip-card-inner">'+
-					    '<div class="flip-card-front">'+
-					    	"<div class='c openable loading justAdded'>"+
-					    		"<iframe intonse="+cUrl+" src='"+cUrl+"'></iframe>"+
-					    	"</div>"+
-						    "<div class='indicator flipit'>"+
-						     	"<div><div></div><div></div></div>"+
-						     	"<div><div></div><div></div></div>"+
-						     	"<div><div></div><div></div></div>"+
-						    '</div>'+
-					    '</div>'+
-					    '<div class="flip-card-back">'+
-					    	"<span target='_BLANK' href='"+cUrl+"'>"+cUrl+"</span>"+
-					      "<div class='remove'><div class='rem'></div></div><div class='hiddenadd'></div>"+
-					  '</div>'+
-					'</div>';
+				var str = getTileHtml(cUrl);
 
 
 
