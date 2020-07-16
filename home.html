@@ -600,6 +600,9 @@
 			background: url(./images/close.png);
 			background-size: 100% 100%;
 		}
+		.ssl input {
+    		pointer-events: none;
+		}
   	</style>
   	<script type="text/javascript">
 
@@ -796,13 +799,23 @@
 				$('.flipit').off('click').on('click', function(){
 					$(this).closest(".flip-card").addClass("hover")
 					$('*').off('mousedown').on('mousedown', function(event) {
-						//console.log(event.target)
-						if(!$(event.target).hasClass('rem'))
-							//if(!$(event.target).hasClass('alink'))
-								$('.flip-card').removeClass("hover");
-						
+						if(!$(event.target).hasClass('rem') && !$(event.target).hasClass('ssl')) {
+							$('.flip-card').removeClass("hover");
+						}
+						if($(event.target).hasClass('rem')) {
+							$('*').off('mousedown');
+							
+						} else if($(event.target).hasClass('ssl')) {
+							setTimeout(function(){
+								$('.flip-card').removeClass("hover")
+								$('*').off('mousedown');
+							},500)
+						} else {
+							$('*').off('mousedown');
+						}
 
-						$('*').off('mousedown');
+						
+						
 					});
 
 				})
