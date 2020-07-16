@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -44,15 +45,48 @@
 		}
   		.indicator {
   			position: absolute;
-		    bottom: 0px;
+		    bottom: 10px;
+		    left: 10px;
 		    background: rgba(255,255,255,.7);
-		    height: 32px;
-		    width: 100%;
+		    height: 50px;
+		    width: 50px;
 		    overflow: hidden;
 		    text-overflow: ellipsis;
 		    font-size: 12px;
 		    line-height: 32px;
 		    text-indent: 5px;
+    		border-radius: 5px;
+		}
+		.indicator > div {
+			position: relative;
+  			display: block;
+		    height: 33.3%;
+		    width: 100%;
+		    border-radius: 100%;
+		}
+		.indicator > div > div:nth-child(1) {
+  			position: absolute;
+		    left: 5px;
+		    height: 10px;
+		    width: 10px;
+		    margin-left: 5px;
+		    background: rgba(0,0,0,.5);
+		    border-radius: 100%;
+		    top: 0;
+		    bottom: 0;
+		    margin: auto;
+		}
+		.indicator > div > div:nth-child(2) {
+  			position: absolute;
+  			right:5px;
+		    height: 6px;
+		    width: 25px;
+		    margin-left:5px;
+		    background: rgba(0,0,0,.5);
+		    border-radius: 5px;
+		    top: 0;
+		    bottom: 0;
+		    margin: auto;
 		}
 		.indicator a, .indicator a:visited {
 		   color:black;
@@ -80,6 +114,7 @@
   			display: inline-block;
   			border:0;
   			width: 100%;
+  			height: 100vh;
   		}
   		.one .full.c {
   			padding:0;
@@ -116,19 +151,19 @@
 		}
 		.src {
 			position: absolute;
-    top: 10px;
-    width: 100%;
-    left: 10px;
-    z-index: 1;
-    margin: 0;
-    border: 0;
-    width: calc(100% - 20px);
-    text-indent: 10px;
-    padding: 0;
-    border-bottom: 0;
-    box-sizing: border-box;
-    transition-duration: 100ms;
-    height: 0;
+		    top: 10px;
+		    width: 100%;
+		    left: 10px;
+		    z-index: 1;
+		    margin: 0;
+		    border: 0;
+		    width: calc(100% - 20px);
+		    text-indent: 10px;
+		    padding: 0;
+		    border-bottom: 0;
+		    box-sizing: border-box;
+		    transition-duration: 100ms;
+		    height: 0;
 		}
 		.bar .src {
 			height: 30px;
@@ -549,8 +584,17 @@
 			text-decoration: underline;
 		    width: 100%;
 		    word-break: break-word;
-		    margin-top: 10px;
+		    margin-top: 15%;
 		    display: inline-block;
+		    cursor:pointer;
+		}
+		.remove > div {
+			width: 50px;
+			height: 50px;
+			background: red;
+			margin: auto;
+			background: url(https://www.materialui.co/materialIcons/navigation/close_black_256x256.png);
+			background-size: 100% 100%;
 		}
   	</style>
   	<script type="text/javascript">
@@ -569,13 +613,16 @@
 					    	"<div class='c openable loading justAdded'>"+
 					    		"<iframe intonse="+savedPages[i]+" src='"+savedPages[i]+"'></iframe>"+
 					    	"</div>"+
-						     "<div class='indicator'>"+
-						     	"<div class='flipit'>"+savedPages[i]+"</div>"+
+						     "<div class='indicator flipit'>"+
+						     	//"<div class='flipit'>"+savedPages[i]+"</div>"+
+						     	"<div><div></div><div></div></div>"+
+						     	"<div><div></div><div></div></div>"+
+						     	"<div><div></div><div></div></div>"+
 						    '</div>'+
 					    '</div>'+
 					    '<div class="flip-card-back">'+
-					    	"<span target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</span>"+
-					      "<div class='remove'>remove</div>"+
+					    	"<span class='alink' target='_BLANK' href='"+savedPages[i]+"'>"+savedPages[i]+"</span>"+
+					      "<div class='remove'><div class='rem'></div></div>"+
 					  '</div>'+
 					'</div>';
 
@@ -637,33 +684,21 @@
 					}
 				}
 
-
-				/*var str = '<div class="flip-card">'+
-				  '<div class="flip-card-inner">'+
-				    '<div class="flip-card-front">'+
-				    	"<div class='c openable loading justAdded'><div class='indicator'><a target='_BLANK' href='"+cUrl+"'>"+cUrl+"</div><div class='addContainer'><div class='add'></div></div><div class='remove'></div><iframe intonse="+cUrl+" src='"+cUrl+"'></iframe></div>"+
-				      '<img src="img_avatar.png" alt="Avatar" style="width:300px;height:300px;">'+
-				    '</div>'+
-				    '<div class="flip-card-back">'+
-				      '<h1>John Doe</h1>'+
-				      '<p>Architect & Engineer</p>'+
-				      '<p>We love that guy</p>'+
-				    '</div>'+
-				  '</div>'+
-				'</div>';*/
 				var str = '<div class="flip-card">'+
 					  '<div class="flip-card-inner">'+
 					    '<div class="flip-card-front">'+
 					    	"<div class='c openable loading justAdded'>"+
 					    		"<iframe intonse="+cUrl+" src='"+cUrl+"'></iframe>"+
 					    	"</div>"+
-						     "<div class='indicator'>"+
-						     	"<div class='flipit'>"+cUrl+"</div>"+
+						    "<div class='indicator flipit'>"+
+						     	"<div><div></div><div></div></div>"+
+						     	"<div><div></div><div></div></div>"+
+						     	"<div><div></div><div></div></div>"+
 						    '</div>'+
 					    '</div>'+
 					    '<div class="flip-card-back">'+
 					    	"<span target='_BLANK' href='"+cUrl+"'>"+cUrl+"</span>"+
-					      "<div class='remove'>remove</div><div class='hiddenadd'></div>"+
+					      "<div class='remove'><div class='rem'></div></div><div class='hiddenadd'></div>"+
 					  '</div>'+
 					'</div>';
 
@@ -716,8 +751,9 @@
 					$(this).closest(".flip-card").addClass("hover")
 					$('*').off('mousedown').on('mousedown', function(event) {
 						console.log(event.target)
-						if(!$(event.target).hasClass('remove'))
-						$('.flip-card').removeClass("hover");
+						if(!$(event.target).hasClass('rem'))
+							//if(!$(event.target).hasClass('alink'))
+								$('.flip-card').removeClass("hover");
 						
 
 						$('*').off('mousedown');
