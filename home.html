@@ -588,6 +588,11 @@
 		    display: inline-block;
 		    cursor:pointer;
 		}
+		.ssl {
+		    margin-top: 10%;
+		    display: inline-block;
+		    cursor:pointer;
+		}
 		.remove > div {
 			width: 50px;
 			height: 50px;
@@ -601,6 +606,10 @@
 		$( document ).ready(function() {
 				
 			function getTileHtml(a) {
+				var checked  = '';
+				if(a.indexOf('https://')==0) {
+					checked  = 'checked="checked"';
+				}
 				return '<div class="flip-card">'+
 					  '<div class="flip-card-inner">'+
 					    '<div class="flip-card-front">'+
@@ -616,7 +625,11 @@
 					    '</div>'+
 					    '<div class="flip-card-back">'+
 					    	"<span class='alink' target='_BLANK' href='"+a+"'>"+a+"</span>"+
-					      "<div class='remove'><div class='rem'></div></div>"+
+					      "<div class='remove'><div class='rem'></div></div><div class='hiddenadd'></div>"+
+					      	'<label class="ssl">'+
+							  '<input type="checkbox" '+checked+'> SSL'+
+							  //'<span class="checkmark"></span>'+
+							'</label>'+
 					  '</div>'+
 					'</div>';
 			}			
@@ -665,7 +678,6 @@
 			})
 
 			window.alert = function(d) {
-				console.log(d)
 				$(".message").remove();
 				$("body").append("<div class='message'>"+d+"</div>");
 				setTimeout(function(){
@@ -675,6 +687,10 @@
 
 
 			function setNewOne(cUrl) {
+
+				if(cUrl.indexOf('http')!=0) {
+					cUrl = 'http://'+cUrl
+				}
 
 				if(!cUrl || cUrl=='') {
 					return alert(cUrl+' not valid')
@@ -702,6 +718,7 @@
 				document.head.append(script);
 				script.onerror = function(e) {
 					console.log(e)
+					alert("Error")
 				  	$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
 				};
 				script.onload = function(e) {
@@ -734,11 +751,52 @@
 				$('.loading').off('click').on('click', function(){
 					$(this).find('iframe').attr('src',$(this).find('iframe').attr('data-src'))
 				})
+				$('.ssl input').off('change').on('change', function(){
+					console.log($(this))
+					var checked = $(this)[0].checked
+					var iframe = $(this).closest('.flip-card').find('iframe');
+					var link = $(this).closest('.flip-card').find('.alink');
+					var srco = iframe.attr('src');
+					if(checked) {
+						src = setSSL(srco,true);
+					} else {
+						src = setSSL(srco,false);
+					}
+					var savedPages = localStorage.getItem('homePages');
+					if(savedPages) {
+						savedPages = JSON.parse(savedPages);
+						if(savedPages.indexOf(srco)!=-1) {
+							savedPages[savedPages.indexOf(srco)] = src;
+							localStorage.setItem('homePages',JSON.stringify(savedPages))
+						}
+					}
 
+
+					iframe.attr('src',src);
+					iframe.attr('intonse',src);
+					link.attr('href',src);
+					link.html(src);
+				})
+				function setSSL(url,flag) {
+					if(flag) {
+						if(url.indexOf('http://')==0) {
+							return url.replace('http://','https://')
+						} else {
+							return 'https://'+url
+						}
+					} else {
+						if(url.indexOf('https://')==0) {
+							return url.replace('https://','http://')
+						} else {
+							return 'http://'+url
+						}
+					}
+					
+				}
 				$('.flipit').off('click').on('click', function(){
 					$(this).closest(".flip-card").addClass("hover")
 					$('*').off('mousedown').on('mousedown', function(event) {
-						console.log(event.target)
+						//console.log(event.target)
 						if(!$(event.target).hasClass('rem'))
 							//if(!$(event.target).hasClass('alink'))
 								$('.flip-card').removeClass("hover");
