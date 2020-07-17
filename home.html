@@ -619,6 +619,7 @@
 		    display: inline-block;
 		    width: 100%;
 		    cursor: pointer;
+		    text-decoration: underline;
 		}
   	</style>
   	<script type="text/javascript">
@@ -663,7 +664,6 @@
 
 					
 					var str = getTileHtml(savedPages[i]);
-					console.log(str)
 
 					$('body').append(str);
 					
@@ -711,12 +711,26 @@
 
 				
 
-
 				var savedPages = localStorage.getItem('homePages');
 				if(savedPages) {
 					savedPages = JSON.parse(savedPages); 
-					if(savedPages.indexOf(cUrl)!=-1) {
-						return alert('already present')
+					if(element) {
+						var temp  = '';
+						if(cUrl.indexOf('https://')==0) {
+							temp = cUrl.replace('https://','http://');
+						}
+						else if(cUrl.indexOf('http://')==0) {
+							temp = cUrl.replace('http://','https://');
+						}
+						if(savedPages.indexOf(temp)!=-1) {
+							 savedPages[savedPages.indexOf(temp)] = cUrl;
+							 localStorage.setItem('homePages',JSON.stringify(savedPages));
+						}
+					}
+					else { 
+						if(savedPages.indexOf(cUrl)!=-1) {
+							return alert('already present')
+						}
 					}
 				}
 				var str = getTileHtml(cUrl);
@@ -724,7 +738,7 @@
 
 				if(element) {
 					element.before(str);
-					element.find(".remove").click();
+					//element.find(".remove").click();
 					element.remove();
 				} else {
 					$('.newOne').before(str);
@@ -739,10 +753,15 @@
 				script.onerror = function(e) {
 					console.log(e)
 					alert("Error")
-				  	$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+					$('iframe[intonse="'+this.intonse+'"]').addClass('err');
+					if(!element) {
+				  		$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+				  	}
 				};
 				script.onload = function(e) {
-				  	$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+					if(!element) {
+				  		$('iframe[intonse="'+this.intonse+'"]').closest('.flip-card').find(".hiddenadd").click();
+				  	}
 				};
 
 
@@ -758,8 +777,11 @@
 				$('.toConfirm').removeClass('toConfirm');
 				$('iframe').off('load').on('load', function(){
 					$(this).closest('.openable').off('click').on('click', function(e){
-						console.log(e.target);
-						if($(e.target).hasClass('openable')) {
+						console.log($(e.target).find('.err'));
+						if($(e.target).find('.err').length) {
+							$(e.target).closest('.flip-card-front').find('.flipit').click();
+						}
+						else if($(e.target).hasClass('openable')) {
 							$(this).addClass('full')
 							$(this).closest(".flip-card").addClass('full')
 							$('body').addClass('one')
