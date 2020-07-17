@@ -617,6 +617,8 @@
 		    overflow: hidden;
 		    text-overflow: ellipsis;
 		    display: inline-block;
+		    width: 100%;
+		    cursor: pointer;
 		}
   	</style>
   	<script type="text/javascript">
@@ -815,17 +817,21 @@
 				$('.flipit').off('click').on('click', function(){
 					$(this).closest(".flip-card").addClass("hover")
 					$('*').off('mousedown').on('mousedown', function(event) {
-						if(!$(event.target).hasClass('rem') && !$(event.target).hasClass('ssl')) {
+						if(!$(event.target).hasClass('alink') && !$(event.target).hasClass('rem') && !$(event.target).hasClass('ssl')) {
 							$('.flip-card').removeClass("hover");
 						}
 						if($(event.target).hasClass('rem')) {
 							$('*').off('mousedown');
-							
 						} else if($(event.target).hasClass('ssl')) {
 							setTimeout(function(){
 								$('.flip-card').removeClass("hover")
 								$('*').off('mousedown');
 							},200)
+						} else if($(event.target).hasClass('alink')) {
+							setTimeout(function(){
+								$('.flip-card').removeClass("hover")
+								$('*').off('mousedown');
+							},300)
 						} else {
 							$('*').off('mousedown');
 						}
