@@ -646,17 +646,10 @@
 
 					
 					var str = getTileHtml(savedPages[i]);
-
+					console.log(str)
 
 					$('body').append(str);
-					// let script = document.createElement('script');
-					// script.src = savedPages[i]
-					// script.intonse = savedPages[i]
-					// document.head.append(script);
-					// script.onerror = function(e,a) {
-					//   console.log(e,a)
-					//   //$('iframe[intonse="'+this.intonse+'"]').closest('.c').remove();
-					// };
+					
 				}
 			}
 
@@ -689,7 +682,7 @@
 			}
 
 
-			function setNewOne(cUrl) {
+			function setNewOne(cUrl,element) {
 
 				if(!cUrl || cUrl=='') {
 					return alert(cUrl+' not valid')
@@ -712,11 +705,16 @@
 				var str = getTileHtml(cUrl);
 
 
+				if(element) {
+					element.before(str);
+					element.find(".remove").click();
+					element.remove();
+				} else {
+					$('.newOne').before(str);
+				}
 
-				$('.newOne').before(str);
-
-				$(".openable").last().hide();
-				$(".openable").last().fadeIn('slow');
+				// $(".openable").last().hide();
+				// $(".openable").last().fadeIn('slow');
 				let script = document.createElement('script');
 				script.src = cUrl;
 				script.intonse = cUrl;
@@ -767,20 +765,21 @@
 					} else {
 						src = setSSL(srco,false);
 					}
-					var savedPages = localStorage.getItem('homePages');
-					if(savedPages) {
-						savedPages = JSON.parse(savedPages);
-						if(savedPages.indexOf(srco)!=-1) {
-							savedPages[savedPages.indexOf(srco)] = src;
-							localStorage.setItem('homePages',JSON.stringify(savedPages))
-						}
-					}
+					setNewOne(src,$(this).closest('.flip-card'))
+					// var savedPages = localStorage.getItem('homePages');
+					// if(savedPages) {
+					// 	savedPages = JSON.parse(savedPages);
+					// 	if(savedPages.indexOf(srco)!=-1) {
+					// 		savedPages[savedPages.indexOf(srco)] = src;
+					// 		localStorage.setItem('homePages',JSON.stringify(savedPages))
+					// 	}
+					// }
 
 
-					iframe.attr('src',src);
-					iframe.attr('intonse',src);
-					link.attr('href',src);
-					link.html(src);
+					// iframe.attr('src',src);
+					// iframe.attr('intonse',src);
+					// link.attr('href',src);
+					// link.html(src);
 				})
 				function setSSL(url,flag) {
 					if(flag) {
