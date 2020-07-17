@@ -10,6 +10,7 @@
   	<title>HOME</title>
   	    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
 
+  	<script type="text/javascript" src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   	<style type="text/css">
   		:root {
@@ -621,12 +622,32 @@
 		    cursor: pointer;
 		    text-decoration: underline;
 		}
+		.ltit {
+			position: absolute;
+			top:10px;
+			left:0;
+			right:0;
+			margin: auto;
+			display: none;
+			text-align: left;
+		    text-indent: 5px;
+		    white-space: nowrap;
+		    overflow: hidden;
+		    text-overflow: ellipsis;
+		    width: 100%;
+		    cursor: pointer;
+		    text-decoration: underline;
+		}
+		.loading .ltit {
+			display: inline-block;
+		}
+
   	</style>
   	<script type="text/javascript">
 
 		$( document ).ready(function() {
 				
-			function getTileHtml(a) {
+			function getTileHtml(a,flag) {
 				var checked  = '';
 				if(a.indexOf('https://')==0) {
 					checked  = 'checked="checked"';
@@ -635,7 +656,8 @@
 					  '<div class="flip-card-inner">'+
 					    '<div class="flip-card-front">'+
 					    	"<div class='c openable loading justAdded'>"+
-					    		"<iframe intonse="+a+" src='"+a+"'></iframe>"+
+					    		"<iframe intonse="+a+" src='"+(flag ? a : '')+"'></iframe>"+
+					    		"<div class='ltit'>"+a+"</div>"+
 					    	"</div>"+
 						     "<div class='indicator flipit'>"+
 						     	//"<div class='flipit'>"+savedPages[i]+"</div>"+
@@ -643,6 +665,7 @@
 						     	"<div><div></div><div></div></div>"+
 						     	"<div><div></div><div></div></div>"+
 						    '</div>'+
+						    
 					    '</div>'+
 					    '<div class="flip-card-back">'+
 					    	"<span class='alink' target='_BLANK' href='"+a+"'>"+a+"</span>"+
@@ -733,7 +756,7 @@
 						}
 					}
 				}
-				var str = getTileHtml(cUrl);
+				var str = getTileHtml(cUrl,true);
 
 
 				if(element) {
@@ -791,14 +814,14 @@
 					$(this).closest('.c').removeClass('loading')
 				});
 				$('.loading').off('click').on('click', function(){
-					$(this).find('iframe').attr('src',$(this).find('iframe').attr('data-src'))
+					$(this).find('iframe').attr('src',$(this).find('iframe').attr('intonse'))
 				})
 				$('.ssl input').off('change').on('change', function(){
 					console.log($(this))
 					var checked = $(this)[0].checked
 					var iframe = $(this).closest('.flip-card').find('iframe');
 					var link = $(this).closest('.flip-card').find('.alink');
-					var srco = iframe.attr('src');
+					var srco = iframe.attr('intonse');
 					if(checked) {
 						src = setSSL(srco,true);
 					} else {
@@ -900,7 +923,7 @@
 				$('.hiddenadd').off('click').on('click',function(e){
 					e.preventDefault();
 					e.stopPropagation()
-					var cSrc = $(this).closest('.flip-card').find('iframe').attr('src');
+					var cSrc = $(this).closest('.flip-card').find('iframe').attr('intonse');
 					var savedPages = localStorage.getItem('homePages');
 					if(savedPages) {
 						savedPages = JSON.parse(savedPages);
