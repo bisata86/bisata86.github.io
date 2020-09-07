@@ -32,7 +32,6 @@
         }
     </style>
     <script type="text/javascript">
-        var current = 'https://monete.herokuapp.com';
 
         $(function() {
             var d = new Date();
@@ -103,7 +102,7 @@
                         for (var i = 0; i < reducedArrays[1].length; i++) {
                             r2*=reducedArrays[1][i];
                         }
-                        if(r1<=10) {
+                        if(r2<=1000) {
                             $('.numerator').html(r1);
                             $('.denumerator').html(r2);
                         }
