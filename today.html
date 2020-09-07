@@ -1,0 +1,241 @@
+<html lang="it">
+
+<head>
+    <title>today</title>
+    <meta name="theme-color" content="black">
+    <meta name="msapplication-navbutton-color" content="black">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <style type="text/css">
+        .result {
+            font-size: 20vh;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            height: fit-content;
+            left: 0;
+            right: 0;
+        }
+        .line {
+            background:black;
+            width: 80%;
+            margin: auto;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .line div {
+            width: 0%;
+            background: gray;
+        }
+    </style>
+    <script type="text/javascript">
+        var current = 'https://monete.herokuapp.com';
+
+        $(function() {
+            var d = new Date();
+
+            //pop from
+            var s = "";
+            s += (d.getHours() < 10 ? ('0'+d.getHours()) : d.getHours())+":";
+            s += (d.getMinutes() < 10 ? ('0'+d.getMinutes()) : d.getMinutes());
+            $('#from').val(s)
+
+            //pop to
+            var s = "";
+            var k = (d.getHours()+1)%24 
+            s += (k < 10 ? ('0'+k) : k)+":";
+            s += (d.getMinutes() < 10 ? ('0'+d.getMinutes()) : d.getMinutes());
+            $('#to').val(s)
+
+            var interval;
+            $('#start').on('click',function(){
+                
+                clearInterval(interval)
+                if(validation()) {
+                    $('.dates').hide();
+                    var from = $('#from').val();
+                    var to = $('#to').val();
+                    var t = from.split(':');
+                    console.log(t)
+                    var fromH = t[0];
+                    var fromM = t[1];
+                    t = to.split(':');
+                    console.log(t)
+                    var toH = t[0];
+                    var toM = t[1];
+                    var ore = toH-fromH;
+                    if(ore<0) ore = 24-(fromH-toH)
+                    var minuti = toM-fromM;
+                    if(minuti<0) {
+                        minuti = 60-(fromM-toM)
+                        ore--;
+                    }
+                    var totMin = minuti+(60*ore)
+                    var totSec = totMin*60;
+                    if(true) {
+                        
+                    }
+                    var str = "";
+                    str += "<div>ore: "+ore+"</div>"
+                    str += "<div>minuti: "+minuti+"</div>"
+                    str += "<div>----</div>"
+                    str += "<div>tot minuti: "+totMin+"</div>"
+                    str += "<div>tot secondi: "+totSec+"</div>"
+                    //$('.output').html(str)
+                    var index = 1;
+                    interval =  setInterval(function(){
+                        //$('.output').append("<div>"+index+"/"+totSec+"</div>");
+                        //$('.output').append("<div>"+index+" - "+reduce(index)+"</div>");
+                        //$('.output').append("<div>"+totSec+" - "+reduce(totSec)+"</div>");
+                        //$('.output').append("<div>---</div>");
+                        var reducedArrays = reduceArrays(reduce(index),reduce(totSec))
+                        
+                        //$('.output').append("<div>"+index+" - "+reducedArrays[0]+"</div>");
+                        //$('.output').append("<div>"+totSec+" - "+reducedArrays[1]+"</div>");
+                        var r1 = 1;
+                        for (var i = 0; i < reducedArrays[0].length; i++) {
+                            r1*=reducedArrays[0][i];
+                        }
+                        var r2 = 1;
+                        for (var i = 0; i < reducedArrays[1].length; i++) {
+                            r2*=reducedArrays[1][i];
+                        }
+                        if(r1<=10) {
+                            $('.numerator').html(r1);
+                            $('.denumerator').html(r2);
+                        }
+                        $('.line div').css('width',(r1/r2)*100  +"%");
+                        $('.line div').css('height',"5px");
+
+
+                        
+                        //$('.output').append("<div>"+r1+"/"+index+" = "+r2+"/"+totSec+"</div>");
+                        if(totSec*r1/index==r2) {
+                           //$('.output').append("<div>OK</div>"); 
+                        } else {
+                           $('.output').append("<div>FAIL</div>");
+                           clearInterval(interval)
+                        }
+                        if(index==totSec) {
+                           //$('.output').append("<div>FINE</div>");
+                           $('.dates').show();
+                           clearInterval(interval)
+                        }
+
+
+                        //$('.output').append("<div>-----------------</div>");
+                        index++;
+                    },1000)
+                }
+            })
+            reduceArrays([3, 3, 5],[2, 2, 2, 2, 3, 3, 5, 5])
+            function reduceArrays(a,b) {
+                var l,s,inverted;
+                if(a.length>b.length) {
+                    l=a;
+                    s=b;
+                    inverted=true;
+                } else {
+                    l=b;
+                    s=a;
+                    inverted=false;
+                }
+                var r = p(l,s);
+                if(inverted) {
+                    return [r[0],r[1]]
+                } else {
+                    return [r[1],r[0]]
+                }
+
+                function p(o,q) {
+                    for (var i = 0; i < o.length; i++) {
+                        if(q.indexOf(o[i])!=-1) {
+                            q.splice(q.indexOf(o[i]),1)
+                            o.splice(i,1)
+                            return p(o,q);
+
+                        }
+                    }
+                    return [o,q]
+                }
+            }
+
+            function reduce(n) {
+                var scomposed = [];
+                var flag = true;
+                var temp = n;
+                while(flag) {
+                    var result = 1;
+                    for (var i = 0; i < scomposed.length; i++) {
+                        result *= scomposed[i];
+                    }
+                    if(result==n) {
+                        flag = false;
+                        return scomposed;
+                    } else {
+                        var k = getDivisor(temp);
+                        scomposed.push(k)
+                        temp = temp/k;
+                    }
+                    if(scomposed.length>=20) {
+                        flag = false;
+                        return scomposed;
+                    }
+
+                }
+
+
+                // console.log(n);
+                // var a = getDivisor(n)
+                // if(a==n) {
+                //     return 'prime'
+                // } else {
+                //     var b = n/a;
+                //     var c = getDivisor(b);
+                //     return a+"x"+c
+                // }
+                // return a;
+
+                function getDivisor(m) {
+                    for (var i = 2; i <= Math.sqrt(m); i++) {
+                    if(m%i==0) {
+                            return i;
+                        }
+                    }
+                    return m;
+                }
+
+            }
+            function validation() {
+                var from = $('#from').val();
+                var to = $('#to').val();
+                if(!from || !to) {
+                    return false;
+                }
+                return true;
+            }
+
+        });
+    </script>
+</head>
+
+<body>
+    <div class="dates">
+       <input type="time" id="from"> 
+       <input type="time" id="to"> 
+       <input type="button" id="start" value="start"> 
+    </div>
+    <div class="output">
+        
+    </div>
+    <div class="result">
+        <div class="numerator"></div>
+        <div class="line"><div></div></div>
+        <div class="denumerator"></div>
+    </div>
+</body>
+
+</html>
