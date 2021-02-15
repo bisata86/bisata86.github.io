@@ -25,8 +25,8 @@
     .button {
       padding:5px;
       border:1px solid black;
-          width: 100px;
-      background-color: steelblue;
+      width: 100px;
+      background-color: white !important;
       cursor: pointer;
     }
     .gen {
@@ -66,16 +66,37 @@
     .loader {
       width:100vw;
       height: 100vh;
-      background: black;
-      opacity: .5;
+      nobackground: black;
+      noopacity: .5;
       position: fixed;
       z-index: 10;
       top:0;
-      transition-duration: .3s;
-      display: none;
+      pointer-events: none;
+      display: inline-block;
     }
     .loader.visible {
-      display: inline-block;
+      pointer-events: all;
+    }
+    .loader div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      left: 0;
+      right: 0;
+      width: 0px;
+      height: 0px;
+      background-color: white !important;
+      transition-duration: .1s;
+      border-radius: 100%;
+      background:url('https://cdn.dribbble.com/users/3374/screenshots/2059439/loader.gif');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .loader.visible div {
+      width: 50px;
+      height: 50px;
     }
 
   </style>
@@ -99,7 +120,8 @@
         $('.gen').on('click',function(){
           k.type = types[Math.floor(Math.random() * types.length)]
           k.squares = [];
-          for (var i = 0; i < 200; i++) {
+
+          for (var i = 0; i < Math.floor(Math.random() * 500)+50; i++) {
             k.squares.push(
               {
                 x:Math.floor(Math.random() * x.width),
@@ -137,6 +159,7 @@
         ctx.fillRect( 0, 0, x.width, x.height);
 
         var ang = Math.floor(Math.random() * 45);
+      
         for (var i = 0; i < k.squares.length; i++) {
           drawRotatedRect(
             k.type,
@@ -149,6 +172,8 @@
             ang,
           );
         }
+
+        setTimeout(function(){  loaderOff();},100)
 
         function drawRotatedRect(type,x1,y1,width,height,degrees,color,ang){
              ctx.fillStyle=color;
@@ -207,7 +232,8 @@
               ctx.restore();
             }
         }
-        loaderOff();
+
+        
     }
     function getRandomColor(a) {
       /*var colors = ['red','blue','gold','green','yellow','violet','cyan','black','white']
@@ -215,7 +241,6 @@
       return hexToRgbA(palette[Math.floor(Math.random() * palette.length)],a)
     }
     function hexToRgbA(hex,a){
-      console.log(a)
       var c;
       if(!a) a = 1
       if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
@@ -234,11 +259,12 @@
     for (var i = 0; i < 6; i++) {
       color += letters[Math.floor(Math.random() * 16)];
     }
+    console.log(color);
     return color;
   }
   function loaderOn() {
     if($('.loader').length==0)
-    $('body').append('<div class="loader"></div>')
+    $('body').append('<div class="loader"><div></div></div>')
     $('.loader').addClass('visible');
   }
   function loaderOff() {
@@ -246,8 +272,9 @@
   }
   function apiColor() {
       loaderOn();
+      var colorSchemes = ['analogic-complement','analogic','complement']
       $.ajax({
-        url: "https://www.thecolorapi.com/scheme?format=json&hex="+getRandomHex()+"&mode=analogic-complement&count=7",
+        url: "https://www.thecolorapi.com/scheme?format=json&hex="+getRandomHex()+"&mode="+colorSchemes[Math.floor(Math.random() * colorSchemes.length)]+"&count=7",
         cache: false
       })
         .done(function( resp ) {
@@ -261,7 +288,7 @@
             k.squares[i].color = getRandomColor(rA);
           }
           k.squares.bg = getRandomColor(rA);
-          k.squares.bg2 = getRandomColor(rA);
+          k.squares.bg2 = getRandomColor(.5);
           go();
         });
     }
