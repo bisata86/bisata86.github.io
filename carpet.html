@@ -107,7 +107,7 @@
       ]
       var types = [
         //'squares2'
-        'bubbles','squares','squares2','stripes','squares-oriented'
+        'bubbles','squares','stripes','squares-oriented'
       ]
     $(function() {
         x = document.createElement("CANVAS");
@@ -173,7 +173,7 @@
           );
         }
 
-        setTimeout(function(){  loaderOff();},100)
+        setTimeout(function(){  loaderOff();},200)
 
         function drawRotatedRect(type,x1,y1,width,height,degrees,color,ang){
              ctx.fillStyle=color;
