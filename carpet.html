@@ -181,6 +181,7 @@
         })
         $('body').append('<div class="button genS"></div>')
         $('.genS').on('click',function(){
+          loaderOn();
           k.type = types[Math.floor(Math.random() * types.length)]
           k.ang = rInt(0,30)
           k.r1 = rInt(20,100)/100
