@@ -68,11 +68,16 @@
                 dataType: 'jsonp',
                 success: function(data) {
                     console.log(data)
-					for (var i in data.query.random) {
-						console.log(data.query.random[i].title.split(" ")[0])
-						words.push(data.query.random[i].title.split(" ")[0])
-					}
-					addWords();
+          					for (var i in data.query.random) {
+          						var q = data.query.random[i].title.split(" ")[0].toUpperCase()
+                      if(q.indexOf("'")!=-1) window.location.reload();
+          						words.push(q)
+          					}
+          try {
+          addWords();
+          } catch(e){
+            window.location.reload();
+          }
                 },
                 async: false
             });
@@ -509,7 +514,7 @@
     }
     function getRandomLetter() {
       var letters = 'ABCDEFGHILMNOPQRSTUVZ';
-      return '-';//letters[Math.floor(Math.random() * letters.length)];
+      return letters[Math.floor(Math.random() * letters.length)];
     }
     function apiColor() {
       $.ajax({
