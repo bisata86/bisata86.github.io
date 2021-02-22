@@ -60,16 +60,21 @@
 
         squareDim = 10;
         
+
             $.ajax({
-	  url: "https://it.wikipedia.org/w/api.php?action=query&list=random&format=json&rnnamespace=0&rnlimit=10",
-	  context: document.body
-	}).done(function(s) {
-	  console.log(s)
+                url: '//it.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=10',
+                // contentType: 'application/json', -- you can't set content type for a <script> tag, this option does nothing for jsonp | KevinB
+                cache: 'true',
+                dataType: 'jsonp',
+                success: function(data) {
+                    console.log(data)
 	  	for (var i in s.query.random) {
 		console.log(s.query.random[i].title.split(" ")[0])
 	}
 	addWords();
-	});
+                },
+                async: false
+            });
 
 
 
