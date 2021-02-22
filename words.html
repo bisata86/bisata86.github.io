@@ -56,22 +56,24 @@
         document.body.appendChild(x);
         ctx = x.getContext("2d");
         k = {squares:[],bg:""}
-        words = ['SALAME','SALMONE','FHAZ']
+        words = []
 
         squareDim = 10;
         
 
             $.ajax({
-                url: '//it.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=10',
+                url: '//it.wikipedia.org/w/api.php?action=query&format=json&list=random&rnlimit=4',
                 // contentType: 'application/json', -- you can't set content type for a <script> tag, this option does nothing for jsonp | KevinB
                 cache: 'true',
                 dataType: 'jsonp',
                 success: function(data) {
                     console.log(data)
-	  	for (var i in s.query.random) {
-		console.log(s.query.random[i].title.split(" ")[0])
-	}
-	addWords();
+					for (var i in data.query.random) {
+						console.log(data.query.random[i].title.split(" ")[0])
+						words.push(data.query.random[i].title.split(" ")[0])
+
+					}
+					addWords();
                 },
                 async: false
             });
