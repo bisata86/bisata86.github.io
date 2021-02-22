@@ -62,7 +62,7 @@
         k = {squares:[],bg:""}
         words = []
 
-        squareDim = 10;
+        squareDim = 5;
         
 
         request();
@@ -93,7 +93,7 @@
                       } else { 
                         words.push(q)
                       }
-                      if(words.length>=10) {
+                      if(words.length>=squareDim) {
                         break;
                       }
                     }
@@ -275,7 +275,7 @@
             ctx.fillStyle='black';
             ctx.rect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
             ctx.fillText(k.mainSquare[i].letter, culo*k.mainSquare[i].row+(culo/2), culo*k.mainSquare[i].column+(culo/2));
-            ctx.globalAlpha = .4;
+            ctx.globalAlpha = .3;
             var starting, ending;
             if(k.mainSquare[i].starting == true) {
             	starting = k.mainSquare[i];
@@ -288,7 +288,7 @@
             ctx.fillStyle='green';
             if(k.mainSquare[i].found == true) {
             	ctx.beginPath();
-              ctx.arc(culo*k.mainSquare[i].row+culo/2, culo*k.mainSquare[i].column+culo/2, culo/2, 0, 2 * Math.PI, false);
+              ctx.arc(culo*k.mainSquare[i].row+culo/2, culo*k.mainSquare[i].column+culo/2, (culo/2), 0, 2 * Math.PI, false);
               ctx.closePath();
               ctx.fill();
              // ctx.fillRect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
@@ -516,6 +516,10 @@
                     k.mainSquare[i].craus = false;
                     k.mainSquare[i].found = true;
                   }
+                }
+                if($('[data-word].done').length==squareDim) {
+                  squareDim++;
+                  request();
                 }
               } else {
                 for (var i = 0; i < k.mainSquare.length; i++) {
