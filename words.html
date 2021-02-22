@@ -34,6 +34,10 @@
     .done {
     	text-decoration: line-through; 
     }
+    [data-word] {
+      display: inline-block;
+      padding: 5px;
+    }
 
   </style>
   <script>
@@ -66,6 +70,7 @@
 
 
         function request() {
+                words = []
                       $.ajax({
                 url: '//it.wikipedia.org/w/api.php?action=query&list=random&format=json&rnnamespace=0&rnlimit=100',
                 // contentType: 'application/json', -- you can't set content type for a <script> tag, this option does nothing for jsonp | KevinB
@@ -75,8 +80,8 @@
                     console.log(data)
                     for (var i in data.query.random) {
                       var q = data.query.random[i].title.split(" ")[0].toUpperCase()
-                      if(q.indexOf("'")!=-1) {
-                        console.log('scarto '+q)
+                      if(!/^[a-zA-Z]+$/.test(q)) {
+                        console.log('scarto reg '+q)
                       } else if(q.indexOf("-")!=-1) {
                         console.log('scarto '+q)
                       } else if(q.indexOf("é")!=-1) {
@@ -88,15 +93,16 @@
                       } else { 
                         words.push(q)
                       }
-                      if(words.length>=5) {
+                      if(words.length>=10) {
                         break;
                       }
                     }
 
           try {
-          addWords();
+            addWords();
           } catch(e){
             console.log(e)
+            request()
             //window.location.reload();
           }
                 },
@@ -120,7 +126,6 @@
             var w = words[o];
             $('.wordCont').append('<div data-word="'+w+'" class="word">'+w+'</div>')
             var r = Math.floor(Math.random() * 4)
-
             if(r==0) addHorizontal(w)
             if(r==1) addVertical(w)
             if(r==2) addObliquo1(w)
@@ -142,7 +147,11 @@
                 }
               }
               if(fastidi) {
-                addHorizontal(word)
+                var r = Math.floor(Math.random() * 4)
+                if(r==0) addHorizontal(w)
+                if(r==1) addVertical(w)
+                if(r==2) addObliquo1(w)
+                if(r==3) addObliquo2(w)
               } else {
                 for (var i = 0; i < w.length; i++) {
                   k.mainSquare[t+i].letter = w[i];
@@ -164,7 +173,11 @@
                 }
               }
               if(fastidi) {
-                addVertical(word)
+                var r = Math.floor(Math.random() * 4)
+                if(r==0) addHorizontal(w)
+                if(r==1) addVertical(w)
+                if(r==2) addObliquo1(w)
+                if(r==3) addObliquo2(w)
               } else {
                 for (var i = 0; i < w.length; i++) {
                   k.mainSquare[t+(i*squareDim)].letter = w[i];
@@ -186,7 +199,11 @@
                 }
               }
               if(fastidi) {
-                addObliquo1(word)
+                var r = Math.floor(Math.random() * 4)
+                if(r==0) addHorizontal(w)
+                if(r==1) addVertical(w)
+                if(r==2) addObliquo1(w)
+                if(r==3) addObliquo2(w)
               } else {
                 for (var i = 0; i < w.length; i++) {
                   k.mainSquare[t+(i*squareDim)+i].letter = w[i];
@@ -208,7 +225,11 @@
                 }
               }
               if(fastidi) {
-                addObliquo2(word)
+                var r = Math.floor(Math.random() * 4)
+                if(r==0) addHorizontal(w)
+                if(r==1) addVertical(w)
+                if(r==2) addObliquo1(w)
+                if(r==3) addObliquo2(w)
               } else {
                 for (var i = 0; i < w.length; i++) {
                   k.mainSquare[t+(i*squareDim)-i].letter = w[i];
