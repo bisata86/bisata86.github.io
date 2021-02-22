@@ -6,7 +6,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <style type="text/css">
 
-    body {
+    body, html {
       margin:0;
       padding:0;
       overflow: hidden;
@@ -61,26 +61,48 @@
         squareDim = 10;
         
 
-            $.ajax({
-                url: '//it.wikipedia.org/w/api.php?action=query&list=random&format=json&rnnamespace=0&rnlimit=4',
+        request();
+
+
+
+        function request() {
+                      $.ajax({
+                url: '//it.wikipedia.org/w/api.php?action=query&list=random&format=json&rnnamespace=0&rnlimit=100',
                 // contentType: 'application/json', -- you can't set content type for a <script> tag, this option does nothing for jsonp | KevinB
                 cache: 'true',
                 dataType: 'jsonp',
                 success: function(data) {
                     console.log(data)
-          					for (var i in data.query.random) {
-          						var q = data.query.random[i].title.split(" ")[0].toUpperCase()
-                      if(q.indexOf("'")!=-1) window.location.reload();
-          						words.push(q)
-          					}
+                    for (var i in data.query.random) {
+                      var q = data.query.random[i].title.split(" ")[0].toUpperCase()
+                      if(q.indexOf("'")!=-1) {
+                        console.log('scarto '+q)
+                      } else if(q.indexOf("-")!=-1) {
+                        console.log('scarto '+q)
+                      } else if(q.indexOf("é")!=-1) {
+                        console.log('scarto '+q)
+                      } else if(q.length>=squareDim) {
+                        console.log('scarto '+q)
+                      } else if(q.length<=2) {
+                        console.log('scarto '+q)
+                      } else { 
+                        words.push(q)
+                      }
+                      if(words.length>=5) {
+                        break;
+                      }
+                    }
+
           try {
           addWords();
           } catch(e){
-            window.location.reload();
+            console.log(e)
+            //window.location.reload();
           }
                 },
                 async: false
             });
+        }
 
 
         
@@ -196,6 +218,16 @@
             }
 
 
+                    ctx.clearRect( 0, 0, x.width, x.height);
+        ctx.fillStyle='white';
+        ctx.fillRect( 0, 0, x.width, x.height);
+        var culo = x.width/squareDim
+        var culo2 = culo/2
+        ctx.font = culo2+"px Arial"
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        updateMain();
+
 
           }
 
@@ -206,19 +238,12 @@
 
 
         
-        ctx.clearRect( 0, 0, x.width, x.height);
-        ctx.fillStyle='white';
-        ctx.fillRect( 0, 0, x.width, x.height);
-        var culo = x.width/squareDim
-        var culo2 = culo/2
-        ctx.font = culo2+"px Arial"
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        for (var i = 0; i < k.mainSquare.length; i++) {
-          ctx.fillStyle='black';
-          ctx.rect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
-          ctx.fillText(k.mainSquare[i].letter, culo*k.mainSquare[i].row+(culo/2), culo*k.mainSquare[i].column+(culo/2));
-        }
+
+        // for (var i = 0; i < k.mainSquare.length; i++) {
+        //   ctx.fillStyle='black';
+        //   ctx.rect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
+        //   ctx.fillText(k.mainSquare[i].letter, culo*k.mainSquare[i].row+(culo/2), culo*k.mainSquare[i].column+(culo/2));
+        // }
 
 
         function updateMain() {
@@ -274,8 +299,8 @@
          // e = e.originalEvent.touches[0]
 
           var rect = e.target.getBoundingClientRect();
-			var xo = e.targetTouches[0].pageX - rect.left;
-			var yo = e.targetTouches[0].pageY - rect.top;
+    			var xo = e.targetTouches[0].pageX - rect.left;
+    			var yo = e.targetTouches[0].pageY - rect.top;
 
 
           console.log(e)
@@ -304,8 +329,8 @@
 
 
         	var rect = e.target.getBoundingClientRect();
-			var xo = e.targetTouches[0].pageX - rect.left;
-			var yo = e.targetTouches[0].pageY - rect.top;
+    			var xo = e.targetTouches[0].pageX - rect.left;
+    			var yo = e.targetTouches[0].pageY - rect.top;
 
 
           var starting = false;
