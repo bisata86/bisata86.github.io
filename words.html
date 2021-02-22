@@ -62,7 +62,7 @@
         k = {squares:[],bg:""}
         words = []
 
-        squareDim = 5;
+        squareDim = 8;
         
 
         request();
@@ -86,14 +86,14 @@
                         console.log('scarto '+q)
                       } else if(q.indexOf("é")!=-1) {
                         console.log('scarto '+q)
-                      } else if(q.length>=squareDim) {
+                      } else if(q.length>squareDim) {
                         console.log('scarto '+q)
                       } else if(q.length<=2) {
                         console.log('scarto '+q)
                       } else { 
                         words.push(q)
                       }
-                      if(words.length>=squareDim) {
+                      if(words.length>squareDim) {
                         break;
                       }
                     }
@@ -142,8 +142,11 @@
               var fastidi = false;
               for (var i = 0; i < w.length; i++) {
                 if(k.mainSquare[t+i].assigned) {
-                  fastidi = true;
-                  break;
+                  if(k.mainSquare[t+i].letter == w[i]) {
+                  } else {
+                    fastidi = true;
+                    break;
+                  }
                 }
               }
               if(fastidi) {
@@ -168,8 +171,11 @@
               var fastidi = false;
               for (var i = 0; i < w.length; i++) {
                 if(k.mainSquare[t+(i*squareDim)].assigned) {
-                  fastidi = true;
-                  break;
+                  if(k.mainSquare[t+(i*squareDim)].letter == w[i]) {
+                  } else {
+                    fastidi = true;
+                    break;
+                  }
                 }
               }
               if(fastidi) {
@@ -194,8 +200,11 @@
               var fastidi = false;
               for (var i = 0; i < w.length; i++) {
                 if(k.mainSquare[t+(i*squareDim)+i].assigned) {
-                  fastidi = true;
-                  break;
+                  if(k.mainSquare[t+(i*squareDim)+i].letter == w[i]) {
+                  } else {
+                    fastidi = true;
+                    break;
+                  }
                 }
               }
               if(fastidi) {
@@ -220,8 +229,11 @@
               var fastidi = false;
               for (var i = 0; i < w.length; i++) {
                 if(k.mainSquare[t+(i*squareDim)-i].assigned) {
-                  fastidi = true;
-                  break;
+                  if(k.mainSquare[t+(i*squareDim)-i].letter == w[i]) {
+                  } else {
+                    fastidi = true;
+                    break;
+                  }
                 }
               }
               if(fastidi) {
@@ -564,6 +576,9 @@
     }
     function getRandomLetter() {
       var letters = 'ABCDEFGHILMNOPQRSTUVZ';
+      if(window.location.href.indexOf('localhost')!=-1) {
+        return '-';
+      }
       return letters[Math.floor(Math.random() * letters.length)];
     }
     function apiColor() {
