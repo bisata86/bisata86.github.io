@@ -1,0 +1,498 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style type="text/css">
+
+    body {
+      margin:0;
+      padding:0;
+      overflow: hidden;
+    }
+    canvas {
+      nomax-height: 100vh;
+      margin: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+    }
+    .button {
+      padding:5px;
+      border:1px solid black;
+          width: 100px;
+    }
+    .signer {
+      pointer-events: none;
+    }
+    .wordCont {
+    	position: fixed;
+    	bottom: 10px;
+    	left: 10px;
+    }
+    .done {
+    	text-decoration: line-through; 
+    }
+
+  </style>
+  <script>
+    var ctx,x,k;
+    var squareDim,words;
+    $(function() {
+        x = document.createElement("CANVAS");
+        var mainDim;
+        if(window.innerWidth>window.innerHeight) {
+          mainDim = window.innerHeight
+        } else mainDim = window.innerWidth
+        x.width  = mainDim;
+        x.height = mainDim;
+        document.body.appendChild(x);
+        ctx = x.getContext("2d");
+        k = {squares:[],bg:""}
+        words = ['DIOPORCO','SALAME','SALMONE','FHAZ']
+
+        squareDim = 10;
+        
+        addWords();
+
+        function addWords() {
+          $('.wordCont').remove();
+          $('body').append('<div class="wordCont"></div>')
+          k.mainSquare = []
+          for (var i = 0; i < squareDim; i++) {
+            for (var l = 0; l < squareDim; l++) {
+                k.mainSquare.push({letter:getRandomLetter(),row:l,column:i})
+            }
+          }
+          for (var o = 0; o < words.length; o++) {
+            var w = words[o];
+            $('.wordCont').append('<div data-word="'+w+'" class="word">'+w+'</div>')
+            var r = Math.floor(Math.random() * 4)
+
+            if(r==0) addHorizontal(w)
+            if(r==1) addVertical(w)
+            if(r==2) addObliquo1(w)
+            if(r==3) addObliquo2(w)
+
+
+
+
+            function addHorizontal(word) {
+              w = word;
+              if(Math.floor(Math.random() * 2)) w = reverseString(w)
+              var t = Math.floor(Math.random() * (squareDim-(w.length-1)));
+              t += squareDim*Math.floor(Math.random() * (squareDim));
+              var fastidi = false;
+              for (var i = 0; i < w.length; i++) {
+                if(k.mainSquare[t+i].assigned) {
+                  fastidi = true;
+                  break;
+                }
+              }
+              if(fastidi) {
+                addHorizontal(word)
+              } else {
+                for (var i = 0; i < w.length; i++) {
+                  k.mainSquare[t+i].letter = w[i];
+                  k.mainSquare[t+i].assigned = true;
+                }
+              }
+            }
+
+            function addVertical(word) {
+              w = word;
+              if(Math.floor(Math.random() * 2)) w = reverseString(w)
+              var t = Math.floor(Math.random() * (squareDim));
+              t += squareDim*Math.floor(Math.random() * (squareDim-(w.length-1)))
+              var fastidi = false;
+              for (var i = 0; i < w.length; i++) {
+                if(k.mainSquare[t+(i*squareDim)].assigned) {
+                  fastidi = true;
+                  break;
+                }
+              }
+              if(fastidi) {
+                addVertical(word)
+              } else {
+                for (var i = 0; i < w.length; i++) {
+                  k.mainSquare[t+(i*squareDim)].letter = w[i];
+                  k.mainSquare[t+(i*squareDim)].assigned = true;
+                }
+              }
+            }
+
+            function addObliquo1(word) {
+              w = word;
+              if(Math.floor(Math.random() * 2)) w = reverseString(w)
+              var t = Math.floor(Math.random() * (squareDim-(w.length-1)));
+              t += squareDim*Math.floor(Math.random() * (squareDim-(w.length-1)));
+              var fastidi = false;
+              for (var i = 0; i < w.length; i++) {
+                if(k.mainSquare[t+(i*squareDim)+i].assigned) {
+                  fastidi = true;
+                  break;
+                }
+              }
+              if(fastidi) {
+                addObliquo1(word)
+              } else {
+                for (var i = 0; i < w.length; i++) {
+                  k.mainSquare[t+(i*squareDim)+i].letter = w[i];
+                  k.mainSquare[t+(i*squareDim)+i].assigned = true;
+                }
+              }
+            }
+
+            function addObliquo2(word) {
+              w = word;
+              if(Math.floor(Math.random() * 2)) w = reverseString(w)
+              var t = rInt(w.length-1,squareDim-1);
+               t += squareDim*Math.floor(Math.random() * (squareDim-(w.length-1)));
+              var fastidi = false;
+              for (var i = 0; i < w.length; i++) {
+                if(k.mainSquare[t+(i*squareDim)-i].assigned) {
+                  fastidi = true;
+                  break;
+                }
+              }
+              if(fastidi) {
+                addObliquo2(word)
+              } else {
+                for (var i = 0; i < w.length; i++) {
+                  k.mainSquare[t+(i*squareDim)-i].letter = w[i];
+                  k.mainSquare[t+(i*squareDim)-i].assigned = true;
+                }
+              }
+            }
+
+
+
+          }
+
+
+          
+        }
+
+
+
+        
+        ctx.clearRect( 0, 0, x.width, x.height);
+        ctx.fillStyle='white';
+        ctx.fillRect( 0, 0, x.width, x.height);
+        var culo = x.width/squareDim
+        var culo2 = culo/2
+        ctx.font = culo2+"px Arial"
+        for (var i = 0; i < k.mainSquare.length; i++) {
+          ctx.fillStyle='black';
+          ctx.rect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
+          ctx.fillText(k.mainSquare[i].letter, culo*k.mainSquare[i].row+(culo/2)-culo2/4, culo*k.mainSquare[i].column+(culo/2)+culo2/4);
+        }
+
+
+        function updateMain() {
+          ctx.clearRect( 0, 0, x.width, x.height);
+          ctx.fillStyle='white';
+          ctx.fillRect( 0, 0, x.width, x.height);
+          for (var i = 0; i < k.mainSquare.length; i++) {
+            ctx.fillStyle='black';
+            ctx.rect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
+            ctx.fillText(k.mainSquare[i].letter, culo*k.mainSquare[i].row+(culo/2)-culo2/4, culo*k.mainSquare[i].column+(culo/2)+culo2/4);
+            ctx.globalAlpha = .4;
+            if(k.mainSquare[i].starting == true || k.mainSquare[i].ending == true) {
+              ctx.fillRect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
+            }
+            ctx.fillStyle='green';
+            if(k.mainSquare[i].found == true) {
+              ctx.fillRect( culo*k.mainSquare[i].row, culo*k.mainSquare[i].column, culo,culo);
+            }
+            ctx.fillStyle='black';
+            ctx.globalAlpha = 1;
+          }
+        }
+
+
+
+
+        k.startingPos = {x:null,y:null};
+        k.endingPos = {x:null,y:null};
+
+        $(x).on("touchstart",function(e){
+          
+         // e = e.originalEvent.touches[0]
+
+          var rect = e.target.getBoundingClientRect();
+			var xo = e.targetTouches[0].pageX - rect.left;
+			var yo = e.targetTouches[0].pageY - rect.top;
+
+
+          console.log(e)
+          k.startingPos.x = (Math.floor(xo/culo));
+          k.startingPos.y = (Math.floor(yo/culo));
+          console.log(k.startingPos.x)
+          for (var i = 0; i < k.mainSquare.length; i++) {
+            if(k.mainSquare[i].row==k.startingPos.x && k.mainSquare[i].column==k.startingPos.y) {
+               k.mainSquare[i].starting = true;
+               
+            } else {
+              k.mainSquare[i].starting = false;
+            }
+          }
+          updateMain();
+
+          //updateSquare(Math.floor(e.offsetX/culo),Math.floor(e.offsetY/culo))
+
+
+          /*tx.globalAlpha = .4;
+          tx.fillRect(k.startingPos.x, k.startingPos.y, culo,culo);*/
+
+        })
+
+        $(x).on("touchmove",function(e){
+
+
+        	var rect = e.target.getBoundingClientRect();
+			var xo = e.targetTouches[0].pageX - rect.left;
+			var yo = e.targetTouches[0].pageY - rect.top;
+
+
+          var starting = false;
+          for (var i = 0; i < k.mainSquare.length; i++) {
+            if(k.mainSquare[i].starting == true) {
+               starting = true;
+               break;
+            }
+          }
+
+          if(starting) {
+            k.endingPos.x = (Math.floor(xo/culo));
+            k.endingPos.y = (Math.floor(yo/culo));
+            for (var i = 0; i < k.mainSquare.length; i++) {
+              if(k.mainSquare[i].row==k.endingPos.x && k.mainSquare[i].column==k.endingPos.y) {
+                 k.mainSquare[i].ending = true;
+                 
+              } else {
+                k.mainSquare[i].ending = false;
+              }
+            }
+            updateMain();
+          }
+
+
+        })
+        $(x).on("touchend",function(e){
+          var starting, startingA, ending, endingA;
+          for (var i = 0; i < k.mainSquare.length; i++) {
+            if(k.mainSquare[i].starting == true) {
+               starting = k.mainSquare[i];
+               startingA = i;
+            }
+            if(k.mainSquare[i].ending == true) {
+               ending = k.mainSquare[i];
+               endingA = i;
+            }
+          }
+          var valid = false;
+          if(starting && ending) {
+            if(
+              starting.row == ending.row ||
+              starting.column == ending.column ||
+              Math.abs(starting.column - ending.column) == Math.abs(starting.row - ending.row)
+              ) {
+              valid = true
+            }
+          } else {
+            for (var i = 0; i < k.mainSquare.length; i++) {
+              k.mainSquare[i].starting = false;
+              k.mainSquare[i].ending = false;
+            }
+          }
+
+          if(valid) {
+              console.log("valid")
+              var string = "";
+              if(starting.row == ending.row) {
+                  if(starting.column > ending.column) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal -= squareDim;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  }
+                  else if(starting.column < ending.column) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal += squareDim;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  } 
+              }
+              else if(starting.column == ending.column) {
+                  if(starting.row > ending.row) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal -= 1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  }
+                  else if(starting.row < ending.row) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal += 1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  } 
+              } else if(Math.abs(starting.column - ending.column) == Math.abs(starting.row - ending.row)) {
+                if(starting.column > ending.column) {
+                  if(starting.row > ending.row) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal -= squareDim+1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  }
+                  else if(starting.row < ending.row) {
+                   var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal -= squareDim-1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                                        k.mainSquare[sal].craus = true
+
+                  }
+                }
+                else if(starting.column < ending.column) {
+                  if(starting.row > ending.row) {
+                    var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal += squareDim-1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                    k.mainSquare[sal].craus = true
+
+                  }
+                  else if(starting.row < ending.row) {
+                   var sal = startingA
+                    while(k.mainSquare[sal].ending!=true) {
+                      string += k.mainSquare[sal].letter;
+                      k.mainSquare[sal].craus = true
+                      sal += squareDim+1;
+                    }
+                    string += k.mainSquare[sal].letter;
+                    k.mainSquare[sal].craus = true
+                  }
+                }
+
+              }
+              console.log(string)
+
+              if(words.indexOf(string)!=-1) {
+                console.log(string+" found")
+                $('[data-word="'+string+'"]').addClass('done');
+                for (var i = 0; i < k.mainSquare.length; i++) {
+                  if(k.mainSquare[i].craus) {
+                    k.mainSquare[i].craus = false;
+                    k.mainSquare[i].found = true;
+                  }
+                }
+              } else {
+                for (var i = 0; i < k.mainSquare.length; i++) {
+                  if(k.mainSquare[i].craus) {
+                    k.mainSquare[i].craus = false;
+                  }
+                }
+              }
+
+          }
+
+
+          for (var i = 0; i < k.mainSquare.length; i++) {
+            k.mainSquare[i].starting = false;
+            k.mainSquare[i].ending = false;
+          }
+          updateMain();
+
+
+
+        })
+
+
+
+    });
+    function rInt(min, max) { // min and max included 
+      return Math.floor(Math.random() * (max - min + 1) + min);
+    }
+    function reverseString(str) {
+    return (str === '') ? '' : reverseString(str.substr(1)) + str.charAt(0);
+  }
+    function getRandomColor(index) {
+      /*var colors = ['red','blue','gold','green','yellow','violet','cyan','black','white']
+      var colors = ['#5F0F40','#9A031E','#FB8B24','#E36414','#0F4C5C',ctx.createPattern($('.cane')[0], 'repeat')]*/
+      return palettes[index][Math.floor(Math.random() * palettes[index].length)]
+    }
+    function getRandomHex() {
+      var letters = '0123456789ABCDEF';
+      var color = '';
+      for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+      }
+      return color;
+    }
+    function getRandomLetter() {
+      var letters = 'ABCDEFGHILMNOPQRSTUVZ';
+      return letters[Math.floor(Math.random() * letters.length)];
+    }
+    function apiColor() {
+      $.ajax({
+        url: "https://www.thecolorapi.com/scheme?format=json&hex="+getRandomHex()+"&mode=analogic&count=7",
+        cache: false
+      })
+        .done(function( resp ) {
+          console.log(resp)
+          var cane = [];
+          for (var i = resp.colors.length - 1; i >= 0; i--) {
+            cane.push(resp.colors[i].hex.value)
+          }
+          console.log(cane)
+          palettes.push(cane)
+          k.palette = palettes.length-1
+          for (var i = 0; i < k.squares.length; i++) {
+            k.squares[i].color = getRandomColor(k.palette);
+          }
+          k.squares.bg = getRandomColor(k.palette);
+          go();
+        });
+      
+    }
+
+  </script>
+</head>
+<body>
+
+
+</body>
+</html>
