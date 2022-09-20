@@ -371,7 +371,7 @@
                     //ctx.setScale(-1, 1)
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
                 }
-                ctx.globalAlpha   = 1;
+                ctx.globalAlpha   = .5;
                 ctx.fillStyle = "black";
                 var img = document.getElementById("bullet");
                 for (var i = this._props.g.p.bullets.length - 1; i >= 0; i--) {
@@ -382,6 +382,7 @@
                     ctx.closePath();
                     //ctx.drawImage(img, e.x+gapx-(e.d), e.y+gapy-(e.d), e.d*2, e.d*2);
                 }
+                ctx.globalAlpha   = 1;
                 ctx.fillStyle = "violet";
                 var img = document.getElementById("powerup");
                 for (var i = this._props.g.collectables.length - 1; i >= 0; i--) {
@@ -396,6 +397,11 @@
                 var img = document.getElementById("turret");
                 for (var i = this._props.g.turrets.length - 1; i >= 0; i--) {
                     let e = this._props.g.turrets[i];
+                    if(e.facing=='right') {
+                      img = document.getElementById("turret");
+                    } else {
+                      img = document.getElementById("tturret");
+                    }
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
                     /*ctx.beginPath();
                     ctx.arc(e.x+gapx, e.y+gapy, e.d, 0, 2 * Math.PI);
@@ -832,6 +838,11 @@
                         }
                       }
                       if(shoot==true) {
+                        if(inte.x>t.x) {
+                          t.facing = "right"
+                        } else {
+                          t.facing = "left"
+                        }
                         app.dataObj.g.p.bullets.push(
                           {
                             x:t.x,
@@ -1057,6 +1068,7 @@
     <img id="villain" style="display:none;" src="./imgs/villain.png"></img>
     <img id="hero" style="display:none;" src="./imgs/hero.png"></img>
     <img id="turret" style="display:none;" src="./imgs/turret.png"></img>
+    <img id="tturret" style="display:none;" src="./imgs/tturret.png"></img>
     <img id="powerup" style="display:none;" src="./imgs/powerup.png"></img>
     <!-- <img id="bullet" style="display:none;" src="./imgs/bullet.png"></img> -->
 </body>
