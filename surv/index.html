@@ -667,24 +667,24 @@
                         if(r==0) {
                           epos = {
                             x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
-                            y:app.dataObj.g.p.y-250-20
+                            y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y-250-120)
                           }
                         }
                         if(r==1) {
                           epos = {
                             x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
-                            y:app.dataObj.g.p.y+250+20
+                            y:app.rint(app.dataObj.g.p.y+250+20,app.dataObj.g.p.y+250+120)
                           }
                         }
                         if(r==2) {
                           epos = {
-                            x:app.dataObj.g.p.x-250-20,
+                            x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x-250-120),
                             y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
                           }
                         }
                         if(r==3) {
                           epos = {
-                            x:app.dataObj.g.p.x+250+20,
+                            x:app.rint(app.dataObj.g.p.x+250+20,app.dataObj.g.p.x+250+120),
                             y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
                           }
                         }
