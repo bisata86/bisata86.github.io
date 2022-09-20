@@ -501,7 +501,8 @@
                       turretLife:20,
                       turretLimit:0
                     },
-                    limitEnemies:2,
+                    limitEnemies:5,
+                    addedEnemies:false,
                     enemies:[],
                     collectables:[],
                     turrets:[]
@@ -658,48 +659,51 @@
 
 
                   // add enemy
-                  //if(false)
-                  if(app.dataObj.g.enemies.length<app.dataObj.g.limitEnemies) {
-
-                      var epos;
-                      var r = app.rint(0,3)
-                      if(r==0) {
-                        epos = {
-                          x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
-                          y:app.dataObj.g.p.y-250-20
+                  if(app.dataObj.g.addedEnemies==false) {
+                    for (var s = 0; s < app.dataObj.g.limitEnemies; s++) {
+                      //if(app.dataObj.g.enemies.length<app.dataObj.g.limitEnemies) {
+                        var epos;
+                        var r = app.rint(0,3)
+                        if(r==0) {
+                          epos = {
+                            x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
+                            y:app.dataObj.g.p.y-250-20
+                          }
                         }
-                      }
-                      if(r==1) {
-                        epos = {
-                          x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
-                          y:app.dataObj.g.p.y+250+20
+                        if(r==1) {
+                          epos = {
+                            x:app.rint(app.dataObj.g.p.x-250-20,app.dataObj.g.p.x+250+20),
+                            y:app.dataObj.g.p.y+250+20
+                          }
                         }
-                      }
-                      if(r==2) {
-                        epos = {
-                          x:app.dataObj.g.p.x-250-20,
-                          y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
+                        if(r==2) {
+                          epos = {
+                            x:app.dataObj.g.p.x-250-20,
+                            y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
+                          }
                         }
-                      }
-                      if(r==3) {
-                        epos = {
-                          x:app.dataObj.g.p.x+250+20,
-                          y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
+                        if(r==3) {
+                          epos = {
+                            x:app.dataObj.g.p.x+250+20,
+                            y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
+                          }
                         }
-                      }
-
-                      app.dataObj.g.enemies.push({
-                        id:231232,
-                        x:epos.x,
-                        y:epos.y,
-                        d:10,//app.rint(5,10),
-                        type:0,
-                        l:100+app.dataObj.g.p.kills/5,
-                        ml:100+app.dataObj.g.p.kills/5,
-                        s:1+app.dataObj.g.p.kills/1000,
-                        damage:.1+app.dataObj.g.p.kills/1000
-                      })
+                        app.dataObj.g.enemies.push({
+                          id:231232,
+                          x:epos.x,
+                          y:epos.y,
+                          d:10,//app.rint(5,10),
+                          type:0,
+                          l:100+app.dataObj.g.p.kills/5,
+                          ml:100+app.dataObj.g.p.kills/5,
+                          s:1+app.dataObj.g.p.kills/1000,
+                          damage:.1+app.dataObj.g.p.kills/1000
+                        })
+                      //}
+                    }
+                    app.dataObj.g.addedEnemies = true;
                   }
+                  
 
                   // add turrets
                   if(app.dataObj.g.p.canTurret && app.dataObj.g.turrets.length<app.dataObj.g.p.turretLimit){
@@ -867,33 +871,35 @@
                   for (var i = app.dataObj.g.p.bullets.length - 1; i >= 0; i--) {
                     var e = app.dataObj.g.p.bullets[i];
                     var a = findClosest(e,app.dataObj.g.enemies); //find closest
-                    var outer = 1000
-                    if(e.x<app.dataObj.g.p.x-outer || e.x > app.dataObj.g.p.x+outer || e.y<app.dataObj.g.p.y-outer || e.y > app.dataObj.g.p.y+outer) {
-                      //console.log('out')
-                    }
-                    else
-                     if (app.getDistance(e.x,e.y,a.x,a.y)<app.dataObj.g.p.bulletSize) {
-                      //console.log('hit')
-                      a.l -= e.damage
-
-                    }
-                    else if (app.getDistance(e.x,e.y,e.objective.x,e.objective.y)>app.dataObj.g.p.bulletSize) {
-
-                      var mid = midpoint(e.x,e.y,e.objective.x,e.objective.y)
-                      
-                      var cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
-                      while (cdistance>app.dataObj.g.p.bulletSpeed) {
-                        mid = midpoint(e.x,e.y,mid[0],mid[1])
-                        cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
+                    if(a) {
+                      var outer = 1000
+                      if(e.x<app.dataObj.g.p.x-outer || e.x > app.dataObj.g.p.x+outer || e.y<app.dataObj.g.p.y-outer || e.y > app.dataObj.g.p.y+outer) {
+                        //console.log('out')
                       }
-                      e.x = mid[0]
-                      e.y = mid[1]
+                      else
+                       if (app.getDistance(e.x,e.y,a.x,a.y)<app.dataObj.g.p.bulletSize) {
+                        //console.log('hit')
+                        a.l -= e.damage
 
-                      updatedBullets.push(e)
+                      }
+                      else if (app.getDistance(e.x,e.y,e.objective.x,e.objective.y)>app.dataObj.g.p.bulletSize) {
 
-                    } else {
-                      //console.log('hit')
+                        var mid = midpoint(e.x,e.y,e.objective.x,e.objective.y)
+                        
+                        var cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
+                        while (cdistance>app.dataObj.g.p.bulletSpeed) {
+                          mid = midpoint(e.x,e.y,mid[0],mid[1])
+                          cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
+                        }
+                        e.x = mid[0]
+                        e.y = mid[1]
 
+                        updatedBullets.push(e)
+
+                      } else {
+                        //console.log('hit')
+
+                      }
                     }
                   }
                   app.dataObj.g.p.bullets = updatedBullets;
@@ -937,9 +943,10 @@
                       updatedEnemies.push(e)
                     } else {
                       app.dataObj.g.p.kills++
-                      if(app.dataObj.g.p.kills%30==0) {
+
+                      /*if(app.dataObj.g.p.kills%30==0) {
                         app.dataObj.g.limitEnemies++;
-                      }
+                      }*/
 
 
                       app.dataObj.g.p.mana+=50
@@ -994,6 +1001,12 @@
                   if(app.dataObj.g.p.l<app.dataObj.g.p.ml)
                     app.dataObj.g.p.l+=app.dataObj.g.p.regen
                   app.dataObj.reloader++
+
+                  if(app.dataObj.g.enemies.length==0) {
+                    console.log('smildone')
+                    app.dataObj.g.limitEnemies*=2;
+                    app.dataObj.g.addedEnemies = false;
+                  }
 
       }
       function findClosest(ca,ce){
