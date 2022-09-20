@@ -428,7 +428,7 @@
             })
             Vue.component('joypad-item', {
               props: ['joypad'],
-              template: '<div id="joy" style=" opacity:.5; width: 128px; position: absolute; left:0px; right:0px;margin:auto; bottom:40px;">      <img src="./imgs/jbase.png"/>      <div id="stick1" style="position: absolute; left:32px; top:32px;"><img src="./imgs/jball.png"/>    </div>    </div>',
+              template: '<div id="joy" style=" opacity:.5; width: 100%;"><div id="stick1" style="width: 100vw;height:100vh;position:absolute;top:0px;"> </div>    </div>',
               mounted: function(){
                   let joystick1 = new JoystickController("stick1", 64, 8); 
 
