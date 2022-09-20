@@ -383,20 +383,24 @@
                     //ctx.drawImage(img, e.x+gapx-(e.d), e.y+gapy-(e.d), e.d*2, e.d*2);
                 }
                 ctx.fillStyle = "violet";
+                var img = document.getElementById("powerup");
                 for (var i = this._props.g.collectables.length - 1; i >= 0; i--) {
                     let e = this._props.g.collectables[i];
-                    ctx.beginPath();
+                    ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
+                    /*ctx.beginPath();
                     ctx.arc(e.x+gapx, e.y+gapy, e.d, 0, 2 * Math.PI);
                     ctx.fill()
-                    ctx.closePath();
+                    ctx.closePath();*/
                 }
                 ctx.fillStyle = "blue";
+                var img = document.getElementById("turret");
                 for (var i = this._props.g.turrets.length - 1; i >= 0; i--) {
                     let e = this._props.g.turrets[i];
-                    ctx.beginPath();
+                    ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
+                    /*ctx.beginPath();
                     ctx.arc(e.x+gapx, e.y+gapy, e.d, 0, 2 * Math.PI);
                     ctx.fill()
-                    ctx.closePath();
+                    ctx.closePath();*/
                 }
               }
             })
@@ -514,24 +518,6 @@
               methods: {
                   upgrade:function () {
                         var poss = [
-                          // {
-                          //   class:'center',
-                          //   html:'<div class="icon user">full life</div>',
-                          //   onclick:function(){
-                          //       app.dataObj.menuItems = []
-                          //       app.dataObj.g.p.l = 100
-                          //       app.start();
-                          //   }
-                          // },
-                          /*{
-                            class:'center',
-                            html:'<div class="icon user">max life</div>',
-                            onclick:function(){
-                                app.dataObj.menuItems = []
-                                app.dataObj.g.p.ml *= 1.5
-                                app.start();
-                            }
-                          },*/
                           {
                             class:'center',
                             html:'<div class="icon user">turrets</div>',
@@ -571,7 +557,7 @@
                           },*/
                           {
                             class:'center',
-                            html:'<div class="icon user">life max && regen</div>',
+                            html:'<div class="icon user">life max & regen</div>',
                             onclick:function(){
                                 app.dataObj.menuItems = []
                                 app.dataObj.g.p.ml *= 1.5
@@ -601,7 +587,7 @@
                           poss.push(
                              {
                               class:'center',
-                              html:'<div class="icon user">speed && size</div>',
+                              html:'<div class="icon user">speed & size</div>',
                               onclick:function(){
                                   app.dataObj.menuItems = []
                                   app.dataObj.g.p.speed++;
@@ -618,6 +604,12 @@
                           if(pots.indexOf(ri)==-1)
                             pots.push(ri)
                         }
+                        app.dataObj.menuItems.push(
+                          {
+                            class:'center',
+                            html:'<div class="icon user">UPGRADE</div>',
+                          },
+                        )
                         console.log(pots.length)
                         for (var i = 0; i < pots.length; i++) {
                           console.log(poss[pots[i]])
@@ -1063,7 +1055,9 @@
     </div>
     <img src="./imgs/bg.jpg" id="bg" style="display:none;"></img>
     <img id="villain" style="display:none;" src="./imgs/villain.png"></img>
-   <img id="hero" style="display:none;" src="./imgs/hero.png"></img>
+    <img id="hero" style="display:none;" src="./imgs/hero.png"></img>
+    <img id="turret" style="display:none;" src="./imgs/turret.png"></img>
+    <img id="powerup" style="display:none;" src="./imgs/powerup.png"></img>
     <!-- <img id="bullet" style="display:none;" src="./imgs/bullet.png"></img> -->
 </body>
 
