@@ -484,7 +484,7 @@
                       manaLimit:150,
                       damage:1,
                       limitBullets:1,
-                      bulletSpeed:10,
+                      bulletSpeed:15,
                       bulletSize:10,
                       bulletDamage:100,
                       canShoot:true,
@@ -689,7 +689,7 @@
                           }
                         }
                         app.dataObj.g.enemies.push({
-                          id:231232,
+                          id:app.rint(0,10000000),
                           x:epos.x,
                           y:epos.y,
                           d:10,//app.rint(5,10),
@@ -909,12 +909,31 @@
                   for (var i = app.dataObj.g.enemies.length - 1; i >= 0; i--) {
                     var e = app.dataObj.g.enemies[i];
                     if (app.getDistance(e.x,e.y,app.dataObj.g.p.x,app.dataObj.g.p.y)>app.dataObj.g.p.d+e.d) {
-                      if(e.x<app.dataObj.g.p.x) 
-                        e.x+=e.s
-                      else if(e.x>app.dataObj.g.p.x)  e.x-=e.s
-                      if(e.y<app.dataObj.g.p.y)
-                        e.y+=e.s
-                      else if(e.y>app.dataObj.g.p.y) e.y-=e.s
+                      var closest = findClosest(e,app.dataObj.g.enemies);
+                      if(!closest || app.getDistance(e.x,e.y,closest.x,closest.y)>e.d*2) {
+                        if(e.x<app.dataObj.g.p.x) 
+                          e.x+=e.s
+                        else if(e.x>app.dataObj.g.p.x)  e.x-=e.s
+                        if(e.y<app.dataObj.g.p.y)
+                          e.y+=e.s
+                        else if(e.y>app.dataObj.g.p.y) e.y-=e.s
+                      } else {
+                        var ra = app.rint(0,3);
+                        if(ra==0) {
+                          e.x+=e.s;
+                        }
+                        if(ra==1) {
+                          e.x-=e.s;
+                        }
+                        if(ra==2) {
+                          e.y+=e.s;
+                        }
+                        if(ra==3) {
+                          e.y+=e.s;
+                        }
+
+                      }
+
                     } else {
                       /*e.l-=app.dataObj.g.p.damage;
                       app.dataObj.g.p.l-=e.damage*/
@@ -1014,8 +1033,16 @@
         for (var i = 0; i < ce.length; i++) {
           var t = app.getDistance(ca.x,ca.y,ce[i].x,ce[i].y);
           if(t<min) {
-            min = t;
+            if(ca.id) {
+              if(ca.id!=ce[i].id) {
+                min = t;
+                index = i
+              }
+            } else {
+              min = t;
             index = i
+            }
+            
           }
         }
         return ce[index]
