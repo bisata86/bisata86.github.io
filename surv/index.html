@@ -520,7 +520,7 @@
                   menuItems : [],
                   reloader:0,
                   mainInterval:null,
-                  version:211445
+                  version:211530
                 }
               },
               mounted () {
@@ -1093,17 +1093,17 @@
 <body>
     <div id="app">
       <div>
-        
-        <canvas-item 
-          v-bind:g="dataObj.g"
-          v-bind:key="dataObj.reloader"
-          >
-        </canvas-item>
         <heromana-item 
           v-bind:p="dataObj.g.p"
           
           >
         </heromana-item>
+        <canvas-item 
+          v-bind:g="dataObj.g"
+          v-bind:key="dataObj.reloader"
+          >
+        </canvas-item>
+        
         <stats-item 
           v-bind:p="dataObj.g.p"
           v-bind:e="dataObj.g.enemies"
