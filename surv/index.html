@@ -577,7 +577,7 @@
                             onclick:function(){
                                 app.dataObj.menuItems = []
                                 app.dataObj.g.p.ml *= 1.5
-                                app.dataObj.g.p.l = app.dataObj.g.p.m 
+                                app.dataObj.g.p.l = app.dataObj.g.p.ml
                                 app.dataObj.g.p.regen*=2;
                                 app.start();
                             }
@@ -1080,22 +1080,17 @@
 <body>
     <div id="app">
       <div>
-        <heromana-item 
-          v-bind:p="dataObj.g.p"
-          
-          >
-        </heromana-item>
+        
         <canvas-item 
           v-bind:g="dataObj.g"
           v-bind:key="dataObj.reloader"
           >
         </canvas-item>
-        <!-- <herolife-item 
+        <heromana-item 
           v-bind:p="dataObj.g.p"
           
           >
-        </herolife-item> -->
-        
+        </heromana-item>
         <stats-item 
           v-bind:p="dataObj.g.p"
           >
