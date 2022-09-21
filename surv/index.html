@@ -914,30 +914,30 @@
                   for (var i = app.dataObj.g.enemies.length - 1; i >= 0; i--) {
                     var e = app.dataObj.g.enemies[i];
                     if (app.getDistance(e.x,e.y,app.dataObj.g.p.x,app.dataObj.g.p.y)>app.dataObj.g.p.d+e.d) {
-                      //var closest = findClosest(e,app.dataObj.g.enemies);
-                      //if(!closest || app.getDistance(e.x,e.y,closest.x,closest.y)>e.d*2) {
+                      var closest = findClosest(e,app.dataObj.g.enemies);
+                      if(!closest || app.getDistance(e.x,e.y,closest.x,closest.y)>e.d*2) {
                         if(e.x<app.dataObj.g.p.x) 
                           e.x+=e.s
                         else if(e.x>app.dataObj.g.p.x)  e.x-=e.s
                         if(e.y<app.dataObj.g.p.y)
                           e.y+=e.s
                         else if(e.y>app.dataObj.g.p.y) e.y-=e.s
-                      /*} else {
-                        var ra = app.rint(0,3);
+                      } else {
+                        var ra = app.rint(0,5);
                         if(ra==0) {
-                          e.x+=e.s;
+                          e.x+=e.d;
                         }
                         if(ra==1) {
-                          e.x-=e.s;
+                          e.x-=e.d;
                         }
                         if(ra==2) {
-                          e.y+=e.s;
+                          e.y+=e.d;
                         }
                         if(ra==3) {
-                          e.y+=e.s;
+                          e.y+=e.d;
                         }
 
-                      }*/
+                      }
 
                     } else {
                       /*e.l-=app.dataObj.g.p.damage;
@@ -1028,6 +1028,8 @@
 
                   if(app.dataObj.g.enemies.length==0) {
                     app.dataObj.g.limitEnemies*=1.5;
+                    if(app.dataObj.g.limitEnemies>500)
+                      app.dataObj.g.limitEnemies = 500;
                     app.dataObj.g.addedEnemies = false;
                   }
 
