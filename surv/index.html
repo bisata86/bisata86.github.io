@@ -349,9 +349,9 @@
                 
 
 
-
-                ctx.rect(250-25,250+this._props.g.p.d+15,50,5)
-                ctx.stroke()
+                //ctx.fillStyle = "black";
+                //ctx.rect(250-25,250+this._props.g.p.d+15,50,5)
+                //ctx.stroke()
                 ctx.fillStyle = "green";
                 ctx.fillRect(250-25,250+this._props.g.p.d+15,(this._props.g.p.l*50/this._props.g.p.ml),5)
 
@@ -395,6 +395,7 @@
                 }
                 ctx.fillStyle = "blue";
                 var img = document.getElementById("turret");
+                ctx.globalAlpha   = 1
                 for (var i = this._props.g.turrets.length - 1; i >= 0; i--) {
                     let e = this._props.g.turrets[i];
                     if(e.facing=='right') {
@@ -402,12 +403,19 @@
                     } else {
                       img = document.getElementById("tturret");
                     }
+                    //ctx.globalAlpha  = e.l/e.ml;
+                    console.log(e.l/e.ml,ctx.globalAlpha)
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
-                    /*ctx.beginPath();
-                    ctx.arc(e.x+gapx, e.y+gapy, e.d, 0, 2 * Math.PI);
-                    ctx.fill()
-                    ctx.closePath();*/
+
+                    /*ctx.rect(e.x+gapx-(e.d*2),e.y+gapy-(e.d*2),50,5)
+                    ctx.stroke()*/
+
+                    ctx.fillStyle = "green";
+                    ctx.fillRect(e.x+gapx-(e.d*2),e.y+gapy+(e.d)*2,(e.l*50/e.ml),5)
+
+
                 }
+                //ctx.globalAlpha   = 1;
               }
             })
             Vue.component('heromana-item', {
@@ -498,6 +506,7 @@
                       turretFrequency:2000,
                       turretDim:8,
                       turretDamage:20,
+                      turretStartLife:20,
                       turretLife:20,
                       turretLimit:0
                     },
@@ -590,15 +599,15 @@
                             }
                           )
                         }
-                        if(app.dataObj.g.p.d>5) {
+                        if(true || app.dataObj.g.p.d>5) {
                           poss.push(
                              {
                               class:'center',
-                              html:'<div class="icon user">speed & size</div>',
+                              html:'<div class="icon user">speed</div>',
                               onclick:function(){
                                   app.dataObj.menuItems = []
                                   app.dataObj.g.p.speed++;
-                                  app.dataObj.g.p.d-=5
+                                  //app.dataObj.g.p.d-=5
                                   app.start();
                               }
                             },
@@ -653,7 +662,7 @@
                     x:app.rint(app.dataObj.g.p.x-1000,app.dataObj.g.p.x+1000),
                     y:app.rint(app.dataObj.g.p.y-1000,app.dataObj.g.p.y+1000),
                     a:50,
-                    d:5
+                    d:10
                   });
                   }
 
@@ -694,8 +703,8 @@
                           y:epos.y,
                           d:10,//app.rint(5,10),
                           type:0,
-                          l:100+app.dataObj.g.p.kills/5,
-                          ml:100+app.dataObj.g.p.kills/5,
+                          l:100+app.dataObj.g.p.kills/50,
+                          ml:100+app.dataObj.g.p.kills/50,
                           s:1+app.dataObj.g.p.kills/1000,
                           damage:.1+app.dataObj.g.p.kills/1000
                         })
@@ -718,6 +727,7 @@
                           y:ano.y,
                           d:app.dataObj.g.p.turretDim,
                           l:app.dataObj.g.p.turretLife,
+                          ml:app.dataObj.g.p.turretStartLife,
                           canShoot:true,
                           damage:app.dataObj.g.p.bulletDamage,
                           shootFrequency:1000
@@ -860,8 +870,7 @@
                         t.canShoot = false
                         setTimeout(function(){
                           t.canShoot = true   
-                          console.log(t)
-                        },1000)
+                        },app.dataObj.g.p.shootFrequency)
                       }
                     }
                   }
@@ -872,7 +881,7 @@
                     var e = app.dataObj.g.p.bullets[i];
                     var a = findClosest(e,app.dataObj.g.enemies); //find closest
                     if(a) {
-                      var outer = 1000
+                      var outer = app.dataObj.g.w*10
                       if(e.x<app.dataObj.g.p.x-outer || e.x > app.dataObj.g.p.x+outer || e.y<app.dataObj.g.p.y-outer || e.y > app.dataObj.g.p.y+outer) {
                         //console.log('out')
                       }
