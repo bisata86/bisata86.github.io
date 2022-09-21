@@ -520,7 +520,7 @@
                   menuItems : [],
                   reloader:0,
                   mainInterval:null,
-                  version:211410
+                  version:211445
                 }
               },
               mounted () {
@@ -918,15 +918,20 @@
                   var updatedEnemies = []
                   for (var i = app.dataObj.g.enemies.length - 1; i >= 0; i--) {
                     var e = app.dataObj.g.enemies[i];
+                    //if(false)
                     if (app.getDistance(e.x,e.y,app.dataObj.g.p.x,app.dataObj.g.p.y)>app.dataObj.g.p.d+e.d) {
+                      
+                      var mid = midpoint(e.x,e.y,app.dataObj.g.p.x,app.dataObj.g.p.y)
+                      var cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
+                      while (cdistance>2) {
+                        mid = midpoint(e.x,e.y,mid[0],mid[1])
+                        cdistance = app.getDistance(e.x,e.y,mid[0],mid[1])
+                      }
+                      
                       var closest = findClosest(e,app.dataObj.g.enemies);
                       if(!closest || app.getDistance(e.x,e.y,closest.x,closest.y)>e.d*2) {
-                        if(e.x<app.dataObj.g.p.x) 
-                          e.x+=e.s
-                        else if(e.x>app.dataObj.g.p.x)  e.x-=e.s
-                        if(e.y<app.dataObj.g.p.y)
-                          e.y+=e.s
-                        else if(e.y>app.dataObj.g.p.y) e.y-=e.s
+                        e.x = mid[0]
+                        e.y = mid[1]
                       } else {
                         var ra = app.rint(0,4);
                         if(ra==0) {
@@ -1043,8 +1048,8 @@
                   if(app.dataObj.g.enemies.length==0) {
                     console.log(app.dataObj.g.limitEnemies)
                     app.dataObj.g.limitEnemies*=1.5;
-                    if(app.dataObj.g.limitEnemies>500)
-                      app.dataObj.g.limitEnemies = 500;
+                    if(app.dataObj.g.limitEnemies>400)
+                      app.dataObj.g.limitEnemies = 400;
                     app.dataObj.g.addedEnemies = false;
                   }
 
