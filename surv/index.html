@@ -356,19 +356,12 @@
                 ctx.fillRect(250-25,250+this._props.g.p.d+15,(this._props.g.p.l*50/this._props.g.p.ml),5)
 
                 ctx.fillStyle = "red";
-                var img = document.getElementById("villain");
+                var img;
                 for (var i = this._props.g.enemies.length - 1; i >= 0; i--) {
-                  var e = this._props.g.enemies[i];
-                    /*ctx.globalAlpha   = 1;   
-
-                    ctx.beginPath();
-                    ctx.arc(e.x+gapx, e.y+gapy, e.d, 0, 2 * Math.PI);
-                    ctx.stroke()*/
+                    var e = this._props.g.enemies[i];
                     ctx.globalAlpha   = .5+(e.l*.5/e.ml);
-                    /*ctx.fill()
-                    ctx.closePath();*/
-                    //ctx.globalAlpha   = 1; 
-                    //ctx.setScale(-1, 1)
+                    if(e.type==0) img = document.getElementById("villain")
+                    if(e.type==1) img = document.getElementById("villain2")
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
                 }
                 ctx.globalAlpha   = .5;
@@ -698,14 +691,15 @@
                             y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
                           }
                         }
+                        var rr = app.rint(0,10)
                         app.dataObj.g.enemies.push({
                           id:app.rint(0,10000000),
                           x:epos.x,
                           y:epos.y,
-                          d:10,//app.rint(5,10),
-                          type:0,
-                          l:100+app.dataObj.g.p.kills/50,
-                          ml:100+app.dataObj.g.p.kills/50,
+                          d:(rr==0 ? 20 : 10),
+                          type:(rr==0 ? 1 : 0),
+                          l:(rr==0 ? 100+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),//100+app.dataObj.g.p.kills/50,
+                          ml:(rr==0 ? 100+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),
                           s:1+app.dataObj.g.p.kills/1000,
                           damage:.1+app.dataObj.g.p.kills/1000
                         })
@@ -1110,6 +1104,7 @@
     </div>
     <img src="./imgs/bg.jpg" id="bg" style="display:none;"></img>
     <img id="villain" style="display:none;" src="./imgs/villain.png"></img>
+    <img id="villain2" style="display:none;" src="./imgs/villain2.png"></img>
     <img id="hero" style="display:none;" src="./imgs/hero.png"></img>
     <img id="turret" style="display:none;" src="./imgs/turret.png"></img>
     <img id="tturret" style="display:none;" src="./imgs/tturret.png"></img>
