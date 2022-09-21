@@ -397,7 +397,7 @@
                       img = document.getElementById("tturret");
                     }
                     //ctx.globalAlpha  = e.l/e.ml;
-                    console.log(e.l/e.ml,ctx.globalAlpha)
+                    //console.log(e.l/e.ml,ctx.globalAlpha)
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
 
                     /*ctx.rect(e.x+gapx-(e.d*2),e.y+gapy-(e.d*2),50,5)
@@ -416,9 +416,10 @@
               template: '<div class="manabar"><div v-bind:style="{width: (p.mana*100/p.manaLimit)+\'%\' }"></div></div>'
             })
             Vue.component('stats-item', {
-              props: ['p'],
+              props: ['p','e'],
               template: '<div class="">'+
               '<div class="">kills  {{p.kills}}</div>'+
+              '<div class="">Enemies left: {{e.length}}</div>'+
               //'<div class="">speed: {{p.speed}}</div>'+
               //'<div class="">size: {{p.d}}</div>'+
               //'<div class="">bullets speed: {{p.bulletSpeed}}</div>'+
@@ -622,7 +623,7 @@
                         )
                         console.log(pots.length)
                         for (var i = 0; i < pots.length; i++) {
-                          console.log(poss[pots[i]])
+                          //console.log(poss[pots[i]])
                           app.dataObj.menuItems.push(poss[pots[i]])
                         }
                   },
@@ -736,45 +737,47 @@
                       },app.dataObj.g.p.turretFrequency)
                   }
 
+                  var outer = 1000
                   // add bullets
                   var shoot = false;
                   //if(false)
                   if(app.dataObj.g.p.canShoot){// && app.dataObj.g.p.bullets.length<app.dataObj.g.p.limitBullets) {
                     var close = findClosest(app.dataObj.g.p,app.dataObj.g.enemies)
+
                     if(close) {
                       var e = app.dataObj.g.p
                       var x1 = app.dataObj.g.p.x;
                       var y1 = app.dataObj.g.p.y;
                       var x2 = close.x;
                       var y2 = close.y;
-                      var x3 = app.dataObj.g.p.x-250;
-                      var y3 = app.dataObj.g.p.y-250;
-                      var x4 = app.dataObj.g.p.x+250;
-                      var y4 = app.dataObj.g.p.y-250;
+                      var x3 = app.dataObj.g.p.x-outer;
+                      var y3 = app.dataObj.g.p.y-outer;
+                      var x4 = app.dataObj.g.p.x+outer;
+                      var y4 = app.dataObj.g.p.y-outer;
                       var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                       if(inte && inte.seg2 && app.dataObj.g.p.y>close.y) {
                         shoot = true;
                       } else  {
-                        var x3 = app.dataObj.g.p.x-250;
-                        var y3 = app.dataObj.g.p.y+250;
-                        var x4 = app.dataObj.g.p.x+250;
-                        var y4 = app.dataObj.g.p.y+250;
+                        var x3 = app.dataObj.g.p.x-outer;
+                        var y3 = app.dataObj.g.p.y+outer;
+                        var x4 = app.dataObj.g.p.x+outer;
+                        var y4 = app.dataObj.g.p.y+outer;
                         var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                         if(inte && inte.seg2 && app.dataObj.g.p.y<close.y) {
                           shoot = true;
                         } else {
-                          var x3 = app.dataObj.g.p.x-250;
-                          var y3 = app.dataObj.g.p.y-250;
-                          var x4 = app.dataObj.g.p.x-250;
-                          var y4 = app.dataObj.g.p.y+250;
+                          var x3 = app.dataObj.g.p.x-outer;
+                          var y3 = app.dataObj.g.p.y-outer;
+                          var x4 = app.dataObj.g.p.x-outer;
+                          var y4 = app.dataObj.g.p.y+outer;
                           var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                           if(inte && inte.seg2 && app.dataObj.g.p.x>close.x) {
                             shoot = true;
                           } else {
-                            var x3 = app.dataObj.g.p.x+250;
-                            var y3 = app.dataObj.g.p.y-250;
-                            var x4 = app.dataObj.g.p.x+250;
-                            var y4 = app.dataObj.g.p.y+250;
+                            var x3 = app.dataObj.g.p.x+outer;
+                            var y3 = app.dataObj.g.p.y-outer;
+                            var x4 = app.dataObj.g.p.x+outer;
+                            var y4 = app.dataObj.g.p.y+outer;
                             var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                             if(inte && inte.seg2 && app.dataObj.g.p.x<close.x) {
                               shoot = true;
@@ -923,7 +926,7 @@
                           e.y+=e.s
                         else if(e.y>app.dataObj.g.p.y) e.y-=e.s
                       } else {
-                        var ra = app.rint(0,5);
+                        var ra = app.rint(0,4);
                         if(ra==0) {
                           e.x+=e.d;
                         }
@@ -1027,9 +1030,10 @@
                   app.dataObj.reloader++
 
                   if(app.dataObj.g.enemies.length==0) {
+                    console.log(app.dataObj.g.limitEnemies)
                     app.dataObj.g.limitEnemies*=1.5;
-                    if(app.dataObj.g.limitEnemies>500)
-                      app.dataObj.g.limitEnemies = 500;
+                    if(app.dataObj.g.limitEnemies>1000)
+                      app.dataObj.g.limitEnemies = 1000;
                     app.dataObj.g.addedEnemies = false;
                   }
 
@@ -1090,6 +1094,7 @@
         </heromana-item>
         <stats-item 
           v-bind:p="dataObj.g.p"
+          v-bind:e="dataObj.g.enemies"
           >
         </stats-item>
       <div>
