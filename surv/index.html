@@ -698,10 +698,11 @@
                           y:epos.y,
                           d:(rr==0 ? 20 : 10),
                           type:(rr==0 ? 1 : 0),
-                          l:(rr==0 ? 100+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),//100+app.dataObj.g.p.kills/50,
-                          ml:(rr==0 ? 100+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),
+                          l:(rr==0 ? 500+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),//100+app.dataObj.g.p.kills/50,
+                          ml:(rr==0 ? 500+app.dataObj.g.p.kills/5 : 100+app.dataObj.g.p.kills/50),
                           s:1+app.dataObj.g.p.kills/1000,
-                          damage:.1+app.dataObj.g.p.kills/1000
+                          damage:.1+app.dataObj.g.p.kills/1000,
+                          manaAmount:(rr==0 ? 100 : 50),
                         })
                       //}
                     }
@@ -972,7 +973,7 @@
                       }*/
 
 
-                      app.dataObj.g.p.mana+=50
+                      app.dataObj.g.p.mana+=e.manaAmount
 
 
                       if(app.dataObj.g.p.mana>=app.dataObj.g.p.manaLimit) {
