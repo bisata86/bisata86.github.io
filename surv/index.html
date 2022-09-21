@@ -501,7 +501,7 @@
                       kills:0,
                       regen:.1,
                       aurea:0,
-                      aureaDamage:5,
+                      aureaDamage:2,
                       canTurret:true,
                       turretFrequency:2000,
                       turretDim:8,
@@ -577,6 +577,7 @@
                             onclick:function(){
                                 app.dataObj.menuItems = []
                                 app.dataObj.g.p.ml *= 1.5
+                                app.dataObj.g.p.l = app.dataObj.g.p.m 
                                 app.dataObj.g.p.regen*=2;
                                 app.start();
                             }
