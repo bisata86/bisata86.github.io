@@ -520,7 +520,7 @@
                   menuItems : [],
                   reloader:0,
                   mainInterval:null,
-                  version:211209
+                  version:211400
                 }
               },
               mounted () {
@@ -654,14 +654,14 @@
     </script>
     <script type="text/javascript">
       function engine(app) {
-                  if(app.dataObj.g.collectables.length<=5) {
+                  /*if(app.dataObj.g.collectables.length<=5) {
                   app.dataObj.g.collectables.push({
                     x:app.rint(app.dataObj.g.p.x-1000,app.dataObj.g.p.x+1000),
                     y:app.rint(app.dataObj.g.p.y-1000,app.dataObj.g.p.y+1000),
                     a:50,
                     d:10
                   });
-                  }
+                  }*/
 
 
                   // add enemy
@@ -694,7 +694,7 @@
                             y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
                           }
                         }
-                        var rr = app.rint(0,10)
+                        var rr = app.rint(0,50)
                         app.dataObj.g.enemies.push({
                           id:app.rint(0,10000000),
                           x:epos.x,
@@ -972,6 +972,14 @@
                       updatedEnemies.push(e)
                     } else {
                       app.dataObj.g.p.kills++
+                      if(e.type==1) {
+                        app.dataObj.g.collectables.push({
+                          x:e.x,
+                          y:e.y,
+                          a:50,
+                          d:10
+                        });
+                      }
 
                       /*if(app.dataObj.g.p.kills%30==0) {
                         app.dataObj.g.limitEnemies++;
