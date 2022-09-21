@@ -694,7 +694,8 @@
                             y:app.rint(app.dataObj.g.p.y-250-20,app.dataObj.g.p.y+250+20)
                           }
                         }
-                        var rr = app.rint(0,50)
+                        var rr = s;//app.rint(0,50)
+                        if(app.dataObj.g.limitEnemies<100) rr = 1
                         app.dataObj.g.enemies.push({
                           id:app.rint(0,10000000),
                           x:epos.x,
@@ -1027,13 +1028,8 @@
                   for (var i = app.dataObj.g.collectables.length - 1; i >= 0; i--) {
                     var e = app.dataObj.g.collectables[i];
                     if (app.getDistance(e.x,e.y,app.dataObj.g.p.x,app.dataObj.g.p.y)<app.dataObj.g.p.d+e.d) {
-
-
                       app.stop()
                       app.upgrade()
-                      
-                    
-
                     } else {
                       updatedCollectables.push(e)
                     }
