@@ -416,10 +416,11 @@
               template: '<div class="manabar"><div v-bind:style="{width: (p.mana*100/p.manaLimit)+\'%\' }"></div></div>'
             })
             Vue.component('stats-item', {
-              props: ['p','e'],
+              props: ['p','e','v'],
               template: '<div class="">'+
               '<div class="">kills  {{p.kills}}</div>'+
-              '<div class="">Enemies left: {{e.length}}</div>'+
+              '<div class="">Enemies left {{e.length}}</div>'+
+              '<div class="">v {{v}}</div>'+
               //'<div class="">speed: {{p.speed}}</div>'+
               //'<div class="">size: {{p.d}}</div>'+
               //'<div class="">bullets speed: {{p.bulletSpeed}}</div>'+
@@ -518,7 +519,8 @@
                   },
                   menuItems : [],
                   reloader:0,
-                  mainInterval:null
+                  mainInterval:null,
+                  version:2111
                 }
               },
               mounted () {
@@ -737,7 +739,7 @@
                       },app.dataObj.g.p.turretFrequency)
                   }
 
-                  var outer = 1000
+                  var outer = 250
                   // add bullets
                   var shoot = false;
                   //if(false)
@@ -814,34 +816,34 @@
                         var y1 = t.y;
                         var x2 = close.x;
                         var y2 = close.y;
-                        var x3 = t.x-250;
-                        var y3 = t.y-250;
-                        var x4 = t.x+250;
-                        var y4 = t.y-250;
+                        var x3 = t.x-outer;
+                        var y3 = t.y-outer;
+                        var x4 = t.x+outer;
+                        var y4 = t.y-outer;
                         var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                         if(inte && inte.seg2 && t.y>close.y) {
                           shoot = true;
                         } else  {
-                          var x3 = t.x-250;
-                          var y3 = t.y+250;
-                          var x4 = t.x+250;
-                          var y4 = t.y+250;
+                          var x3 = t.x-outer;
+                          var y3 = t.y+outer;
+                          var x4 = t.x+outer;
+                          var y4 = t.y+outer;
                           var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                           if(inte && inte.seg2 && t.y<close.y) {
                             shoot = true;
                           } else {
-                            var x3 = t.x-250;
-                            var y3 = t.y-250;
-                            var x4 = t.x-250;
-                            var y4 = t.y+250;
+                            var x3 = t.x-outer;
+                            var y3 = t.y-outer;
+                            var x4 = t.x-outer;
+                            var y4 = t.y+outer;
                             var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                             if(inte && inte.seg2 && t.x>close.x) {
                               shoot = true;
                             } else {
-                              var x3 = t.x+250;
-                              var y3 = t.y-250;
-                              var x4 = t.x+250;
-                              var y4 = t.y+250;
+                              var x3 = t.x+outer;
+                              var y3 = t.y-outer;
+                              var x4 = t.x+outer;
+                              var y4 = t.y+outer;
                               var inte = line_intersect(x1, y1, x2, y2, x3, y3, x4, y4)
                               if(inte && inte.seg2 && t.x<close.x) {
                                 shoot = true;
@@ -1095,6 +1097,7 @@
         <stats-item 
           v-bind:p="dataObj.g.p"
           v-bind:e="dataObj.g.enemies"
+          v-bind:v="dataObj.version"
           >
         </stats-item>
       <div>
