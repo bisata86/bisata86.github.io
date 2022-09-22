@@ -365,7 +365,7 @@
                     ctx.drawImage(img, e.x+gapx-(e.d*2), e.y+gapy-(e.d*2), e.d*4, e.d*4);
                 }
                 ctx.globalAlpha   = .5;
-                ctx.fillStyle = "black";
+                ctx.fillStyle = "rgb(10,100,"+this._props.g.p.bulletDamage%250+")";
                 var img = document.getElementById("bullet");
                 for (var i = this._props.g.p.bullets.length - 1; i >= 0; i--) {
                     let e = this._props.g.p.bullets[i];
