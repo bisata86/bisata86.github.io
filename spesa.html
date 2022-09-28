@@ -1,0 +1,312 @@
+
+<html lang="it">
+
+<head>
+    <title>SPESA</title>
+    <meta name="theme-color" content="black">
+    <meta name="msapplication-navbutton-color" content="black">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+    <style type="text/css">
+        .action {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+        }
+        .gensPesa {
+            bottom: 50px;
+        }
+        .addPasto {
+            width: 30px;
+            height: 30px;
+        }
+        .addPasto:before, .addPasto:after {
+          position: absolute;
+          left: 0px;
+          right: 0px;
+          margin: auto;
+          content: ' ';
+          height: 100%;
+          width: 2px;
+          background-color: #333;
+        }
+        .addPasto:before {
+          transform: rotate(90deg);
+        }
+        .addPasto:after {
+          
+        }
+        .remove {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            nobackground: black;
+            vertical-align: middle;
+            margin-left: 10px ;
+             position: relative;
+        }
+        .remove:before, .remove:after {
+          position: absolute;
+          left: 0px;
+          right: 0px;
+          margin: auto;
+          content: ' ';
+          height: 100%;
+          width: 2px;
+          background-color: #333;
+        }
+        .remove:before {
+          transform: rotate(45deg);
+        }
+        .remove:after {
+          transform: rotate(-45deg);
+        }
+        .erase {
+            left: 10px;
+        }
+        .ing.bar {
+           text-decoration: line-through; 
+        }
+        #text {
+           width: 100%;
+        }
+        .sugg {
+            padding: 5px;
+        }
+    </style>
+    <script type="text/javascript">
+                var ricette = [
+            {
+                name:'pasta al pesto',
+                ings:[
+                    'pasta',
+                    'pesto'
+                ]
+            },
+            {
+                name:'pasta al pesce',
+                ings:[
+                    'pasta',
+                    'pesce per pasta'
+                ]
+            },
+            {
+                name:'uova',
+                ings:[
+                    'uova',
+                    'burro',
+                    'cipolla'
+                ]
+            },
+            {
+                name:'risotto',
+                ings:[
+                    'riso',
+                    'cipolla'
+                ]
+            },
+            {
+                name:'formaggio',
+                ings:[
+                    'formaggio'
+                ]
+            },
+            {
+                name:'yoghurt',
+                ings:[
+                    'yoghurt',
+                    'bisnetti'
+                ]
+            },
+            {
+                name:'hamburger',
+                ings:[
+                    'hamburger',
+                ]
+            },
+            {
+                name:'insalata',
+                ings:[
+                    'insalata',
+                    'olio',
+                    'aceto',
+                    'sale fino'
+                ]
+            },
+            {
+                name:'gelato',
+                ings:[
+                    'gelato',
+                ]
+            },
+            {
+                name:'caprese',
+                ings:[
+                    'prosciutto crudo',
+                    'mozzarella',
+                ]
+            },
+            {
+                name:'pizza',
+                ings:[
+                    'pasta per pizza',
+                    'mozzarella',
+                ]
+            },
+            {
+                name:'gamberetti in padella',
+                ings:[
+                    'gamberetti'
+                ]
+            },
+            {
+                name:'dentifricio',
+                ings:[
+                    'dentifricio'
+                ]
+            },
+            {
+                name:'torta di mele',
+                ings:[
+                    'mele',
+                    'farina',
+                    'lievito',
+                    'olio di semi',
+                    'yoghurt'
+                ]
+            },
+
+
+        ]
+    </script>
+    <script type="text/javascript">
+
+        function GetId() {
+            var id = Math.floor(Math.random() * 1000000)
+            return id
+        }
+
+        function findRicetta(n) {
+            for (var i = ricette.length - 1; i >= 0; i--) {
+                if(ricette[i].name==n) {
+                    return ricette[i];
+                }
+            }
+        }
+
+
+        var pasti = [];
+        
+        function drawPasti() {
+            $('.pasto').remove();
+           for (var i = pasti.length - 1; i >= 0; i--) {
+               $('body').append('<div data-id="'+pasti[i].id+'" class="pasto">'+pasti[i].name+'<div class="remove"></div></div>')
+           }
+           localStorage.setItem('pasti',JSON.stringify(pasti))
+           $('.genSpesa').remove();
+           if(pasti.length) {
+               $('body').append('<div class="action genSpesa">spesa</div>')
+               $('.genSpesa').on('click',function() {
+                   genSpesa();
+                })
+            }
+            if($('.addPasto').length==0) {
+                $('body').append('<div class="action addPasto"></div>')
+                $('.addPasto').on('click',function() {
+                    addPasto()
+                })
+            }
+            $('.remove').on('click',function() {
+                var newPasti = [];
+                for (var i = 0; i < pasti.length; i++) {
+                    if( pasti[i].id == $(this).closest('.pasto').attr('data-id') ) {
+
+                    } else {
+                       newPasti.push(pasti[i]) 
+                    }
+                }
+                pasti = newPasti;
+                drawPasti(); 
+            })
+        }
+
+
+        $(function() {
+            $('body').append('<div class="action addPasto"></div>')
+            $('.addPasto').on('click',function() {
+                addPasto()
+            })
+            /*if(localStorage.getItem('pasti')) {
+                $('body').append('<div class="action erase">cancella</div>')
+                $('.erase').on('click',function() {
+                    localStorage.removeItem('pasti');
+                    window.location.reload();
+                })
+            }*/
+            var ret = localStorage.getItem('pasti')
+        if(ret) {
+            pasti = JSON.parse(ret)
+        }
+        drawPasti()
+
+
+        });
+
+        function addPasto() {
+            $('.genSpesa').remove();
+            $('.addPasto').remove();
+            $('.pasto').remove();
+            $('body').append('<div class="form"></div>')
+            $('.form').append('<input type="text" id="text"></input>')
+            //$('.form').append('<input type="button" value="go"></input>')
+            $('#text').focus();
+            $('#text').on('keyup',function() {
+                $('.sugg').remove();
+                if($(this).val()) {
+                    for (var i = ricette.length - 1; i >= 0; i--) {
+                        if(ricette[i].name.indexOf($(this).val())!=-1) {
+                            $('.form').append('<div class="sugg">'+ricette[i].name+'</div>')
+                        }
+                    }
+                    $('.sugg').on('click',function() {
+                        var el = findRicetta($(this).html());
+                        el.id = GetId()
+                        pasti.push(JSON.parse(JSON.stringify(el)))
+                        $('.form').remove();
+                        drawPasti();
+                    })
+                }
+            })
+        }
+        function genSpesa() {
+            $('.pasto').remove();
+            $('.ing').remove();
+            $('.genSpesa').remove();
+            $('.addPasto').remove();
+            for (var i = 0; i < pasti.length; i++) {
+                for (var k = 0; k < pasti[i].ings.length; k++) {
+                    $('body').append('<div class="ing">'+pasti[i].ings[k]+'</div>')
+                }
+            }
+            $('body').append('<div class="action indietro">indietro</div>')
+            $('.indietro').on('click',function() {
+                $('.indietro').remove();
+                $('.ing').remove();
+                drawPasti()
+            })
+            $('.ing').on('click',function() {
+                $(this).toggleClass('bar')
+            })
+        }
+
+        
+
+    </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
