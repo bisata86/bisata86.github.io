@@ -264,7 +264,7 @@
                 $('.sugg').remove();
                 if($(this).val()) {
                     for (var i = ricette.length - 1; i >= 0; i--) {
-                        if(ricette[i].name.indexOf($(this).val())!=-1) {
+                        if(ricette[i].name.indexOf($(this).val().toLowerCase())!=-1) {
                             $('.form').append('<div class="sugg">'+ricette[i].name+'</div>')
                         }
                     }
@@ -283,11 +283,20 @@
             $('.ing').remove();
             $('.genSpesa').remove();
             $('.addPasto').remove();
+            var redoit = [];
             for (var i = 0; i < pasti.length; i++) {
                 for (var k = 0; k < pasti[i].ings.length; k++) {
+                    /*if(redoit.indexOf(pasti[i].ings[k])==-1) {
+                        redoit.push(pasti[i].ings[k])
+                    } else {
+                       redoit[redoit.indexOf(pasti[i].ings[k])] = redoit[redoit.indexOf(pasti[i].ings[k])]+' +1 '
+                    }*/
                     $('body').append('<div class="ing">'+pasti[i].ings[k]+'</div>')
                 }
             }
+            /*for (var k = 0; k < redoit.length; k++) {
+                $('body').append('<div class="ing">'+redoit[k]+'</div>')
+            }*/
             $('body').append('<div class="action indietro">indietro</div>')
             $('.indietro').on('click',function() {
                 $('.indietro').remove();
