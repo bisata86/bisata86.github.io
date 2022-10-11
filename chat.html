@@ -1,0 +1,60 @@
+
+<html lang="it">
+
+<head>
+    <title>M</title>
+    <meta name="theme-color" content="black">
+    <meta name="msapplication-navbutton-color" content="black">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.1.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+        .bar {
+            width: 100vw;
+            height: 1px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+        }
+        .pixel {
+            background: black;
+            display: inline-block;
+            position: absolute;
+        }
+    </style>
+    <script type="text/javascript">
+
+
+
+        $(function() {
+
+            var num = 10000;
+            var w = $(window).width()/num
+
+            $('body').append('<div class="bar"></div>')
+            for (var i = 0; i <= num; i++) {
+                if(i%2==0) {
+
+                }
+                else {
+                    $('.bar').append('<div class="pixel" style="width:'+w+'px;height:100%;left:'+(i*w)+'px;"></div>')
+                }
+            }
+        });
+
+
+
+        
+
+    </script>
+
+</head>
+
+<body>
+
+</body>
+
+</html>
