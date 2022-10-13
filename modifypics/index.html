@@ -397,14 +397,14 @@
         }
         .dims {
             position: absolute;
-            top:0px;
-            right:0px;
             z-index: 10;
+            width: 100%;
+            text-align: center;
         }
         .settings, .menu, .dims {
             z-index: 51;
         }
-        .mobile .plus, .mobile .minus {
+        .plus, .minus {
             display: none !important;
         }
         /*.menu, .menul, select {
@@ -4418,28 +4418,26 @@
                     $(window).on('mousewheel',function(e) {
                         //if($('.settings').length==0) {                    
                             if(e.originalEvent.wheelDelta  < 0) {
-                                $('.minus').click()
+                                //$('.minus').click()
+                                imgZoom(.9,e)
                             }else {
-                               $('.plus').click()
+                               imgZoom(1.1,e)
+                               //$('.plus').click()
                             }
                         //}
                     })
 
-
-                    $('.plus').on('click', function() {
-                        mult = mult*1.1
+                    function imgZoom(a,e) {
+                        mult = mult*a
                         ctx.clearRect(0, 0, $(window).width(), $(window).height())
-
-                        imagParams.fx*=1.1
-                        imagParams.fy*=1.1
-                        imagParams.fw*=1.1
-                        imagParams.fh*=1.1
-
-                        originaParams.fx*=1.1
-                        originaParams.fy*=1.1
-                        originaParams.fw*=1.1
-                        originaParams.fh*=1.1
-
+                        imagParams.fx*=a
+                        imagParams.fy*=a
+                        imagParams.fw*=a
+                        imagParams.fh*=a
+                        originaParams.fx*=a
+                        originaParams.fy*=a
+                        originaParams.fw*=a
+                        originaParams.fh*=a
                         var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
                         ctx.save();
                         ctx.translate(center.x, center.y);
@@ -4457,40 +4455,7 @@
                             imagParams.fh,
                         );
                         ctx.restore();
-                    })
-                    $('.minus').on('click', function() {
-                        mult = mult/1.1
-                        ctx.clearRect(0, 0, $(window).width(), $(window).height())
-                        
-                        imagParams.fx/=1.1
-                        imagParams.fy/=1.1
-                        imagParams.fw/=1.1
-                        imagParams.fh/=1.1
-
-                        originaParams.fx/=1.1
-                        originaParams.fy/=1.1
-                        originaParams.fw/=1.1
-                        originaParams.fh/=1.1
-
-                         var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
-                        ctx.save();
-                        ctx.translate(center.x, center.y);
-                        ctx.rotate(cangle);
-                        ctx.translate(-center.x,-center.y);
-                        ctx.drawImage(
-                            img,
-                            imagParams.sx,
-                            imagParams.sy,
-                            imagParams.sw,
-                            imagParams.sh,
-                            imagParams.fx,
-                            imagParams.fy,
-                            imagParams.fw,
-                            imagParams.fh,
-                        );
-                        ctx.restore();
-                    })
-
+                    }
 
                     $('#imgCanvas').on(events.start, function(e) {
 
@@ -4589,9 +4554,7 @@
                             );
                             ctx.restore();
                         } else {
-                            console.log('cane',touchCounter,prevTouchCounter)
-
-
+                            
                             if (e.touches) {
 
                             try {
@@ -4760,7 +4723,14 @@
             var url = (window.webkitURL || window.URL).createObjectURL(blob);
             //location.href = url; // <-- Download!
             $('.downloadMe').remove();
-            window.open(url,'_blank');
+            //window.open(url,'_blank');
+
+              var link = document.createElement('a');
+              link.href = url;  // use realtive url 
+              link.download = 'img'+new Date().getTime()+'.png';
+              document.body.appendChild(link);
+              link.click();   
+
 
 
         }
@@ -4814,7 +4784,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.1</div>
+        <div class="version">v4.2</div>
     </body>
 
 </html>
