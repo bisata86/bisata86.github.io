@@ -44,7 +44,29 @@
         .selectImage {
             position: absolute;
         }
-
+        select {
+            -webkit-appearance: button;
+            -moz-appearance: button;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -webkit-padding-end: 20px;
+            -moz-padding-end: 20px;
+            -webkit-padding-start: 2px;
+            -moz-padding-start: 2px;
+            background-position: center right;
+            background-repeat: no-repeat;
+            border: 1px solid #AAA;
+            border-radius: 2px;
+            box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+            color: #555;
+            font-size: inherit;
+            margin: 0;
+            overflow: hidden;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
         .menu {
             position: absolute;
             bottom: 0px;
@@ -74,13 +96,20 @@
 
         .settings, .gamone {
             position: absolute;
-            bottom: 5px;
+            bottom: 0px;
             /* right: 0px; */
             /* left: 0px; */
             z-index: 10;
             /* margin: auto; */
             text-align: center;
             width: 100%;
+        }
+        .settingsCont {
+           width: fit-content;
+            background: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px 20px 0 0; 
         }
 
         .selected {
@@ -305,7 +334,6 @@
 
         .thick {
             display: inline-block;
-            width: 80%;
             margin-right: 10px;
         }
 
@@ -3877,8 +3905,8 @@
                     $('.menu').hide();
                     $('.menul').hide();
                     if ($('.settings').length == 0)
-                        $('body').append('<div class="settings"></div>')
-                    $('.settings').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div>')
+                        $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
+                    $('.settingsCont').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div>')
 
 
 
@@ -3979,7 +4007,7 @@
                         $('body').append('<div class="overlay"></div>')
                         var k = linew*mainZoom
                         console.log('k',k)
-                        $('.overlay').html('<div class="color"><input type="color" value="' + color + '"/></div><div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div><div class="button setBrush"></div></div>')
+                        $('.overlay').html('<div class="color"><input type="color" value="' + color + '"/></div><div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="settingsCont"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div><div class="button setBrush"></div></div></div>')
                         $('.lineDisp').css('width',k)
                         $('.lineDisp').css('height',k)
                         $('.lineDisp').on('click', function(e) {
@@ -4265,8 +4293,8 @@
                 $('body').append('<img id="tempImg" src="' + url + '"></img>')
                 img.onload = function(e) {
                     if ($('.settings').length == 0)
-                        $('body').append('<div class="settings"></div>')
-                    $('.settings').html('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="minus button"></div><div class="move button selected"></div><div class="rotate button"></div>');
+                        $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
+                    $('.settingsCont').html('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="minus button"></div><div class="move button selected"></div><div class="rotate button"></div>');
                     //<div class="cut button"></div>
                     $('.menu').hide();
                     $('.menul').hide();
@@ -4323,7 +4351,7 @@
                     var originaParams  = {};
                     var tmainZoom = mainZoom;
 
-                    $('#opacitySelector').on('change', function(e) {
+                    $('#opacitySelector').on('input', function(e) {
                         ctx.globalAlpha = $(this).val();
                         ctx.clearRect(0, 0, $(window).width(), $(window).height())
                         ctx.drawImage(
@@ -4784,7 +4812,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.2</div>
+        <div class="version">v4.3</div>
     </body>
 
 </html>
