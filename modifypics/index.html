@@ -31,12 +31,14 @@
             right:0px;
             top:0px;
             bottom:0px;
-            margin: auto;
+            nomargin: auto;
             
         }
         #canvas {
-           transition-duration:.1s;
            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
+           /*background: url("https://img.freepik.com/free-vector/best-scene-nature-landscape-mountain-river-forest-with-sunset-evening-warm-tone-illustration_1150-39403.jpg?w=2000");
+           background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;*/
         }
 
         .selectImage {
@@ -70,7 +72,7 @@
             transform-origin: right;
         }
 
-        .settings {
+        .settings, .gamone {
             position: absolute;
             bottom: 5px;
             /* right: 0px; */
@@ -194,7 +196,7 @@
         .cut.selected, .rotate.selected {
             background-color: red;
         }
-        .setImg {
+        .setImg, .setBrush {
             padding: 0 !important;
             width: 40px;
             height: 30px;
@@ -250,6 +252,17 @@
             display: inline-block;
             
         }
+        .brush {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://uxwing.com/wp-content/themes/uxwing/download/tools-equipment-construction/settings-icon.png'); 
+            background-size: 90% 90%;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            
+        }
         .redo {
             padding: 0 !important;
             width: 30px;
@@ -287,11 +300,18 @@
 
         .inputfile {
             display: none;
+
         }
 
-        .color,
         .thick {
             display: inline-block;
+            display: inline-block;
+    width: 84%;
+
+        }
+
+        .color {
+            display: none;
         }
 
         .color input {
@@ -388,10 +408,25 @@
         .mobile .plus, .mobile .minus {
             display: none !important;
         }
-        /*.mobile .menul {
+        /*.menu, .menul, select {
             display: none !important;
+        }*/
+        .overlay {
+            z-index: 1000;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: rgba(0,0,0,.5);
         }
-        */
+        .lineDisp {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            border-radius: 100%;
+        }
     </style>
     <script type="text/javascript">
         /*! jQuery v3.4.0 | (c) JS Foundation and other contributors | jquery.org/license */ ! function(e, t) {
@@ -3628,6 +3663,7 @@
         var events = {};
         var wcan;
         var hcan;
+        var linew = 5;
         var mainZoom = 1;
         $(document).ready(function() {
             wcan = $(window).width();
@@ -3696,6 +3732,7 @@
                     $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
                     $('#canvas').css('right','initial');
                 //}
+                dragEvents()
             })
             $('.changeWH').on('change',function(){
                 n = $(this).find('option:selected').data('h')
@@ -3720,11 +3757,12 @@
                     $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
                     $('#canvas').css('bottom','initial');
                 //}
+                dragEvents()
             })
             addMenu();
             var prev = {};
             var color = 'black';
-            var linew = 5;
+
             
             function addMenu() {
                 $('body').append('<div class="menu"></div>')
@@ -3733,8 +3771,8 @@
                 //$('.menu').append('<div class="text"></div>')
                 $('.menu').append('<div class="save"></div>')
                 $('.menu').append('<div class="clear"></div>')
-                $('body').append('<div class="menul"></div>')
-                $('.menul').append('<div class="drag"></div>')
+                /*$('body').append('<div class="menul"></div>')
+                $('.menul').append('<div class="drag"></div>')*/
                 /*$('.menul').append('<div class="zoomin"></div>')
                 $('.menul').append('<div class="zoomout"></div>')*/
                 $('.save').on('click', function() {
@@ -3839,12 +3877,13 @@
                     $('.menul').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"></div>')
-                    $('.settings').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="color"><input type="color" value="' + color + '"/></div><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 500 + '" min="1" step="1"/></div>')
+                    $('.settings').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div>')
+
+
+
                     $('.undo').addClass('disabled');
                     $('.redo').addClass('disabled');
-                    $('.color input').on('change', function(e) {
-                        color = $(this).val();
-                    })
+                    
                     var write = false;
                     $('.setImg').on('click', function(e) {
                         $('.settings').remove();
@@ -3933,7 +3972,34 @@
 
                     
                     })
-
+                    $('.brush').on('click', function(e) {
+                        $('.overlay').remove();
+                        $('.settings').hide();
+                        $('body').append('<div class="overlay"></div>')
+                        var k = linew*mainZoom
+                        console.log('k',k)
+                        $('.overlay').html('<div class="color"><input type="color" value="' + color + '"/></div><div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div><div class="button setBrush"></div></div>')
+                        $('.lineDisp').css('width',k)
+                        $('.lineDisp').css('height',k)
+                        $('.lineDisp').on('click', function(e) {
+                            $('.color input').click()
+                        })
+                        $('#linew').on('input', function(e) {
+                            linew = $(this).val()
+                            var k = linew*mainZoom
+                            $('.lineDisp').css('width',k)
+                            $('.lineDisp').css('height',k)
+                        })
+                        $('.color input').on('input', function(e) {
+                            color = $(this).val();
+                            $('.lineDisp').css('background',color)
+                        })
+                        $('.setBrush').on('click', function(e) {
+                            $('.overlay').remove();
+                            $('.settings').show();
+                        })
+                    })
+                    
                     $('#canvas').on(events.move, function(e) {
 
                         if (e.touches) {
@@ -3961,7 +4027,7 @@
                                 x: (((e.clientX))-cdrag.x)/mainZoom,
                                 y: (((e.clientY))-cdrag.y)/mainZoom,
                             }
-                            linew = $('#linew').val()
+                            //linew = $('#linew').val()
                             line(curr, prev, ctx, color, linew)
                             prev = JSON.parse(JSON.stringify(curr))
 
@@ -3979,26 +4045,6 @@
                         $('.redo').addClass('disabled');
                     })
                 })
-                $('.drag').on('click', function() {
-                    if(true || $('#canvas').width()<$(window).width()) {
-                        $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
-                        $('#canvas').css('right','initial');
-                    }
-                    if(true || $('#canvas').height()<$(window).height()) {
-                        $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
-                        $('#canvas').css('bottom','initial');
-                    }
-                    dragEvents()
-                   
-                })
-                
-                //$('.drag').click();
-                $('.zoomout').on('click', function() {
-                    zoomOut();
-                });
-                $('.zoomin').on('click', function() {
-                    zoomIn()
-                });
 
                 var input = document.getElementById('input');
                 input.addEventListener('change', handleFiles);
@@ -4010,38 +4056,29 @@
                 $('body').css('height',$(window).height());
                 $('body').css('width',$(window).width());
             })
-            var mousewheelActive = true;
             $(window).on('mousewheel',function(e) {
-                if(mousewheelActive) {
-                    mousewheelActive = false
+                if($('.settings').length==0) {                    
                     if(e.originalEvent.wheelDelta  < 0) {
-                        //scroll down
-                        zoomOut()
+                        zoom(0.9,e)
                     }else {
-                        //scroll up
-                        zoomIn()
+                        zoom(1.1,e)
                     }
-                    dragEvents()
-                    setTimeout(function(){
-                        mousewheelActive = true
-                    },200)
+                    dragEvents() 
                 }
             })
-
         })
 
 
         function dragEvents() {
-            var tx = ($(window).width()-$('#canvas').width())/2
-            var ty = ($(window).height()-$('#canvas').height())/2
+            //console.log('dragEvents')
             var startPos = {x:0,y:0};
             var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
-            if(!$('#canvas').attr('moved'))
+            /*if(!$('#canvas').attr('moved'))
                 cdrag = {x:tx,y:ty};
             if((($(window).width()<wcan) || $(window).height()<hcan) && !$('#canvas').attr('moved')) {
                 cdrag.x = $('#canvas').position().left
                 cdrag.y = $('#canvas').position().top
-            }
+            }*/
             // if($(window).height()<$('#canvas').height()) {
             //     cdrag.y = $('#canvas').position().top
             // }
@@ -4056,6 +4093,7 @@
             $('.dragEvents').remove();
             $('body').append('<div class="dragEvents" style="z-index:50;position:absolute;width:100%;height:100%;"></div>')
             $('.dragEvents').off(events.move).on(events.move, function(e) {
+
                 e.stopPropagation();
                 e.preventDefault();
                 var constantZoom = 1
@@ -4072,12 +4110,14 @@
                             if(startZoom>d) {
                                 var l = startZoom-d;
                                 startZoom = d+l/2
+                                zoom(d/startZoom,y)
                             }
                             if(d>startZoom) {
                                 var l = d-startZoom;
                                 startZoom = startZoom+l/2
+                                zoom(d/startZoom,y)
                             }
-                            constantZoom = d/startZoom
+                            /*constantZoom = d/startZoom
                             
                             if(($('#canvas').width()*constantZoom)>20) {
 
@@ -4097,7 +4137,7 @@
                                 $('#canvas').css('top',$('#canvas').position().top-(( startPosF.y - curr.y  )*mainZoom))
                                 $('#canvas').css('right','initial')
                                 $('#canvas').css('bottom','initial') 
-                            }
+                            }*/
                         }
                     } catch(e) {
                         
@@ -4105,19 +4145,22 @@
                     e = e.touches[0];
                 }
                 if(touchCounter==1 && (prevTouchCounter==0)) {
-
+                    //console.log(cdrag)
+                    var prop1 = $('body').width()/$('#canvas').width();
+                    var prop2 = $('body').height()/$('#canvas').height();
                     dist = {
-                        x: e.clientX-startPos.x,
-                        y: e.clientY-startPos.y
+                        x: (e.clientX-startPos.x),
+                        y: (e.clientY-startPos.y)
                     }
                     $('#canvas').attr('moved','true')
                     $('#canvas').css('left',dist.x+cdrag.x)
                     $('#canvas').css('top',dist.y+cdrag.y)
                     $('#canvas').css('right','initial')
                     $('#canvas').css('bottom','initial')
+                    //console.log('salamono',startPos)
                 }
                 else if(touchCounter==1 && (prevTouchCounter==2)) {
-                    
+                    console.log('non di qua')
                     if(canefix==0) {
                         canefix = 1;
                         startPos = {x:e.clientX,y:e.clientY};
@@ -4169,41 +4212,42 @@
                 cdrag.x = $('#canvas').position().left;
                 cdrag.y = $('#canvas').position().top;
                 dist = {x:0,y:0}
+                console.log('end')
             })
             //console.log(events)
         }
 
+        function zoom(a,e) {
 
-        function zoomIn() {
-            $('#canvas').css('width',$('#canvas').width()*1.1)
-            $('#canvas').css('height',$('#canvas').height()*1.1)
-            mainZoom = mainZoom*1.1
-            if(!$('#canvas').attr('moved')) {
-            if(true || $('#canvas').width()<$(window).width()) {
+            mainZoom = mainZoom*a
+
+            $('#canvas').css('width',$('#canvas').width()*a)
+            $('#canvas').css('height',$('#canvas').height()*a)
+
+            
+            var tt = $('#canvas').position().left
+            var culo = (e.clientX-tt)/(mainZoom/a)
+
+            var tt = $('#canvas').position().top
+            var culo2 = (e.clientY-tt)/(mainZoom/a)
+
+            
+
+            var t = ((culo-((culo)*(mainZoom))))
+            $('#canvas').css('left',t+e.clientX-culo)
+            var t = ((culo2-(culo2*(mainZoom))))
+            $('#canvas').css('top',t+e.clientY-culo2)
+
+            if($('#canvas').width()<$(window).width()) {
                 $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
                 $('#canvas').css('right','initial');
             }
-            if(true || $('#canvas').height()<$(window).height()) {
+            if($('#canvas').height()<$(window).height()) {
                 $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
                 $('#canvas').css('bottom','initial');
             }
-            }
 
-        }
-        function zoomOut() {
-            $('#canvas').css('width',$('#canvas').width()/1.1)
-            $('#canvas').css('height',$('#canvas').height()/1.1)
-            mainZoom = mainZoom/1.1
-            if(!$('#canvas').attr('moved')) {
-                if( true || $('#canvas').width()<$(window).width()) {
-                    $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
-                    $('#canvas').css('right','initial');
-                }
-                if(true || $('#canvas').height()<$(window).height()) {
-                    $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
-                    $('#canvas').css('bottom','initial');
-                }
-            }
+
         }
 
         function handleFiles(e) {
@@ -4441,39 +4485,7 @@
 
                         prevTouchCounter = touchCounter;
                         touchCounter++;
-                        
 
-                        /*if (e.touches)
-                            e = e.touches[0];
-                            
-
-
-                        if (mmove) {
-                            
-                            move = true;
-                            hMove = {
-                                x: e.clientX  - (imagParams.fx),
-                                y: e.clientY  - (imagParams.fy)
-                            }
-                            oMove = {
-                                x: e.clientX  - (originaParams.fx || 0),
-                                y: e.clientY  - (originaParams.fy || 0)
-                            }
-                        }
-                        if (cut) {
-                            cutstart = true;
-                            cutstartpos = {
-                                x: e.clientX,
-                                y: e.clientY
-                            };
-                        }
-                        if(rotatestart)
-                            rotate = true;
-                            rotatestartpos = {
-                                    x: e.clientX,
-                                    y: e.clientY
-                                };
-                        */
                         if(rotatestart) {
                             if (e.touches)
                                 e = e.touches[0];
@@ -4517,62 +4529,8 @@
                         cdrag.x = imagParams.fx;
                         cdrag.y = imagParams.fy;
                         dist = {x:0,y:0}
-                        /*if (mmove) {
-                            move = false
-
-                        }
-                        if (cutstart) {
-                            if (e.originalEvent && e.originalEvent.changedTouches)
-                                e = e.originalEvent.changedTouches[0]
-                            cutstart = false;
-                            ctx.clearRect(0, 0, wcan, hcan)
 
 
-
-
-                            imagParams = {
-                                sx: ((cutstartpos.x -  (originaParams.fx || 0))/mult)/mainZoom,
-                                sy: ((cutstartpos.y - (originaParams.fy || 0))/mult)/mainZoom,
-                                sw: ((e.clientX - cutstartpos.x)/mult)/mainZoom,
-                                sh: (e.clientY - cutstartpos.y)/mult/mainZoom,
-                                fx: cutstartpos.x,
-                                fy: cutstartpos.y,
-                                fw: (e.clientX - cutstartpos.x),
-                                fh: (e.clientY - cutstartpos.y),
-                            }
-                            if(imagParams.fh<0) {
-                                imagParams.fh = -imagParams.fh;
-                                imagParams.fy =  imagParams.fy - imagParams.fh;
-                            }
-                            if(imagParams.fw<0) {
-                                imagParams.fw = -imagParams.fw;
-                                imagParams.fx =  imagParams.fx - imagParams.fw;
-                            }
-
-
-
-                           var center = {x:originaParams.fx+originaParams.fw/2,y:originaParams.fy+originaParams.fh/2}
-                            ctx.save();
-                            ctx.translate(center.x, center.y);
-                            ctx.rotate(cangle);
-                            ctx.translate(-center.x,-center.y);
-                            ctx.drawImage(
-                                img,
-                                imagParams.sx,
-                                imagParams.sy,
-                                imagParams.sw,
-                                imagParams.sh,
-                                imagParams.fx,
-                                imagParams.fy,
-                                imagParams.fw,
-                                imagParams.fh,
-                            );
-                            ctx.restore();             
-                        }
-                        if(rotatestartpos) {
-                            rotate = false;
-                            prevAngle = cangle;
-                        }*/
                         if(rotatestartpos) {
                             rotate = false;
                             prevAngle = cangle;
@@ -4583,71 +4541,6 @@
                         e.preventDefault();
                         var constantZoom = 1
 
-
-                        
-                        /*
-                        if (cut && cutstartpos && cutstart) {
-
-                            ctx.clearRect(0, 0, $(window).width(), $(window).height())
-
-
-                            var center = {x:originaParams.fx+originaParams.fw/2,y:originaParams.fy+originaParams.fh/2}
-                            ctx.save();
-                            ctx.translate(center.x, center.y);
-                            ctx.rotate(cangle);
-                            ctx.translate(-center.x,-center.y);
-                            ctx.drawImage(
-                                img,
-                                originaParams.sx,
-                                originaParams.sy,
-                                originaParams.sw,
-                                originaParams.sh,
-                                originaParams.fx,
-                                originaParams.fy,
-                                originaParams.fw,
-                                originaParams.fh,
-                            );
-                            ctx.restore();
-
-                            ctx.beginPath();
-                            ctx.rect(cutstartpos.x, cutstartpos.y, e.clientX - cutstartpos.x, e.clientY - cutstartpos.y);
-                            ctx.stroke();
-                        }
-                        if(rotate) {
-                            var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
-                            ctx.clearRect(0, 0, $(window).width(), $(window).height())
-                        
-                            function p(x, y) {return {x,y}}
-
-                            function angle(p1, center, p2) {
-                                const transformedP1 = p(p1.x - center.x, p1.y - center.y)
-                                const transformedP2 = p(p2.x - center.x, p2.y - center.y)
-
-                                const angleToP1 = Math.atan2(transformedP1.y, transformedP1.x)
-                                const angleToP2 = Math.atan2(transformedP2.y, transformedP2.x)
-
-                                return (angleToP2 - angleToP1)
-                            }
-                            console.log(cangle)
-                            cangle = prevAngle+((angle(p(rotatestartpos.x, rotatestartpos.y), p(center.x, center.y), p(e.clientX, e.clientY))))
-
-                            ctx.save();
-                            ctx.translate(center.x, center.y);
-                            ctx.rotate(cangle);
-                            ctx.translate(-center.x,-center.y);
-                            ctx.drawImage(
-                                img,
-                                imagParams.sx,
-                                imagParams.sy,
-                                imagParams.sw,
-                                imagParams.sh,
-                                imagParams.fx,
-                                imagParams.fy,
-                                imagParams.fw,
-                                imagParams.fh,
-                            );
-                            ctx.restore();
-                        }*/
                         if(rotate) {
                             if(e.touches)
                                e = e.touches[0] 
@@ -4910,7 +4803,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.0</div>
+        <div class="version">v4.1</div>
     </body>
 
 </html>
