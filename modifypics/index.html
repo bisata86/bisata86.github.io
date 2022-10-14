@@ -36,8 +36,7 @@
         }
         #canvas {
            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
-           /*background: url("https://img.freepik.com/free-vector/best-scene-nature-landscape-mountain-river-forest-with-sunset-evening-warm-tone-illustration_1150-39403.jpg?w=2000");
-           background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           /*background: url("https://freegestcrm.com/crm/assets/img/test.png");
            background-size: 100% 100%;*/
         }
 
@@ -338,7 +337,15 @@
         }
 
         .color {
-            display: none;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            width: 10px;
+            height: 10px;
+            visibility: hidden;
         }
 
         .color input {
@@ -443,7 +450,12 @@
             position: absolute;
             height: 100%;
             width: 100%;
-            background: rgba(0,0,0,.5);
+            background: white;
+            bottom: 0px;
+            right: 0px;
+            width: 200px;
+            height: 200px;
+            bottom: 40px;
         }
         .lineDisp {
             position: absolute;
@@ -455,6 +467,7 @@
             border-radius: 100%;
             border: 1px solid white;
             max-width: 100%;
+            max-height: 100%;
         }
     </style>
     <script type="text/javascript">
@@ -3694,6 +3707,8 @@
         var hcan;
         var linew = 5;
         var mainZoom = 1;
+        var prev = {};
+        var color = 'black';
         $(document).ready(function() {
             wcan = $(window).width();
             hcan = $(window).height();
@@ -3789,8 +3804,7 @@
                 dragEvents()
             })
             addMenu();
-            var prev = {};
-            var color = 'black';
+
 
             
             function addMenu() {
@@ -3900,10 +3914,10 @@
 
                 });
                 $('.handDraw').on('click', function() {
+                    var write = false;
                     var history = [document.getElementById('canvas').toDataURL('image/png')]
                     $('.dragEvents').hide();
                     $('.menu').hide();
-                    $('.menul').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
                     $('.settingsCont').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div>')
@@ -3913,7 +3927,7 @@
                     $('.undo').addClass('disabled');
                     $('.redo').addClass('disabled');
                     
-                    var write = false;
+                    
                     $('.setImg').on('click', function(e) {
                         $('.settings').remove();
                         write = false
@@ -4003,11 +4017,12 @@
                     })
                     $('.brush').on('click', function(e) {
                         $('.overlay').remove();
-                        $('.settings').hide();
+                        //$('.settings').hide();
                         $('body').append('<div class="overlay"></div>')
+                        //$('.overlay').css('bottom',$('.brush').position().top)
                         var k = linew*mainZoom
                         console.log('k',k)
-                        $('.overlay').html('<div class="color"><input type="color" value="' + color + '"/></div><div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="settingsCont"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div><div class="button setBrush"></div></div></div>')
+                        $('.overlay').html('<div class="color"><input type="color" value="' + color + '"/></div><div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="settingsConpt"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div><div class="button setBrush"></div></div></div>')
                         $('.lineDisp').css('width',k)
                         $('.lineDisp').css('height',k)
                         $('.lineDisp').on('click', function(e) {
@@ -4033,38 +4048,34 @@
 
                         if (e.touches) {
                             e = e.touches[0];
-                            // var rect = e.target.getBoundingClientRect();
-                            // e.pageX = (e.targetTouches[0].pageX - rect.left);
-                            // e.pageY = (e.targetTouches[0].pageY - rect.top);
                         }
                         if (write) {
-
                             var ctx = document.getElementById('canvas').getContext('2d');
-                            // var curr = {x:e.pageX,y:e.pageY*90/100}
-                            // line(curr,prev,ctx, color, $('#linew').val())
-                            // prev = {x:e.pageX,y:e.pageY*90/100}
-                            var tx = ($(window).width()-$('#canvas').width())/2
-                            var ty = ($(window).height()-$('#canvas').height())/2
                             var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
-                            if(!$('#canvas').attr('moved'))
-                                cdrag = {x:tx,y:ty};
-                            if(($(window).width()<$('#canvas').width() || $(window).height()<$('#canvas').height()) && !$('#canvas').attr('moved')) {
-                                cdrag.x = $('#canvas').position().left
-                                cdrag.y = $('#canvas').position().top
-                            }
+                            
                             var curr = {
                                 x: (((e.clientX))-cdrag.x)/mainZoom,
                                 y: (((e.clientY))-cdrag.y)/mainZoom,
                             }
-                            //linew = $('#linew').val()
                             line(curr, prev, ctx, color, linew)
                             prev = JSON.parse(JSON.stringify(curr))
-
 
                         }
                     })
                     $('#canvas').on(events.start, function(e) {
+                        if (e.touches) {
+                            e = e.touches[0];
+                        }
                         write = true;
+                        var ctx = document.getElementById('canvas').getContext('2d');
+                        var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                        
+                        var curr = {
+                            x: (((e.clientX))-cdrag.x)/mainZoom,
+                            y: (((e.clientY))-cdrag.y)/mainZoom,
+                        }
+                        point(curr, ctx, color, linew)
+                        prev = JSON.parse(JSON.stringify(curr))
                     })
                     $('#canvas').on(events.end, function(e) {
                         write = false
@@ -4096,8 +4107,6 @@
                 }
             })
         })
-
-
         function dragEvents() {
             //console.log('dragEvents')
             var startPos = {x:0,y:0};
@@ -4132,41 +4141,17 @@
                             y = e.touches[0];
                             k = e.touches[1];
                             var d = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
-                            /*$('.cane').remove();
-                            $('body').append('<div class="cane"  style="position:absolute;width:10px;height:10px;background:blue;top:'+y.clientY+'px;left:'+y.clientX+'px"></div>')
-                            $('body').append('<div class="cane" style="position:absolute;width:10px;height:10px;background:red;top:'+k.clientY+'px;left:'+k.clientX+'px"></div>')
-                            $('body').append('<div class="cane" style="position:absolute;width:15px;height:15px;background:green;top:'+midPos.y+'px;left:'+midPos.x+'px"></div>')*/
+                            var midpoint = {clientX:(k.clientX + y.clientX)/2,clientY: (k.clientY + y.clientY)/2}
                             if(startZoom>d) {
                                 var l = startZoom-d;
                                 startZoom = d+l/2
-                                zoom(d/startZoom,y)
+                                zoom(d/startZoom,midpoint)
                             }
                             if(d>startZoom) {
                                 var l = d-startZoom;
                                 startZoom = startZoom+l/2
-                                zoom(d/startZoom,y)
+                                zoom(d/startZoom,midpoint)
                             }
-                            /*constantZoom = d/startZoom
-                            
-                            if(($('#canvas').width()*constantZoom)>20) {
-
-                                $('#canvas').css('width',$('#canvas').width()*constantZoom)
-                                $('#canvas').css('height',$('#canvas').height()*constantZoom)
-                                mainZoom = mainZoom*constantZoom;                                            
-                                $('#canvas').attr('moved','true')
-                                
-                                var curr = {
-                                    x: (((midPos.x)-$('#canvas').position().left))/mainZoom,
-                                    y: (((midPos.y)-$('#canvas').position().top))/mainZoom,
-                                }
-
-
-
-                                $('#canvas').css('left',$('#canvas').position().left-(( startPosF.x - curr.x  )*mainZoom))
-                                $('#canvas').css('top',$('#canvas').position().top-(( startPosF.y - curr.y  )*mainZoom))
-                                $('#canvas').css('right','initial')
-                                $('#canvas').css('bottom','initial') 
-                            }*/
                         }
                     } catch(e) {
                         
@@ -4245,7 +4230,6 @@
             })
             //console.log(events)
         }
-
         function zoom(a,e) {
 
             mainZoom = mainZoom*a
@@ -4260,8 +4244,6 @@
             var tt = $('#canvas').position().top
             var culo2 = (e.clientY-tt)/(mainZoom/a)
 
-            
-
             var t = ((culo-((culo)*(mainZoom))))
             $('#canvas').css('left',t+e.clientX-culo)
             var t = ((culo2-(culo2*(mainZoom))))
@@ -4275,10 +4257,7 @@
                 $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
                 $('#canvas').css('bottom','initial');
             }
-
-
         }
-
         function handleFiles(e) {
             if(e.target.files[0].type.indexOf('image')!=-1) {
                 $('.dragEvents').hide();
@@ -4712,8 +4691,6 @@
                 $('.inputfile').val('')
             }
         }
-
-
         function downloadCanvasAsImage() {
             let downloadLink = document.createElement('a');
             downloadLink.setAttribute('download', 'image.png');
@@ -4758,19 +4735,13 @@
               link.download = 'img'+new Date().getTime()+'.png';
               document.body.appendChild(link);
               link.click();   
-
-
-
         }
-
-        function point(x, y, canvas) {
+        function point(p, canvas, color, linew) {
+            canvas.fillStyle = color;
             canvas.beginPath();
-            canvas.moveTo(x, y);
-            canvas.lineWidth = 5;
-            canvas.lineTo(x + 2, y + 2);
-            canvas.stroke();
+            canvas.arc(p.x, p.y, linew/2, 0, 2 * Math.PI, true);
+            canvas.fill();
         }
-
         function line(c, p, canvas, color, linew) {
             canvas.lineJoin = "round";
             canvas.strokeStyle = color;
@@ -4781,7 +4752,6 @@
             canvas.closePath();
             canvas.stroke();
         }
-
         function isMobile() {
             if ($(window).height() > $(window).width()) {
                 $('body').removeClass('landscape');
@@ -4812,7 +4782,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.3</div>
+        <div class="version">v4.4</div>
     </body>
 
 </html>
