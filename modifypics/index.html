@@ -459,18 +459,19 @@
             width: 200px;
             height: 200px;
             bottom: 40px;
+            overflow: hidden;
+                border: 2px solid white;
         }
         .lineDisp {
             position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            right: 0px;
             margin: auto;
+            display: block;
+            bottom: 0px;
+            top: 0px;
+            left: 50%;
+            transform: translate(-50%, 0);
             border-radius: 100%;
-            border: 1px solid white;
-            max-width: 100%;
-            max-height: 100%;
+            
         }
     </style>
     <script type="text/javascript">
@@ -3825,8 +3826,11 @@
                     downloadCanvasAsImage();
                 })
                 $('.clear').on('click', function() {
-                    if (confirm('clear all?'))
+                    if (confirm('clear all?')) {
                         $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                        $('.dims').show();
+                    }
+                    
                 })
                 $('.text').on('click', function() {
                     $('.menu').hide();
@@ -3917,10 +3921,12 @@
 
                 });
                 $('.handDraw').on('click', function() {
+
                     var write = false;
                     var history = [document.getElementById('canvas').toDataURL('image/png')]
                     $('.dragEvents').hide();
                     $('.menu').hide();
+                    $('.dims').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
                     $('.settingsCont').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div>')
@@ -4085,6 +4091,10 @@
                         }
                         point(curr, ctx, color, linew)
                         prev = JSON.parse(JSON.stringify(curr))
+                        if($('.brush').hasClass('active')) {
+                           $('.brush').click() 
+                        }
+                        $('.settings').fadeOut();
                     })
                     $('#canvas').on(events.end, function(e) {
                         write = false
@@ -4092,6 +4102,7 @@
                         history.push(document.getElementById('canvas').toDataURL('image/png'))
                         $('.undo').removeClass('disabled').attr('data-step',history.length-1);
                         $('.redo').addClass('disabled');
+                        $('.settings').fadeIn();
                     })
                 })
 
@@ -4269,6 +4280,7 @@
         }
         function handleFiles(e) {
             if(e.target.files[0].type.indexOf('image')!=-1) {
+                $('.dims').hide();
                 $('.dragEvents').hide();
                 $('body').append('<canvas id="imgCanvas"></canvas>')
                 document.getElementById('imgCanvas').width = $(window).width();
@@ -4791,7 +4803,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.4</div>
+        <div class="version">v4.5</div>
     </body>
 
 </html>
