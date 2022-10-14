@@ -4095,7 +4095,6 @@
                         if($('.brush').hasClass('active')) {
                            $('.brush').click() 
                         }
-                        $('.settings').hide();
                     })
                     $('#canvas').on(events.end, function(e) {
                         write = false
@@ -4103,7 +4102,6 @@
                         history.push(document.getElementById('canvas').toDataURL('image/png'))
                         $('.undo').removeClass('disabled').attr('data-step',history.length-1);
                         $('.redo').addClass('disabled');
-                        $('.settings').show();
                     })
                 })
 
@@ -4247,7 +4245,6 @@
                 cdrag.x = $('#canvas').position().left;
                 cdrag.y = $('#canvas').position().top;
                 dist = {x:0,y:0}
-                console.log('end')
             })
             //console.log(events)
         }
@@ -4354,27 +4351,7 @@
 
                     $('#opacitySelector').on('input', function(e) {
                         ctx.globalAlpha = $(this).val();
-                        ctx.clearRect(0, 0, $(window).width(), $(window).height())
-
-                        var center = {x:((imagParams.fx-$('#canvas').position().left)/mainZoom)+(imagParams.fw/mainZoom)/2,y:((imagParams.fy-$('#canvas').position().top)/mainZoom)+(imagParams.fh/mainZoom)/2}
-                        ctx.save();
-                        ctx.translate(center.x, center.y);
-                        ctx.rotate(cangle);
-                        ctx.translate(-center.x,-center.y);
-
-
-                        ctx.drawImage(
-                            img,
-                            imagParams.sx,
-                            imagParams.sy,
-                            imagParams.sw,
-                            imagParams.sh,
-                            imagParams.fx,
-                            imagParams.fy,
-                            imagParams.fw,
-                            imagParams.fh,
-                        );
-                        ctx.restore();
+                        imgZoom(1,e)
                     })
                     $('.back').on('click', function(e) {
                         $('#imgCanvas').remove();
@@ -4813,7 +4790,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.6</div>
+        <div class="version">v4.7</div>
     </body>
 
 </html>
