@@ -4445,15 +4445,17 @@
                     function imgZoom(a,e) {
                         mult = mult*a
                         ctx.clearRect(0, 0, $(window).width(), $(window).height())
-                        imagParams.fx*=a
-                        imagParams.fy*=a
+                        /*imagParams.fx=e.clientX
+                        imagParams.fy=e.clientY*/
                         imagParams.fw*=a
                         imagParams.fh*=a
-                        originaParams.fx*=a
-                        originaParams.fy*=a
-                        originaParams.fw*=a
-                        originaParams.fh*=a
+                        /*originaParams.fx=imagParams.fx
+                        originaParams.fy=imagParams.fy
+                        originaParams.fw=imagParams.fw
+                        originaParams.fh=imagParams.fh*/
+
                         var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
+
                         ctx.save();
                         ctx.translate(center.x, center.y);
                         ctx.rotate(cangle);
@@ -4790,7 +4792,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.7</div>
+        <div class="version">v4.8</div>
     </body>
 
 </html>
