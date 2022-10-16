@@ -4256,17 +4256,16 @@
             $('#canvas').css('height',$('#canvas').height()*a)
 
             
-            var tt = $('#canvas').position().left
-            var culo = (e.clientX-tt)/(mainZoom/a)
+            var b = $('#canvas').position().left
+            var x = e.clientX
+            $('#canvas').css('left',(b-x)*(a)+x)
 
-            var tt = $('#canvas').position().top
-            var culo2 = (e.clientY-tt)/(mainZoom/a)
+            b = $('#canvas').position().top
+            var y = e.clientY
+            $('#canvas').css('top',(b-y)*(a)+y)
 
-            var t = ((culo-((culo)*(mainZoom))))
-            $('#canvas').css('left',t+e.clientX-culo)
-            var t = ((culo2-(culo2*(mainZoom))))
-            $('#canvas').css('top',t+e.clientY-culo2)
 
+ 
             if($('#canvas').width()<$(window).width()) {
                 $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
                 $('#canvas').css('right','initial');
@@ -4453,6 +4452,14 @@
                         originaParams.fy=imagParams.fy
                         originaParams.fw=imagParams.fw
                         originaParams.fh=imagParams.fh*/
+                        /*var b = imagParams.fx
+                        var x = e.clientX
+                        imagParams.fx = (b-x)*(a)+x
+
+                        var b = imagParams.fy
+                        var x = e.clientY
+                        imagParams.fy = (b-x)*(a)+x*/
+           
 
                         var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
 
@@ -4475,7 +4482,7 @@
                     }
 
                     $('#imgCanvas').on(events.start, function(e) {
-
+                        console.log(touchCounter)
                         prevTouchCounter = touchCounter;
                         touchCounter++;
 
@@ -4518,7 +4525,8 @@
                     $('#imgCanvas').on(events.end, function(e) {
 
                         prevTouchCounter = touchCounter;
-                        touchCounter--
+                        if(touchCounter>0)
+                            touchCounter--
                         cdrag.x = imagParams.fx;
                         cdrag.y = imagParams.fy;
                         dist = {x:0,y:0}
@@ -4530,6 +4538,7 @@
                         }
                     })
                     $('#imgCanvas').on(events.move, function(e) {
+                        console.log('move')
                         e.stopPropagation();
                         e.preventDefault();
                         var constantZoom = 1
@@ -4637,6 +4646,7 @@
                                 e = e.touches[0];
                             }
                             if (touchCounter==1 && (prevTouchCounter==0)) {
+                                console.log('move')
                                     dist = {
                                         x: e.clientX-startPos.x,
                                         y: e.clientY-startPos.y
@@ -4792,7 +4802,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.8</div>
+        <div class="version">v4.9</div>
     </body>
 
 </html>
