@@ -4350,7 +4350,7 @@
 
                     $('#opacitySelector').on('input', function(e) {
                         ctx.globalAlpha = $(this).val();
-                        imgZoom(1,e)
+                        imgZoom(1,null)
                     })
                     $('.back').on('click', function(e) {
                         $('#imgCanvas').remove();
@@ -4452,14 +4452,15 @@
                         originaParams.fy=imagParams.fy
                         originaParams.fw=imagParams.fw
                         originaParams.fh=imagParams.fh*/
-                        /*var b = imagParams.fx
-                        var x = e.clientX
-                        imagParams.fx = (b-x)*(a)+x
+                        if(e) {
+                            var b = imagParams.fx
+                            var x = e.clientX
+                            imagParams.fx = (b-x)*(a)+x
 
-                        var b = imagParams.fy
-                        var x = e.clientY
-                        imagParams.fy = (b-x)*(a)+x*/
-           
+                            var b = imagParams.fy
+                            var x = e.clientY
+                            imagParams.fy = (b-x)*(a)+x
+                        }
 
                         var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
 
@@ -4517,6 +4518,8 @@
                             else if(touchCounter==1 && prevTouchCounter==0) {
                                 if (e.touches)
                                     e = e.touches[0];
+                                cdrag.x = imagParams.fx;
+                                cdrag.y = imagParams.fy;
                                 startPos = {x:e.clientX,y:e.clientY};
                             }
 
@@ -4538,7 +4541,6 @@
                         }
                     })
                     $('#imgCanvas').on(events.move, function(e) {
-                        console.log('move')
                         e.stopPropagation();
                         e.preventDefault();
                         var constantZoom = 1
@@ -4802,7 +4804,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v4.9</div>
+        <div class="version">v5.0</div>
     </body>
 
 </html>
