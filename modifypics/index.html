@@ -4397,6 +4397,7 @@
                     }
 
                     canvas.on(events.start, function(e) {
+                        $('.textMark').blur();
                         prevTouchCounter = touchCounter;
                         touchCounter++;
 
@@ -4642,7 +4643,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.5</div>
+        <div class="version">v5.6</div>
     </body>
 
 </html>
