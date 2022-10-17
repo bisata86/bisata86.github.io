@@ -36,8 +36,8 @@
         }
         #canvas {
            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
-           /*background: url("https://freegestcrm.com/crm/assets/img/test.png");
-           background-size: 100% 100%;*/
+           background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;
         }
 
         .selectImage {
@@ -3819,13 +3819,10 @@
                 $('body').append('<div class="menu"></div>')
                 $('.menu').append('<div class="handDraw"></div>')
                 $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
-                //$('.menu').append('<div class="text"></div>')
+                $('.menu').append('<div class="text"></div>')
                 $('.menu').append('<div class="save"></div>')
                 $('.menu').append('<div class="clear"></div>')
-                /*$('body').append('<div class="menul"></div>')
-                $('.menul').append('<div class="drag"></div>')*/
-                /*$('.menul').append('<div class="zoomin"></div>')
-                $('.menul').append('<div class="zoomout"></div>')*/
+
                 $('.save').on('click', function() {
                     downloadCanvasAsImage();
                 })
@@ -3838,11 +3835,11 @@
                 })
                 $('.text').on('click', function() {
                     $('.menu').hide();
-                    $('body').append('<input style="position:absolute;z-index:10; background:transparent; color: transparent;border:none;-webkit-appearance: none;" class="textMark" value=""></input>')
+                    $('body').append('<input style="position:absolute;z-index:10; background:transparent; color: transparent;border:none;-webkit-appearance: none; outline: none !important;;" class="textMark" value=""></input>')
                     
                     if ($('.settings').length == 0)
                     $('body').append('<div class="settings"></div>')
-                    $('.settings').html('<div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="minus button"></div><div class="move button selected"></div>');
+                    $('.settings').html('<div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="rotate button"></div><div class="move button selected"></div>');
                     $('body').append('<canvas id="textCanvas"></canvas>')
                     document.getElementById('textCanvas').width = wcan;
                     document.getElementById('textCanvas').height = hcan;
@@ -3852,77 +3849,15 @@
                     var fsize = 40;
                     var fsx = wcan/2;
                     var fsy = hcan/2;
-                    $('.back').on('click', function(e) {
-                        $('#textCanvas').remove();
-                        $('.settings').remove();
-                        $('.menu').show();
-                        $('.textMark').remove();
-                    })
-                    $('.textMark').on('keyup',function(e){
-                        writeText($(this).val(),fsize,fsx,fsy)
-                        if(e.keyCode==13) {
-                            $('.textMark').blur();
-                        }
-                    })
-                    $('.minus').on('click',function(){
-                        fsize-=10;
-                        writeText($('.textMark').val(),fsize,fsx,fsy)
-                    })
-                    $('.plus').on('click',function(){
-                        fsize+=10;
-                        writeText($('.textMark').val(),fsize,fsx,fsy)
-                    })
-
-                    $('.move').on('click', function(e) {
-                        mmove = true;
-                        cut = false;
-                    })
-                    $('.setImg').on('click', function() {
-                        $('#textCanvas').remove();
-                        var ctx = $('#canvas')[0].getContext('2d');
-                        ctx.font = fsize+"px Georgia";
-                        ctx.fillText($('.textMark').val(), fsx, fsy);
-                        $('.settings').remove();
-                        $('.menu').show();
-                        $('.textMark').remove();
-                    })
-                    $('#textCanvas').on(events.start, function(e) {
-                        if (e.touches)
-                            e = e.touches[0];
-                        if (mmove) {
-                            move = true;
-                            hMove = {
-                                x: e.clientX  - (fsx || 0),
-                                y: e.clientY  - (fsy || 0)
-                            }
-                        }
-                    })
-                    $('#textCanvas').on(events.end, function(e) {
-                        if (mmove) {
-                            move = false
-                        }
-                    })
-                    $('#textCanvas').on(events.move, function(e) {
-
-                        if (e.touches)
-                            e = e.touches[0];
-                        if (mmove && move) {
-                            fsx =  (e.clientX - hMove.x)
-                            fsy =  (e.clientY - hMove.y)
-                            writeText($('.textMark').val(),fsize,fsx,fsy)
-
-                        }
-                    })
-
-
-
-                    function writeText(text,fontsize,fsx,fsy) {
-                        var ctx = $('#textCanvas')[0].getContext('2d');
-                        ctx.clearRect(0, 0, wcan, hcan)
-                        ctx.font = fontsize+"px Georgia";
-                        ctx.fillText(text, fsx, fsy);
+                    var ctx = $('#textCanvas')[0].getContext('2d');
+                    function draw(ctx,img,imagParams,text,fosize) {
+                        ctx.font = fosize+"px Georgia";
+                        console.log(imagParams)
+                        ctx.fillText(text, imagParams.fx, fosize+imagParams.fy);
+                        $('.textMark').focus();
                     }
-
+                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'text',fsize)
+                    
                 });
                 $('.handDraw').on('click', function() {
 
@@ -4282,7 +4217,6 @@
         function handleFiles(e) {
             if(e.target.files[0].type.indexOf('image')!=-1) {
                 $('.dims').hide();
-                $('.dragEvents').hide();
                 $('body').append('<canvas id="imgCanvas"></canvas>')
                 document.getElementById('imgCanvas').width = $(window).width();
                 document.getElementById('imgCanvas').height = $(window).height();
@@ -4298,12 +4232,35 @@
                     var w = $('#tempImg').width();
                     var h = $('#tempImg').height();
                     $('#tempImg').remove();
-                    var tx = ($(window).width()-$('#canvas').width())/2
-                    var ty = ($(window).height()-$('#canvas').height())/2
-                    var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
-                    if(!$('#canvas').attr('moved'))
-                        cdrag = {x:tx,y:ty};
-                    ctx.drawImage(img, cdrag.x, cdrag.y, mainZoom*w , mainZoom*h );
+                    function draw(ctx,img,imagParams) {
+                        console.log(imagParams)
+                        ctx.drawImage(
+                            img,
+                            imagParams.sx,
+                            imagParams.sy,
+                            imagParams.sw,
+                            imagParams.sh,
+                            imagParams.fx,
+                            imagParams.fy,
+                            imagParams.fw,
+                            imagParams.fh,
+                        );
+                    }
+                    handleCanvas(ctx,img,w,h,$('#imgCanvas'),draw)
+
+                }
+                img.src = url;
+            } else {
+                alert('file type not allowed')
+                $('.settings').remove();
+                $('.menu').show();
+                $('.menul').show();
+                $('.inputfile').val('')
+            }
+        }
+        function handleCanvas(ctx,img,w,h,canvas,draw,text,fsize) {
+                    $('.dragEvents').hide();
+                    var cdrag = {x:0,y:0};
                     var mult = 1;
                     var dist = {x:0,y:0};
                     var startZoom;
@@ -4335,7 +4292,7 @@
                         imgZoom(1,null)
                     })
                     $('.back').on('click', function(e) {
-                        $('#imgCanvas').remove();
+                        canvas.remove();
                         $('.settings').remove();
                         $('.menu').show();
                         $('.inputfile').val('')
@@ -4344,24 +4301,21 @@
                     $('.rotate').on('click', function(e) {
                         $(this).addClass("selected");
                         $('.move').removeClass("selected");
-                        $('.cut').removeClass("selected");
                         mmove = false;
                         rotate = false;
                         rotatestart = true;
                     })
                     $('.move').on('click', function(e) {
                         $(this).addClass("selected");
-                        $('.cut').removeClass("selected");
                         $('.rotate').removeClass("selected");
                         mmove = true;
-                        cut = false;
                         rotate = false;
                         rotatestart = false;
                     })
                     $('.setImg').on('click', function() {
                         mainZoom = tmainZoom;
                         $('.dragEvents').show();
-                        $('#imgCanvas').remove();
+                        canvas.remove();
                         var fCtx = $('#canvas')[0].getContext('2d')
                         fCtx.globalAlpha = $('#opacitySelector').val();
                         var center = {x:((imagParams.fx-$('#canvas').position().left)/mainZoom)+(imagParams.fw/mainZoom)/2,y:((imagParams.fy-$('#canvas').position().top)/mainZoom)+(imagParams.fh/mainZoom)/2}
@@ -4369,48 +4323,40 @@
                         fCtx.translate(center.x, center.y);
                         fCtx.rotate(cangle);
                         fCtx.translate(-center.x,-center.y);
-                        fCtx.drawImage(
-                                img,
-                                imagParams.sx,
-                                imagParams.sy,
-                                imagParams.sw,
-                                imagParams.sh,
-                                ((imagParams.fx)/mainZoom)-$('#canvas').position().left/mainZoom,
-                                ((imagParams.fy)/mainZoom)-$('#canvas').position().top/mainZoom,                    
-                                imagParams.fw/mainZoom,
-                                imagParams.fh/mainZoom,
-                            );
+                        
+                        imagParams.fx = ((imagParams.fx)/mainZoom)-$('#canvas').position().left/mainZoom;
+                        imagParams.fy = ((imagParams.fy)/mainZoom)-$('#canvas').position().top/mainZoom;
+                        
+                        imagParams.fw = imagParams.fw/mainZoom;
+                        imagParams.fh = imagParams.fh/mainZoom;
+                        fsize = fsize/mainZoom
+                        draw(fCtx,img,imagParams,text,fsize)
+
                         fCtx.restore();
                         fCtx.globalAlpha = 1;
                         $('.settings').remove();
                         $('.menu').show();
-                        $('.menul').show();
                         $('.inputfile').val('')
+                    })
+                    $('.textMark').on('keyup',function(e){
+                        text = $(this).val();
+                        imgZoom(1,null)
                     })
 
                     $(window).on('mousewheel',function(e) {
-                        //if($('.settings').length==0) {                    
-                            if(e.originalEvent.wheelDelta  < 0) {
-                                //$('.minus').click()
-                                imgZoom(.9,e)
-                            }else {
-                               imgZoom(1.1,e)
-                               //$('.plus').click()
-                            }
-                        //}
+                        if(e.originalEvent.wheelDelta  < 0) {
+                            imgZoom(.9,e)
+                        }else {
+                           imgZoom(1.1,e)
+                        }
                     })
 
                     function imgZoom(a,e) {
                         mult = mult*a
+                        fsize = fsize*a
                         ctx.clearRect(0, 0, $(window).width(), $(window).height())
-                        /*imagParams.fx=e.clientX
-                        imagParams.fy=e.clientY*/
                         imagParams.fw*=a
                         imagParams.fh*=a
-                        /*originaParams.fx=imagParams.fx
-                        originaParams.fy=imagParams.fy
-                        originaParams.fw=imagParams.fw
-                        originaParams.fh=imagParams.fh*/
                         if(e) {
                             var b = imagParams.fx
                             var x = e.clientX
@@ -4427,7 +4373,14 @@
                         ctx.translate(center.x, center.y);
                         ctx.rotate(cangle);
                         ctx.translate(-center.x,-center.y);
-                        ctx.drawImage(
+
+
+                        /*ctx.clearRect(0, 0, wcan, hcan)
+                        ctx.font = "24px Georgia";
+                        ctx.fillText('text', imagParams.fx, imagParams.fy);*/
+                        draw(ctx,img,imagParams,text,fsize)
+
+                        /*ctx.drawImage(
                             img,
                             imagParams.sx,
                             imagParams.sy,
@@ -4437,11 +4390,11 @@
                             imagParams.fy,
                             imagParams.fw,
                             imagParams.fh,
-                        );
+                        );*/
                         ctx.restore();
                     }
 
-                    $('#imgCanvas').on(events.start, function(e) {
+                    canvas.on(events.start, function(e) {
                         prevTouchCounter = touchCounter;
                         touchCounter++;
 
@@ -4483,7 +4436,7 @@
 
                         }
                     })
-                    $('#imgCanvas').on(events.end, function(e) {
+                    canvas.on(events.end, function(e) {
 
                         prevTouchCounter = touchCounter;
                         if(touchCounter>0)
@@ -4498,7 +4451,7 @@
                             prevAngle = cangle;
                         }
                     })
-                    $('#imgCanvas').on(events.move, function(e) {
+                    canvas.on(events.move, function(e) {
                         e.stopPropagation();
                         e.preventDefault();
                         var constantZoom = 1
@@ -4549,7 +4502,6 @@
                                         /*$('#canvas').css('width',$('#canvas').width()*constantZoom)
                                         $('#canvas').css('height',$('#canvas').height()*constantZoom)*/
                                         mainZoom = mainZoom*constantZoom;                                            
-                                        $('#canvas').attr('moved','true')
                                         
                                         var curr = {
                                             x: (((midPos.x)-imagParams.fx))/mainZoom,
@@ -4595,15 +4547,8 @@
                         }
                     })
 
-                }
-                img.src = url;
-            } else {
-                alert('file type not allowed')
-                $('.settings').remove();
-                $('.menu').show();
-                $('.menul').show();
-                $('.inputfile').val('')
-            }
+                    imgZoom(1,null)
+                    
         }
         function downloadCanvasAsImage() {
             let downloadLink = document.createElement('a');
@@ -4696,7 +4641,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.2</div>
+        <div class="version">v5.3</div>
     </body>
 
 </html>
