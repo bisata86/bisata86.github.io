@@ -4501,8 +4501,7 @@
 
                                         imagParams.fw = imagParams.fw*constantZoom
                                         imagParams.fh = imagParams.fh*constantZoom
-                                        /*$('#canvas').css('width',$('#canvas').width()*constantZoom)
-                                        $('#canvas').css('height',$('#canvas').height()*constantZoom)*/
+                                        fsize = fsize*constantZoom;
                                         mainZoom = mainZoom*constantZoom;                                            
                                         
                                         var curr = {
@@ -4643,7 +4642,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.4</div>
+        <div class="version">v5.5</div>
     </body>
 
 </html>
