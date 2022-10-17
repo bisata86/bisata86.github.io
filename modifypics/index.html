@@ -3741,7 +3741,7 @@
                     select2 += '<option selected value="'+hcan+'">'+hcan+'</option>'
             }
             select2 += '</select>'
-            var select3 = '<select class="changeWH" style="width: 30px;">'
+            var select3 = '<select class="changeWH" style="width: 10px;">'
             var commonImages = [
                 {name:'window',w:$(window).width(),h:$(window).height()},
                 {name:'icon',w:57,h:57},
@@ -3855,7 +3855,7 @@
                         console.log(imagParams)
                         ctx.fillText(text, imagParams.fx, fosize+imagParams.fy);
                     }
-                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'text',fsize)
+                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'',fsize)
                     
                 });
                 $('.handDraw').on('click', function() {
@@ -4050,8 +4050,8 @@
             dragEvents()
             $(window).resize(function() {
                 isMobile();
-                $('body').css('height',$(window).height());
-                $('body').css('width',$(window).width());
+                /*$('body').css('height',$(window).height());
+                $('body').css('width',$(window).width());*/
             })
             $(window).on('mousewheel',function(e) {
                 if($('.settings').length==0) {                    
@@ -4394,6 +4394,7 @@
                         ctx.translate(-center.x,-center.y);
 
                         ctx.fillStyle = color;
+                        //ctx.imageSmoothingEnabled = false;
                         /*ctx.clearRect(0, 0, wcan, hcan)
                         ctx.font = "24px Georgia";
                         ctx.fillText('text', imagParams.fx, imagParams.fy);*/
@@ -4660,7 +4661,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.8</div>
+        <div class="version">v6</div>
     </body>
 
 </html>
