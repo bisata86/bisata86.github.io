@@ -3839,7 +3839,7 @@
                     
                     if ($('.settings').length == 0)
                     $('body').append('<div class="settings"></div>')
-                    $('.settings').html('<div class="settingsCont"><div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="testo button">Aa</div><div class="rotate button"></div><div class="move button selected"></div></div>');
+                    $('.settings').html('<div class="settingsCont"><div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="testo button">Aa</div><div class="rotate button"></div><div class="move button selected"></div><div class="button colorPicker">color</div></div>');
                     $('body').append('<canvas id="textCanvas"></canvas>')
                     document.getElementById('textCanvas').width = wcan;
                     document.getElementById('textCanvas').height = hcan;
@@ -4300,6 +4300,19 @@
                     $('.testo').on('click', function(e) {
                         $('.textMark').focus();
                     })
+                    $('.colorPicker').on('click', function(e) {
+                        
+                        $('body').append('<div class="color"><input type="color" value="' + color + '"/></div>')
+                        $('.color input').on('input', function(e) {
+                            color = $(this).val();
+                            imgZoom(1,null)
+                            $('.colorPicker').css('background',color)
+                        })
+                        setTimeout(function(){
+                            $('.color input').click()
+                        },10)
+                        
+                    })
                     $('.rotate').on('click', function(e) {
                         $(this).addClass("selected");
                         $('.move').removeClass("selected");
@@ -4324,6 +4337,7 @@
                         fCtx.save();
                         fCtx.translate(center.x, center.y);
                         fCtx.rotate(cangle);
+                        fCtx.fillStyle = color;
                         fCtx.translate(-center.x,-center.y);
                         
                         imagParams.fx = ((imagParams.fx)/mainZoom)-$('#canvas').position().left/mainZoom;
@@ -4343,6 +4357,9 @@
                     $('.textMark').on('keyup',function(e){
                         text = $(this).val();
                         imgZoom(1,null)
+                        if(e.keyCode==13) {
+                            $('.textMark').blur();
+                        }
                     })
 
                     $(window).on('mousewheel',function(e) {
@@ -4376,7 +4393,7 @@
                         ctx.rotate(cangle);
                         ctx.translate(-center.x,-center.y);
 
-
+                        ctx.fillStyle = color;
                         /*ctx.clearRect(0, 0, wcan, hcan)
                         ctx.font = "24px Georgia";
                         ctx.fillText('text', imagParams.fx, imagParams.fy);*/
@@ -4497,12 +4514,12 @@
                                         startZoom = startZoom+l/2
                                     }
                                     constantZoom = d/startZoom
-                                    
+                                    fsize = fsize*constantZoom
                                     if((imagParams.fw*constantZoom) > 20) {
 
                                         imagParams.fw = imagParams.fw*constantZoom
                                         imagParams.fh = imagParams.fh*constantZoom
-                                        fsize = fsize*constantZoom;
+                                        ;
                                         mainZoom = mainZoom*constantZoom;                                            
                                         
                                         var curr = {
@@ -4643,7 +4660,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.6</div>
+        <div class="version">v5.8</div>
     </body>
 
 </html>
