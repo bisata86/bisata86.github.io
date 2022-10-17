@@ -4292,10 +4292,7 @@
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
                     $('.settingsCont').html('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="minus button"></div><div class="move button selected"></div><div class="rotate button"></div>');
-                    //<div class="cut button"></div>
                     $('.menu').hide();
-                    $('.menul').hide();
-                    console.log('mainZoom: '+mainZoom)
                     var w = $('#tempImg').width();
                     var h = $('#tempImg').height();
                     var tx = ($(window).width()-$('#canvas').width())/2
@@ -4305,19 +4302,13 @@
                         cdrag = {x:tx,y:ty};
                     ctx.drawImage(img, cdrag.x, cdrag.y, mainZoom*w , mainZoom*h );
 
-
-
-                        var dist = {x:0,y:0};
-                        var startZoom;
-                        var startPosF;
-                        var midPos;
-                        var prevTouchCounter = 0;
-                        var touchCounter = 0;
-                        var canefix = 0;
-
-
-
-
+                    var dist = {x:0,y:0};
+                    var startZoom;
+                    var startPosF;
+                    var midPos;
+                    var prevTouchCounter = 0;
+                    var touchCounter = 0;
+                    var canefix = 0;
                     $('#tempImg').remove();
                     var move = false;
                     var mmove = true;
@@ -4343,7 +4334,6 @@
                         x: 0,
                         y: 0
                     };
-                    //var imagParams  = {sx:0,sy:0};
                     var imagParams  = {sx:0,sy:0,sw:w,sh:h,fx:cdrag.x,fy:cdrag.y,fw:mainZoom*w,fh:mainZoom*h};
                     var originaParams  = {};
                     var tmainZoom = mainZoom;
@@ -4359,21 +4349,6 @@
                         $('.inputfile').val('')
                         $('.dragEvents').show();
                     })
-                    $('.cut').on('click', function(e) {
-                        $(this).addClass("selected");
-                        $('.move').removeClass("selected");
-                        $('.rotate').removeClass("selected");
-                        mmove = false;
-                        cut = true;
-                        cutstart = false;
-                        rotate = false;
-                        rotatestart = false;
-                        if(originaParams.sx==undefined)
-                            originaParams = JSON.parse(JSON.stringify(imagParams))
-                        console.log(originaParams)
-                        /*cutstartpos = {};
-                        cutendpos = {};*/
-                    })
                     $('.rotate').on('click', function(e) {
                         $(this).addClass("selected");
                         $('.move').removeClass("selected");
@@ -4383,12 +4358,6 @@
                         cutstart = false;
                         rotate = false;
                         rotatestart = true;
-                        if(originaParams.sx==undefined)
-                            originaParams = JSON.parse(JSON.stringify(imagParams))
-                        console.log(originaParams)
-                        
-                        /*cutstartpos = {};
-                        cutendpos = {};*/
                     })
                     $('.move').on('click', function(e) {
                         $(this).addClass("selected");
@@ -4562,30 +4531,14 @@
 
                                 return (angleToP2 - angleToP1)
                             }
-                            console.log(cangle)
                             cangle = prevAngle+((angle(p(rotatestartpos.x, rotatestartpos.y), p(center.x, center.y), p(e.clientX, e.clientY))))
 
-                            ctx.save();
-                            ctx.translate(center.x, center.y);
-                            ctx.rotate(cangle);
-                            ctx.translate(-center.x,-center.y);
-                            ctx.drawImage(
-                                img,
-                                imagParams.sx,
-                                imagParams.sy,
-                                imagParams.sw,
-                                imagParams.sh,
-                                imagParams.fx,
-                                imagParams.fy,
-                                imagParams.fw,
-                                imagParams.fh,
-                            );
-                            ctx.restore();
+                            imgZoom(1,null)
+
                         } else {
                             
                             if (e.touches) {
-
-                            try {
+                                try {
                                     y = e.touches[0];
                                     k = e.touches[1];
                                     var d = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
@@ -4619,66 +4572,20 @@
 
                                         
                                     }
-
-                                    ctx.clearRect(0, 0, $(window).width(), $(window).height())
-                                    var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
-                                ctx.save();
-                                ctx.translate(center.x, center.y);
-                                ctx.rotate(cangle);
-                                ctx.translate(-center.x,-center.y);
-                                    ctx.drawImage(
-                                        img,
-                                        imagParams.sx,
-                                        imagParams.sy,
-                                        imagParams.sw,
-                                        imagParams.sh,
-                                        imagParams.fx,
-                                        imagParams.fy,
-                                        imagParams.fw,
-                                        imagParams.fh,
-                                    );
-                                    ctx.restore();
+                                    imgZoom(1,null)
                                 } catch(e) {
                                     
                                 }
-
-
-
-
                                 e = e.touches[0];
                             }
                             if (touchCounter==1 && (prevTouchCounter==0)) {
-                                console.log('move')
-                                    dist = {
-                                        x: e.clientX-startPos.x,
-                                        y: e.clientY-startPos.y
-                                    }
-                                    imagParams.fx = dist.x+cdrag.x
-                                    imagParams.fy = dist.y+cdrag.y
-                                    /*$('#canvas').attr('moved','true')
-                                    $('#canvas').css('left',dist.x+cdrag.x)
-                                    $('#canvas').css('top',dist.y+cdrag.y)
-                                    $('#canvas').css('right','initial')
-                                    $('#canvas').css('bottom','initial')*/
-                                ctx.clearRect(0, 0, $(window).width(), $(window).height())
-
-                                var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
-                                ctx.save();
-                                ctx.translate(center.x, center.y);
-                                ctx.rotate(cangle);
-                                ctx.translate(-center.x,-center.y);
-                                ctx.drawImage(
-                                    img,
-                                    imagParams.sx,
-                                    imagParams.sy,
-                                    imagParams.sw,
-                                    imagParams.sh,
-                                    imagParams.fx,
-                                    imagParams.fy,
-                                    imagParams.fw,
-                                    imagParams.fh,
-                                );
-                                ctx.restore();
+                                dist = {
+                                    x: e.clientX-startPos.x,
+                                    y: e.clientY-startPos.y
+                                }
+                                imagParams.fx = dist.x+cdrag.x
+                                imagParams.fy = dist.y+cdrag.y
+                                imgZoom(1,null)
                                
                             }
                             else if(touchCounter==1 && (prevTouchCounter==2)) {
@@ -4696,12 +4603,8 @@
                                     
                             }
 
-
-
                         }
                     })
-
-
 
                 }
                 img.src = url;
@@ -4804,7 +4707,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.0</div>
+        <div class="version">v5.1</div>
     </body>
 
 </html>
