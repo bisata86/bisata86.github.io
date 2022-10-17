@@ -36,8 +36,8 @@
         }
         #canvas {
            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
-           background: url("https://freegestcrm.com/crm/assets/img/test.png");
-           background-size: 100% 100%;
+           /*background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;*/
         }
 
         .selectImage {
@@ -3839,7 +3839,7 @@
                     
                     if ($('.settings').length == 0)
                     $('body').append('<div class="settings"></div>')
-                    $('.settings').html('<div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="rotate button"></div><div class="move button selected"></div>');
+                    $('.settings').html('<div class="settingsCont"><div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="testo button">Aa</div><div class="rotate button"></div><div class="move button selected"></div></div>');
                     $('body').append('<canvas id="textCanvas"></canvas>')
                     document.getElementById('textCanvas').width = wcan;
                     document.getElementById('textCanvas').height = hcan;
@@ -3854,7 +3854,6 @@
                         ctx.font = fosize+"px Georgia";
                         console.log(imagParams)
                         ctx.fillText(text, imagParams.fx, fosize+imagParams.fy);
-                        $('.textMark').focus();
                     }
                     handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'text',fsize)
                     
@@ -4298,6 +4297,9 @@
                         $('.inputfile').val('')
                         $('.dragEvents').show();
                     })
+                    $('.testo').on('click', function(e) {
+                        $('.textMark').focus();
+                    })
                     $('.rotate').on('click', function(e) {
                         $(this).addClass("selected");
                         $('.move').removeClass("selected");
@@ -4641,7 +4643,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.3</div>
+        <div class="version">v5.4</div>
     </body>
 
 </html>
