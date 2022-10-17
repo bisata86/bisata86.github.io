@@ -66,6 +66,10 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+        /*.changeWH {
+             -webkit-appearance: none;
+             background: url('');
+        }*/
         .menu {
             position: absolute;
             bottom: 0px;
@@ -3771,7 +3775,7 @@
             select3 += '</select>'
             $('.dims').html(select1+' '+select3+' '+select2)
             var prevHtml = btoa($('.changeWH').find('option:selected').html());
-            $('.changeWH').find('option:selected').attr('data-prehtml',prevHtml).html('x')
+            //$('.changeWH').find('option:selected').attr('data-prehtml',prevHtml).html('x')
             $('.changeW').on('change',function(){
                 wcan = $(this).val();
                 document.getElementById('canvas').width = wcan;
@@ -3794,7 +3798,7 @@
                     $('option[data-prehtml]').each(function(){
                         $(this).html(atob($(this).attr('data-prehtml')));
                     })
-                    $(this).find('option:selected').attr('data-prehtml',prevHtml).html('x')
+                    //$(this).find('option:selected').attr('data-prehtml',prevHtml).html('x')
                 }
             })
             $('.changeH').on('change',function(){
@@ -4284,9 +4288,7 @@
                 document.getElementById('imgCanvas').height = $(window).height();
                 var ctx = $('#imgCanvas')[0].getContext('2d');
                 var url = URL.createObjectURL(e.target.files[0]);
-                console.log(e.target.files[0])
-                var img = new Image();
-                var mult = 1;
+                var img = new Image();                
                 $('body').append('<img id="tempImg" src="' + url + '"></img>')
                 img.onload = function(e) {
                     if ($('.settings').length == 0)
@@ -4295,13 +4297,14 @@
                     $('.menu').hide();
                     var w = $('#tempImg').width();
                     var h = $('#tempImg').height();
+                    $('#tempImg').remove();
                     var tx = ($(window).width()-$('#canvas').width())/2
                     var ty = ($(window).height()-$('#canvas').height())/2
                     var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
                     if(!$('#canvas').attr('moved'))
                         cdrag = {x:tx,y:ty};
                     ctx.drawImage(img, cdrag.x, cdrag.y, mainZoom*w , mainZoom*h );
-
+                    var mult = 1;
                     var dist = {x:0,y:0};
                     var startZoom;
                     var startPosF;
@@ -4309,10 +4312,8 @@
                     var prevTouchCounter = 0;
                     var touchCounter = 0;
                     var canefix = 0;
-                    $('#tempImg').remove();
                     var move = false;
                     var mmove = true;
-                    var cut = false;
                     var rotate = false;
                     var rotatestart = false;
                     var cangle = 0;
@@ -4320,15 +4321,6 @@
                     var rotatestartpos = {
                         x: 0,
                         y: 0
-                    };
-                    var cutstart = false;
-                    var cutstartpos = {
-                        x: 0,
-                        y: 0
-                    };
-                    var cutendpos = {
-                        x: w,
-                        y: h
                     };
                     var hMove = {
                         x: 0,
@@ -4354,8 +4346,6 @@
                         $('.move').removeClass("selected");
                         $('.cut').removeClass("selected");
                         mmove = false;
-                        cut = false;
-                        cutstart = false;
                         rotate = false;
                         rotatestart = true;
                     })
@@ -4452,7 +4442,6 @@
                     }
 
                     $('#imgCanvas').on(events.start, function(e) {
-                        console.log(touchCounter)
                         prevTouchCounter = touchCounter;
                         touchCounter++;
 
@@ -4707,7 +4696,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v5.1</div>
+        <div class="version">v5.2</div>
     </body>
 
 </html>
