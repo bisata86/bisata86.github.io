@@ -3880,13 +3880,17 @@
                     $('.dims').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
-                    $('.settingsCont').append('<div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button colorPicker"></div>')
+                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button colorPicker"></div>')
 
 
 
                     $('.undo').addClass('disabled');
                     $('.redo').addClass('disabled');
-                    
+                    $('#opacitySelector').on('input', function(e) {
+                        var ctx = document.getElementById('canvas').getContext('2d');
+                        ctx.globalAlpha = $(this).val();
+                        //zoom(1,null)
+                    })
                     
                     $('.setImg').on('click', function(e) {
                         $('.settings').remove();
@@ -3909,6 +3913,9 @@
                         setTimeout(function(){
                             $('.color input').click()
                         },10)
+                        if($('.brush').hasClass('active')) {
+                           $('.brush').click() 
+                        }
                         
                     })
                     $('.undo').on('click', function(e) {
@@ -4688,7 +4695,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v6.4</div>
+        <div class="version">v6.5</div>
     </body>
 
 </html>
