@@ -3857,6 +3857,7 @@
                 })
                 $('.text').on('click', function() {
                     $('.menu').hide();
+                    $('.dims').hide();
                     $('body').append('<input style="position:absolute;z-index:10; background:transparent; color: transparent;border:none;-webkit-appearance: none; outline: none !important;;" class="textMark" value=""></input>')
                     
                     if ($('.settings').length == 0)
@@ -4704,7 +4705,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
-        <div class="version">v6.6</div>
+        <div class="version">v6.7</div>
     </body>
 
 </html>
