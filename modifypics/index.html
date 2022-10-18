@@ -4758,56 +4758,87 @@
         }
         function downloadCanvasAsImage() {
 
-            for (var i = layers.length - 1; i >= 0; i--) {
+            $('body').append('<canvas class="mergeCanvas" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
+                    
+            var ctxo = $('.mergeCanvas')[0].getContext("2d");
+
+            function step(i) {
                 console.log(layers[i])
+                if(i<layers.length) {
+                    var img = new Image();
+                    img.onload = function(e) {
+                        ctxo.drawImage(
+                            img,
+                            0,
+                            0
+                        );
+                        step(i+1)
+                    }
+                    img.src = $('#'+layers[i])[0].toDataURL('image/png',0.25);
+                } else {
+                    var img = new Image();
+                    img.onload = function(e) {
+                        ctxo.drawImage(
+                            img,
+                            0,
+                            0
+                        );
+                        download();
+                    }
+                    img.src = $('#canvas')[0].toDataURL('image/png',0.25);
 
+
+                }
+                
+            }
+            step(0)
+            function download() {
+                let downloadLink = document.createElement('a');
+                downloadLink.setAttribute('download', 'image.png');
+                let canvas = $('.mergeCanvas')[0];//document.getElementById('canvas');
+                let dataURL = canvas.toDataURL('image/png',0.25);
+                $('body').append('<img class="downloadMe" style="display:none;" src="'+dataURL+'"></img>')
+                //let url = dataURL.replace(/^data:image\/png/, 'data:application/octet-stream');
+                //downloadLink.setAttribute('href', url);
+                //downloadLink.click();
+
+
+                var img = $('.downloadMe')[0];
+                // atob to base64_decode the data-URI
+                var image_data = atob(img.src.split(',')[1]);
+                // Use typed arrays to convert the binary data to a Blob
+                var arraybuffer = new ArrayBuffer(image_data.length);
+                var view = new Uint8Array(arraybuffer);
+                for (var i=0; i<image_data.length; i++) {
+                    view[i] = image_data.charCodeAt(i) & 0xff;
+                }
+                try {
+                    // This is the recommended method:
+                    var blob = new Blob([arraybuffer], {type: 'image/png'});
+                } catch (e) {
+                    // The BlobBuilder API has been deprecated in favour of Blob, but older
+                    // browsers don't know about the Blob constructor
+                    // IE10 also supports BlobBuilder, but since the `Blob` constructor
+                    //  also works, there's no need to add `MSBlobBuilder`.
+                    var bb = new (window.WebKitBlobBuilder || window.MozBlobBuilder);
+                    bb.append(arraybuffer);
+                    var blob = bb.getBlob('image/png'); // <-- Here's the Blob
+                }
+
+                // Use the URL object to create a temporary URL
+                var url = (window.webkitURL || window.URL).createObjectURL(blob);
+                //location.href = url; // <-- Download!
+                $('.downloadMe').remove();
+                $('.mergeCanvas').remove();
+                //window.open(url,'_blank');
+
+                  var link = document.createElement('a');
+                  link.href = url;  // use realtive url 
+                  link.download = 'img'+new Date().getTime()+'.png';
+                  document.body.appendChild(link);
+                  link.click();  
             }
 
-            console.log(layers)
-            return false;
-            let downloadLink = document.createElement('a');
-            downloadLink.setAttribute('download', 'image.png');
-            let canvas = document.getElementById('canvas');
-            let dataURL = canvas.toDataURL('image/png',0.25);
-            $('body').append('<img class="downloadMe" style="display:none;" src="'+dataURL+'"></img>')
-            //let url = dataURL.replace(/^data:image\/png/, 'data:application/octet-stream');
-            //downloadLink.setAttribute('href', url);
-            //downloadLink.click();
-
-
-            var img = $('.downloadMe')[0];
-            // atob to base64_decode the data-URI
-            var image_data = atob(img.src.split(',')[1]);
-            // Use typed arrays to convert the binary data to a Blob
-            var arraybuffer = new ArrayBuffer(image_data.length);
-            var view = new Uint8Array(arraybuffer);
-            for (var i=0; i<image_data.length; i++) {
-                view[i] = image_data.charCodeAt(i) & 0xff;
-            }
-            try {
-                // This is the recommended method:
-                var blob = new Blob([arraybuffer], {type: 'image/png'});
-            } catch (e) {
-                // The BlobBuilder API has been deprecated in favour of Blob, but older
-                // browsers don't know about the Blob constructor
-                // IE10 also supports BlobBuilder, but since the `Blob` constructor
-                //  also works, there's no need to add `MSBlobBuilder`.
-                var bb = new (window.WebKitBlobBuilder || window.MozBlobBuilder);
-                bb.append(arraybuffer);
-                var blob = bb.getBlob('image/png'); // <-- Here's the Blob
-            }
-
-            // Use the URL object to create a temporary URL
-            var url = (window.webkitURL || window.URL).createObjectURL(blob);
-            //location.href = url; // <-- Download!
-            $('.downloadMe').remove();
-            //window.open(url,'_blank');
-
-              var link = document.createElement('a');
-              link.href = url;  // use realtive url 
-              link.download = 'img'+new Date().getTime()+'.png';
-              document.body.appendChild(link);
-              link.click();   
         }
         function point(p, canvas, color, linew) {
             canvas.fillStyle = color;
@@ -4856,7 +4887,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v6.8<div>download</div> <div>sposta layers</div> <div> check layer</div></div>
+        <div class="version">v6.9<div>sposta layers</div> <div> check layer</div></div>
     </body>
 
 </html>
