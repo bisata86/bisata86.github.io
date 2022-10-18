@@ -34,10 +34,13 @@
             nomargin: auto;
             
         }
-        #canvas {
+        #canvas.initial {
            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
            /*background: url("https://freegestcrm.com/crm/assets/img/test.png");
            background-size: 100% 100%;*/
+        }
+        .initLayerCanvas {
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
         }
 
         .selectImage {
@@ -51,8 +54,40 @@
                 background: url(https://cdn3.iconfinder.com/data/icons/pyconic-icons-1-2/512/close-512.png) no-repeat right;
                 background-size: 100% 100%;
                 border: none;
+                color: transparent;
         }
-        /*select {
+        .changeWH option, .changeWH optgroup {
+                color: black;
+        }
+        .layerCanvas {
+            pointer-events: none;
+            z-index: -1;
+        }
+        .seeLayer {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAAAXNSR0IArs4c6QAAA29JREFUaEPtmDtIa0EQhv/4iC+CiooKooWksRFjI9poFbBLIdhaRxAUbARBsDMJgsHCIq2NhY2NnYWFIGhjkyIQQSKiKCLxBeayAeEk55GZPXtyb3J3y2R25//mnyyz8RUKhQLqfPk0ZJ04rJ2sEyOhndRO1lAFdLvWkFmOUrWT2skaqoBu1xoy6+9dPD8/P2hsbCTV6uPjAy0tLaRYbpDydu3u7sbLywtXhyle5TNXGaTP53MNZnXAzc0NxsbGXJ3tGtIruHKqh4cH9PX1ScFKQ8rAzczMIB6Po7W1Ffv7+zg4OGCLlmljKUgO4OHhIRYXFx1hPj8/i+DUtba2hlgsRg3nvSfb2togbkHq4la9v78foi2pi3o+2UmOe83Nzfj6+qJqLYm7vr7GxMQEeS8FlATJARTqKImdKKampnBxcaEMtCKkSsCzszPMzs4WxW9ubmJra8sWRGVeR0huovn5eZycnJiE5/N5dHR0WAJNT0/j/Pzc8jtufrsOsoXkJrBrU5G4oaHBsfWGh4eRzWZNMao0WEKKeVPMndxlVUmqUDd7y3WWn2WCPDo6wsLCApevGO9GaFdXF56fn0vyvr6+orOzk61FFNZokgmSWvnyzEtLS0ilUiUfj4yM4Pb2lizSTZGc3FQGGY1GkUwmS3INDg7i/v7+34NMJBIQY5PMKndCTEdiSqIsESduYeN6e3tDIBCgbDfFGLVYXjyyLeum3dzsZV88vxtkQK2EillUzKROS7glLpnypUqD0mFgd3cXKysrJrF3d3cYGhqy5GxqasL397fld1xI9jAg66jT3Lq+vo6dnZ3i0QMDA8jlcrYGqwIUCSrOrsUg5l8bbgf0SCSC4+Nj8oVTKR8JkgsaDAaRTqfJIo2BmUwGo6Oj5L2VAMlO/mb0+/22vx8rVRQBxn3hcBinp6dKAdmQYsPT0xN6e3vJQh4fH9HT01MxnvOTGB8fh3hcUxe5XVVc79vb29jY2CgeJd6Wc3Nz7Ac2tzuknFQBS3XAGHd5eYnJyUmZrbTblXIyp90o5/3G7O3tYXl5mbPFFCvdrnZZ29vb8f7+7kqU2CzTlnZJlUMaE11dXSEUCpGAxZ/Oq6urpFhukKeQXDFexWtIrypb7XO1k9WuuFf5tJNeVbba52onq11xr/JpJ72qbLXP/S+c/AMW8gB0UHQH7gAAAABJRU5ErkJggg==');
+            background-size: 100% 100%;
+        }
+        .seeLayer.done {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAAAXNSR0IArs4c6QAABPZJREFUaEPtmkko/V8UwM8zz7NQyoLEwhBlY0ORMoQFYSd2FFEsLFBWZhkWSNmQUIhImbJSwsJGSYYFGSJkHn6d9++r7/uO536/3t97cnaec+85n3vucO65X8Pn5+cn/HIx/EH+kgj/RdIaArm8vAzZ2dnw/PwMkZGRsLKyAj4+PiauW30kHRwc4PX19QuqtLQUBgYGfgfk0dERhIWFwdvbmwlQVlYWzMzM/A5IOzs7eH9/F62oxcVFSE1NtX5IZ2dneHp6EgGOjY1Bfn6+6HerW5M4HWdnZ0UgJSUlMDg4KLlXWhVkY2MjNDQ0iEDwt/r6etnDwGogLy4uICAgAIRZaGFhIYyMjCiedlYBubCwADhNhTupv78/nJ+fqx7nFg+5u7sL0dHRogj6+fkBRpciFg1ZW1sLzc3NIg4vLy+4vr6m8Bl1zAr58fEBtra2JGfwSHB0dPzS3dragvj4eFFbe3t7uLq6And3d1K/ZoH09vaGm5sbsgMsiq6urnB/f8/S5HsjaTAYmI2zNLCxsZHMcCh96J6u5objIHAXxd1Ui2iG1AKXmJgIbW1t4OTkBH19fdDf38/ss5ZqjSZIFsDR0VEoKChQhMEIXV5ekoGrq6uhtbWVrM8EKZcYy1mjjLqHhwfc3d2RHeYrUvpn2l1Zoofb/MvLi6rjlZWV0NXVpaqnpEABJUWSBRAdohheWlqClJQUkf+ZmZnGTGZjY4MMr2ZPFfI7AdfW1iApKcnoPE79x8dHE5DAwEA4PT3972xjPJKUQBUhWQ2lp6fD3NycKAIPDw+AB7mShIeHw97enokKq305UFlIVgNy0xQN40GuJGgLU0ChfJcPkpCYb0oZVVskUiNJdVRPW6Ffwr5EkBMTE5CXl6fGI/l/PY5K3Sxub2/B09OT2RfhzBBBUkdeaLm4uBiGhoZMfg4JCYHj42Oyk3oGSSma3wZZVlYGPT09JraCgoLg7OzM8iDb29sB0yYtIoxERESEaMeU6xePFNyF+YLXKpZ7I78t3xfJjUfrlOV3jOsa1zdVzDVVjWeu3PukFlDO0eHhYcA1qpaJcAOA0cJN5n89QjhjrKCdnZ2wvr4Ok5OT1AAClvv5Dzb8hqz2mZMBraBSdMHBwXBycgI1NTXQ0tJiVOGncFJtvgtQcbrqGVF+24yMDMmyvlKoc3NzYWpqijwb1JaFaoKuJ6KhoaGwv79PdhYVDw4OANtRRQ2QHEnOoPDBU80RigP8PtLS0gCf3qhC7Z8cSc4w1jyxek0VLGv4+vqqqrOswZiYGNjZ2VHt82sWavnEpby8HHp7e8lGOMWmpiaoq6sz/ol3y+TkZPIxw/VBjZ7JnsIKiXfG+fl5ZkC9DTY3NyUr6pR+maZrUVERYPVNKHjWCV+cKMYpOt3d3YAzR4+QIaOiogBfmITi5uYGWK9JSEgw/svFxUVU1tDioJZpKWeHBIkvufjKKxR8oJF6u+f0tre3IS4ujsSIReeqqiqSLquSKiR+aDA+Pi7qF++Kh4eHrPZ+RF8RUq5KoJRv/giFilHmah2WI8z1NGeuAZKFlPoYCB9qsC6K9RhrEknInJwcmJ6eNuHQ8z740wMiCYlpG6ZvnGDK1dHRARUVFT/tryb7kpCrq6vGlAsFk3L8zNKaRXZNIih+O4p3u9jYWGtmNO/XH5YyMqrJgKU4qsePP0g9o2dJbf8B9xardCEvLyIAAAAASUVORK5CYII=');
+            background-size: 100% 100%;
+        }
+        .deleteLayer {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            vertical-align: middle;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAAAXNSR0IArs4c6QAAAvBJREFUaEPtmj2PMVEUxw8r8RIKoSDZRIhWSAiVika3jWYrlYr9CnwFoVMpNDqdhkJFQoJWKMhKFIQgIXbZzOTxZDB25t6ZMbOTUZG55875nf95uQPV+Xw+g8xfKgVSJgoLpuR6vQaz2QxM1ZDP5yGVSgkaTkEgVSoVstNMwUDekGIgGUi/3w+dTocLy0NbwSGZFLqo/vLyAl9fXwokbgQEURLXGaHsFEihIvvsfVkriTMWhIJhama39/2TkAQECigrSCmpeFFJgbzJ1z+r5GazAaPRyKrsWUGy2knCixRICYuD5BqWkmJ0W5Ruij0nqYZiQKLOxit/cb7jUSB/qRYiOLhpl8lkIJvNItXiZTFvNXlx/pHKVDimNYfDAXQ63RXQeDwGp9MpHqRarYbv72/SgclkAg6H484ZFEjC+DYQuBlA7sVXTV6coFPhtmkwKSl5SDoHFch/iW0wGGC325GfCoUCpNPpq5SXVLriKun1eqHX65FgxPvBYCA/yGazCeFwmAQzmUyw3W7lB8nUfZ+errVaDWKx2MNI03VPFAgme9RhiTVC6MYEnxCSgGSaY0xOol7XaDRwPB5RBfy/HkvJZ0Pa7XaYzWbyhpxOp/D6+ipvSC6dFfvsSpeu+/0etFotGW3UmmM69kkGkjiheDweElKv1wMBTX1x6b6SgQwGg9But0muaDQK9XpdfpDUlCsWi5BMJuUNyfeIES1dib+vrFYr1mr9yZpMJBJQKpV4h/z8/LybiaIpuVwuwWKx8AJJfWCuVqvw9vbG22MWpzmJWne/pev7+zuUy2USLBAIQLfblR9kpVKBeDxOe5Bwu90wHA6xj3SSUXI0GoHL5aKFzOVy8PHxIR3IUCgErVYLbDYbzOfzO8eIlF0sFmC1Wmmv0ZXA6XSiPSaiUGM/aj06o6LcnM1arp2Vc7r6fD7o9/tsfMVeIzok4Xmj0YBIJIIN8ciQ+tMD1805pSvXmz/LXoF8VqSFvo+ipNARftb+PwkUnHSHzIq5AAAAAElFTkSuQmCC');
+            background-size: 100% 100%;
+        }
+        select {
             -webkit-appearance: button;
             -moz-appearance: button;
             -webkit-user-select: none;
@@ -74,7 +109,7 @@
             padding-bottom: 2px;
             text-overflow: ellipsis;
             white-space: nowrap;
-        }*/
+        }
         /*.changeWH {
              -webkit-appearance: none;
              background: url('');
@@ -99,6 +134,19 @@
             text-align: center;
             transform: scale(.5);
             transform-origin: right;
+            
+        }
+        .menuLayers {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            margin: auto;
+            left:0px;
+            z-index: 100;
+            text-align: center;
+            background: white;
+            transform-origin: right;
+            height: fit-content;
             
         }
         .menul.scale {
@@ -196,11 +244,19 @@
 
             background-color: white;
         }
+        .lock {
+            width: 40px;
+            height: 40px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAAAXNSR0IArs4c6QAAA+5JREFUaEPtmU9IFFEcx397WRHUi1cDy8U0bRcXlyDE2jXdjhleYnQ95S0vSR7NKTynBzuomTdJc0uSMFvCUhAJ1jFxDXY39OJFEEQRBNl4wti8aXbn/ZthlXnX+b3f7/v5/d5783szrkwmk4FLPlwO5CWpsFPJS1JIcCrpVPICZcDW5bqw8AW6u59AIvHb1hTZAnlycgLV1dcxMK/XC9HoR1tgLYesqLiaE2Ru7jNUVVVZCmsZpBFcKvXnDCbXMytohUPSANDY8sALg+QRzDOXBJ4b0uO5BvqLTDKZBpfLRRIfs7EKlhkyEumA5eUlTOTo6BsIBoPUcPoJomGpIZPJJITDzZiu8vJyiMW+ccNpHRwcHEBdnQ/zWVRUBIryizoOFaToDJOonZh4C7Lcj5lKkgSy/JJk+pkNEaTXWwtHR0eYU/V1QByJ0zAYvAM7OztMGogge3qeQjQ6wxSAk+18Os8qIoJUI/EEYoVF7SBqC7Vjc3MLCgoKiF1SQdoJ29X1GGKxrxjI8PBrCIfvE8OphkyQaPLx8THU1t7AAqLsoizzjPV1BVpbH2AuampqYHb2E7NbZkg14tjYGAwM4CedJLWDLL+gEoUaCtRY6IeIA44LEu1RVYTPdxMODw8xjWtr61BcXGwKm2uvI3DUQfEMJshbtwKwt7d3HlebbZrDycxW/5y1qlSQg4ODMDT0CkvqzMwH8PnwzgQZiLpqmSWCpMLEkPpgJSUlEI8rpjHMLs0k1UmlUtDScg+LRbPviSBFLBu9D/Sdx+12myZJa8CqgwjSbPnRKFUUxXB55/LBu2SJIe1sBETHooYULcCogg0Nt2F3dxd7tLj4HcrKrtAsmnNbZkgrYI0ai0ikE/r6njPBqZO4IZGj/f19qK/3Y0JIT180yeiCjJoI1EyIGMyQ6mGwuvoTSktLz7T09j6D6ekpTFd/vwzt7R1ZtZodKupzkldNtiDUkJWVHjg9PcX86QUYXY8SiS1wu/9dj8zgsm0HFlhiyLa2hxCPxzG4ycl3EAgEqKpkZGwmnDQhXJXUB2lsbITx8Qni7ZKt6zGD0wewtBlA33fQdx7t2NjYhMLCQmJQZMizv3iqSbxctSK1ZLTVoMqKoP8mVJBWvBuzQfNUTu+TCdJKWKPfDryrhQtSJGwodBe2t7exIszPL4DH46Fd4f/ZC4HkgV1ZWQFJeoQJ8/v9MDX1nhtOdSAUEjlNp9PQ3NyECcz2r0TkvsuVEeGQarDOzggsLf3AYo+MjEIo1HTx/zTrM2p0kNj5CkKxLKukqG5FxMa0DVKEWFYfDiRr5vJtnlPJfKsIqx6nkqyZy7d5TiXzrSKsev4C/MJddFwkz68AAAAASUVORK5CYII=');
+            background-size: 100% 100%;
+            display: inline-block;
+
+        }
 
         .text {
             width: 40px;
             height: 40px;
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEwAACxMBAJqcGAAABHNJREFUeJzt3LurHGUcx+FvcqKiJohGBBGjRPHyB4imE0u72Akix1bsBAsriyiKokQ7CQoKaiGKCpGAjSI2golXhIR4v3USbzExicViiCHndy55d95zdp4H3iYLM7+d3c+emd0hCQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABJsq73AFOyMckVmd3ntxp9n+T33kNQ25hkV5IjSU5Yg64jSZ5NcuGirxJdrEuyJ/3fKGNfu+Mv96p0W/q/OazJurV+qdaO9b0HaOiW3gNw0rbeA7QyS4Fc0HsATjqv9wCtzFIg0JxAoCAQKGzoPcAqcSDJd0mON9zmukx+rLy+4TbP5MskP2by7VEr65NcmeTahtuksx1Z/teRLyW5YcpzbUtycAWzLbb2J7lpyrPfmOSVFcz20JTnYgWWE8ixJHcPONvWTG7DaBXHoSRbBpz/nkyO2egCGes1yANJXhhwfweTvNhwe88n+bbh9payvwcH3N+qMcZAvkqys8N+9zbc1r6G21qqJzNslKvCGAPZmeSfDvs90nBbRxtuazn7fKbDfrsaWyCHkjzXe4g1bFeSP3oPMaSxBbIryW+9h1jDfs3IPmDGFMjxjPAUYQqeTtvfXFa1MQXyepKvew8xAw4keav3EEMZUyBP9R5ghozmWI4lkA+TfNB7iBnybvp81Ty4WQrkcPHY4xnRefMATiR5onj8z6EGmbZZCuSjBf79nSSvDjnISLyc5L0FHlvotaCjczK5s/XUe4L2Jtncc6hTzKfdvVh3DTv6gi5L8mn+P9tnSeZ6DsXCrkvyfia3kzya1fVf0Mxn9gJJkk2ZnMJ+k8lfFLfIsyLzmc1AZtosXYNAcwKBgkCgIBAoCAQKAoGCQKAgECgIBAoCgYJAoCAQKAgECgKBgkCgIBAoCAQKAoGCQKAgECgIBAoCgYJAoCAQKAgECgKBgkCgIBAoCAQKAoGCQKAgECgIBAoCgYJAoCAQKAgECgKBgkCgIBAoCAQKAoGCQKAgECgIBAoCgYJAoCAQKAgECgKBgkCgIBAoCAQKAoGCQKAgECgIBAoCgYJAoCAQKAgECgKBgkCgIBAoCAQKAoGCQKAgECgIZDhzDbfldRuIAz2crQ23dXXDbUF3c0n2JznRaH0eH27MkPvTLo7/1n2DPgOYkvkkx9I+kKNJ7hzuaUA7m5LckWR32odx+nozyfYkGwd5ZrBCV2Vy2rMnyd+Zfhinr8NJ3k5yb5ItU36usKi5JNuSPJLkkwwfxGLr4yQ7ktwcF/QM6KIkjyX5Jf0jWOr6OcnDmZz6wdRck+Rg+r/hV7r2Z3IqCM2dm+SL9H+Tn+3al2RD42MD2Z7+b+5W6/bGx2ZmuXhbukt6D9DQ5t4DMHsuzeRit/en/9muH5Jc3PjYQJLJRfobmfyK3fuNvtx1NMlrcaPjsqzrPcAadX6Sy7N2TlGPJ/kpyV+9BwEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM7kX8fwvIWqet/rAAAAAElFTkSuQmCC');
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADkAAAA5CAYAAACMGIOFAAAAAXNSR0IArs4c6QAABRZJREFUaEPtWFkorW0UXoZE6IQb3EguJDpcIfMdioyHkKEocxJRxkSSG0PGUBzTQcZQlDKHciEkKZJMiVNH0lE4PW99O/uztz3Y/j7+7619s793WM961nrWel+t5+fnZ/riQ0sE+UUYFpn8IkSSyKTI5CfygBiun4isN00VmRSZ/EQeEMP1E5H18cLz+/dvSkxMJB0dHWpvb6dv374Jyj8aCde5uTkKCQkhIyMjGhsbI2dn568F8u/fv5SXl0f19fUMWHFxMZWWljJWhTLezeTu7i79+PGD9vb2GCYXFxfq7+8na2troWB8/y2ko6ODkpKSpAAhL5GjQhnvYpITnNvbWzo9PZWwGRsbS42NjWRsbCwInO8CCcEBYz9//qTh4WFJXlpYWAhKgNQGyQnOnz9/qKGhgdbW1pjCglWhCZDaIDnBqaiooNDQUOJCd3R09F0CBKdNT08T9llfX6fj42O2n6urKytN8fHx5OTkRNra2kqngtogIThtbW1SSsoXIVUE6OnpiUZGRqioqIiurq4oKiqK/P39SV9fn1ZWVqiuro5ubm5YnqNMZWdnk66urlJA1QLJsebg4CBVE4+OjphxYAAjISGBhbKhoeGbxuB9G2UnJSWFhTvWpKenS61ZWFhgLIJZAO3u7qagoKCPA8kJzuDgoFR38/j4SGVlZVReXs4OV1aAzs7OKCYmhubn59k6sFRVVUV6enoSEPy9lXUgNlCZSb7g8Fna2Nig4OBgOj8/V1qA+CCTk5OppqaGDAwMpJiamJiQsOfj40O9vb1kaWmpkE2VQfIFh3/C3d0dZWRkUGdnp9IChHDF/NzcXLK3t6fq6momNPyB3PTw8GB/Ozo60sDAANna2moeJDwM9UNtRDjKGhCQsLAwySfUUCjwe8d/ApJfJpQ1WpX84e8Jli8vLwmh2tPTQ0tLSx/LJCc4kZGRZGpq+ibGnZ0dZpQqAsRtiHJycnLCuiao7sXFBSEHbWxsqKSk5ONAKhIcPuLNzU0KDAxUSYAgVl1dXSw/9/f3WTlKS0tjCg6l/fBw5QSnsLCQyb2iwRcgNzc36uvrIysrq1dLwdyvX78oMzOTFXyIChp8rNHS0pLMfwlS4+qKvIDgQGyUVTRYxu+A5AnQ7OwshYeHs0YATgCb3t7eb6qrr68vKyFmZmaK/K1cnUQYxcXFsZyQVb/knYKQQ/5ubW2xKbIE6P7+nhX/1tZWNkdejcS3l0xqHCRXElpaWpgRyg7+04isDuj6+pqF/8zMDNsWTyf4vQxT7rzFxUUJwxoFibIBYENDQ4T+0cvLS1mMbB6/ZhYUFLDWj2uusT8u2VNTU2w+ACMf+S9+COX8/Hxqbm5m8zQGEhtXVlayPhIDj1WpqalKd/9YA5WNiIigw8NDtgea66amJoqOjmbXJX5PyrGZlZVFJiYm9PDwwO6qSBO8G01OTtLBwQHZ2dkxsfr+/btCp79q63AoDEP4gL3t7W2pTfBQ5efnx9oud3d3mU8ceNRaXV1l+6A74u6ELzcKCAgg/NAZ4UxEy/j4uEyD0brV1taSp6cn5eTkSPIXCovbirm5OVNkec8tr0DyhUCem97qHXEL4Yq2IjcvLy8zZ6HkQL2hrLiqwWD8j9cGOIJTUdw1cbdEowHnwdm4dwKsPKVVuUFXZLQQv4sghciKOjaJTKrjNSGuEZkUIivq2CQyqY7XhLhGZFKIrKhjk8ikOl4T4hqRSSGyoo5N/wsm/wEDtX2D4fYlWAAAAABJRU5ErkJggg==');
             background-size: 100% 100%;
             display: inline-block;
             background-color: white;
@@ -1990,7 +2046,7 @@
                     _default: [0, "", ""]
                 };
 
-            function ve(e, t) {
+            function ve(e, t) {F
                 var n;
                 return n = "undefined" != typeof e.getElementsByTagName ? e.getElementsByTagName(t || "*") : "undefined" != typeof e.querySelectorAll ? e.querySelectorAll(t || "*") : [], void 0 === t || t && N(e, t) ? k.merge([e], n) : n
             }
@@ -3739,6 +3795,7 @@
         var mainZoom = 1;
         var prev = {};
         var color = 'black';
+        var layers = []
         $(document).ready(function() {
             wcan = $(window).width();
             hcan = $(window).height();
@@ -3843,6 +3900,7 @@
                 $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
                 $('.menu').append('<div class="text"></div>')
                 $('.menu').append('<div class="save"></div>')
+                $('.menu').append('<div class="lock"></div>')
                 $('.menu').append('<div class="clear"></div>')
 
                 $('.save').on('click', function() {
@@ -3853,6 +3911,38 @@
                         $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
                         $('.dims').show();
                     }
+                    
+                })
+                $('.lock').on('click', function() {
+                    $('.dims').hide();
+                    var newGuid =  function() {
+                      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+                        function(c) {
+                          var r = Math.random() * 16 | 0,
+                            v = c == 'x' ? r : (r & 0x3 | 0x8);
+                          return v.toString(16);
+                        }).toUpperCase();
+                    }
+                    var nuovoId = newGuid()
+                    $('body').append('<canvas class="layerCanvas" id="'+nuovoId+'" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
+                    
+                    var ctxs = $('#'+nuovoId)[0].getContext("2d");
+                    data =  canvas.toDataURL('image/png',0.25);
+                    console.log(data)
+                    var image = new Image();
+                    image.onload = function() {
+                      ctxs.drawImage(image, 0, 0);
+                      
+                      $('#'+nuovoId).css('width',$('#canvas').width())
+                      $('#'+nuovoId).css('height',$('#canvas').height())
+                      $('#'+nuovoId).css('top',$('#canvas').position().top)
+                      $('#'+nuovoId).css('left',$('#canvas').position().left)
+                      $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                      $('#canvas').removeClass('initial')
+                      layers.push(nuovoId)
+                      displayLayers()
+                    };
+                    image.src = data
                     
                 })
                 $('.text').on('click', function() {
@@ -3878,7 +3968,8 @@
                         console.log(imagParams)
                         ctx.fillText(text, imagParams.fx, fosize+imagParams.fy);
                     }
-                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'',fsize)
+                    ctx.globalAlpha = 1;
+                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'Text here',fsize)
                     
                 });
                 $('.handDraw').on('click', function() {
@@ -3890,10 +3981,11 @@
                     $('.dims').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
-                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button colorPicker"></div>')
+                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser">erase</div><div class="button colorPicker"></div>')
 
 
-
+                    var ctx = document.getElementById('canvas').getContext('2d');
+                    ctx.globalAlpha = 1;
                     $('.undo').addClass('disabled');
                     $('.redo').addClass('disabled');
                     $('#opacitySelector').on('input', function(e) {
@@ -3901,7 +3993,14 @@
                         ctx.globalAlpha = $(this).val();
                         //zoom(1,null)
                     })
-                    
+                    $('.eraser').on('click', function(e) {
+                        if(ctx.globalCompositeOperation=='source-over') {
+                            ctx.globalCompositeOperation="destination-out"
+                        } else {
+                            ctx.globalCompositeOperation='source-over'
+                        }
+                        //ctx.globalCompositeOperation="source-over"
+                    })
                     $('.setImg').on('click', function(e) {
                         $('.settings').remove();
                         write = false
@@ -4054,6 +4153,7 @@
                                 x: (((e.clientX))-cdrag.x)/mainZoom,
                                 y: (((e.clientY))-cdrag.y)/mainZoom,
                             }
+                            
                             line(curr, prev, ctx, color, linew)
                             prev = JSON.parse(JSON.stringify(curr))
 
@@ -4108,6 +4208,39 @@
                 }
             })
         })
+        function displayLayers() {
+            if(layers.length) {
+                if($('.menuLayers').length==0)
+                    $('body').append('<div class="menuLayers"></div>')
+                $('.menuLayers').html('')
+                for (var i = layers.length - 1; i >= 0; i--) {
+                    $('.menuLayers').append('<div data-id="'+layers[i]+'">Layer '+(i+1)+'<div class="seeLayer"></div><div class="deleteLayer"></div></div>')
+                }
+                $('.seeLayer').on('click',function(){
+                    
+                    if($(this).hasClass('done')) {
+                       $('#'+$(this).parent().attr('data-id')).show() 
+                    } else {
+                       $('#'+$(this).parent().attr('data-id')).hide() 
+                    }
+                    
+                    $(this).toggleClass('done')
+                })
+                /*$('.seeLayer').on(events.end,function(){
+                    $('canvas').show()
+                })*/
+                $('.deleteLayer').on('click',function(){
+                    if(confirm('Dlete layer?')) {
+                        $('#'+$(this).parent().attr('data-id')).remove();
+                        layers.splice(layers.indexOf($(this).parent().attr('data-id')), 1)
+                        displayLayers()
+                    }
+                })
+            } else {
+                $('.menuLayers').remove()
+            }
+        }
+
         function dragEvents() {
             //console.log('dragEvents')
             var startPos = {x:0,y:0};
@@ -4190,6 +4323,10 @@
                     $('#canvas').css('right','initial')
                     $('#canvas').css('bottom','initial')
                 }
+                $('.layerCanvas').css('width',$('#canvas').width())
+                $('.layerCanvas').css('height',$('#canvas').height())
+                $('.layerCanvas').css('top',$('#canvas').position().top)
+                $('.layerCanvas').css('left',$('#canvas').position().left)
             })
             $('.dragEvents').off(events.start).on(events.start, function(e) {
                 canefix = 0;
@@ -4256,6 +4393,11 @@
                 $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
                 $('#canvas').css('bottom','initial');
             }
+
+            $('.layerCanvas').css('width',$('#canvas').width())
+            $('.layerCanvas').css('height',$('#canvas').height())
+            $('.layerCanvas').css('top',$('#canvas').position().top)
+            $('.layerCanvas').css('left',$('#canvas').position().left)
         }
         function handleFiles(e) {
             if(e.target.files[0].type.indexOf('image')!=-1) {
@@ -4615,6 +4757,14 @@
                     
         }
         function downloadCanvasAsImage() {
+
+            for (var i = layers.length - 1; i >= 0; i--) {
+                console.log(layers[i])
+                
+            }
+
+            console.log(layers)
+            return false;
             let downloadLink = document.createElement('a');
             downloadLink.setAttribute('download', 'image.png');
             let canvas = document.getElementById('canvas');
@@ -4705,6 +4855,7 @@
     <body>
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
+        <canvas class="initLayerCanvas layerCanvas"></canvas>
         <div class="version">v6.7</div>
     </body>
 
