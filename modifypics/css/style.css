@@ -57,7 +57,9 @@
             height: 20px;
             vertical-align: middle;
             background: url('https://bisata86.github.io/modifypics/img/see.png');
-            background-size: 100% 100%;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center;
             padding: 5px;
         }
         .seeLayer.done {
@@ -66,7 +68,9 @@
             height: 20px;
             vertical-align: middle;
             background: url('https://bisata86.github.io/modifypics/img/unsee.png');
-            background-size: 100% 100%;
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center;
         }
         .nameLayer {
             display: inline-block;
