@@ -378,6 +378,17 @@
             display: inline-block;
             
         }
+        .replacer {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://img.icons8.com/ios/500/fill-color.png'); 
+            background-size: 30px 30px;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            
+        }
         /*.brush.active {
             background-color: black;
         }*/
@@ -3832,6 +3843,7 @@
         var mainZoom = 1;
         var prev = {};
         var color = '#000000';
+        var colorAlpa = 255;
         var layers = []
         var menuItems = [];
         $(document).ready(function() {
@@ -4070,7 +4082,7 @@
                     $('.menuLayers').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
-                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div><div class="button replacer">r</div>')
+                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min="0" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div><div class="button replacer"></div>')
 
 
                     var ctx = document.getElementById('canvas').getContext('2d');
@@ -4081,11 +4093,13 @@
                     $('#opacitySelector').on('input', function(e) {
                         var ctx = document.getElementById('canvas').getContext('2d');
                         ctx.globalAlpha = $(this).val();
+                        colorAlpa = ctx.globalAlpha*255
                         //zoom(1,null)
                     })
                     $('.replacer').on('click', function(e) {
                         $('body').css('cursor','crosshair')
                         replace = true
+                        $(this).toggleClass('selected')
                     })
                     $('.eraser').on('click', function(e) {
                         if(ctx.globalCompositeOperation=='source-over') {
@@ -4099,6 +4113,7 @@
                     $('.setImg').on('click', function(e) {
                         $('.settings').remove();
                         write = false
+                        replace = false
                         ctx.globalCompositeOperation='source-over'
                         $('.menu').show();
                         $('.menuLayers').show();
@@ -4107,14 +4122,24 @@
                         $('#canvas').off(events.end)
                         $('.dragEvents').show();
                         $('.overlay').remove();
+                        $('body').css('cursor','initial')
                     })
                      $('.colorPicker').css('background-color',color)
+                    var pickerTimeout;
                     $('.colorPicker').on('click', function(e) {
                         $('body').append('<div class="color"><input type="color" value="' + color + '"/></div>')
                         $('.color input').on('input', function(e) {
                             color = $(this).val();
                             //zoom(1,null)
+                            clearTimeout(pickerTimeout)
+                            pickerTimeout = setTimeout(function(){
+                                $('.color input').hide()
+                            },500)
+                            
                             $('.colorPicker').css('background-color',color)
+                        })
+                        $('.color input').on('change', function(e) {
+                            console.log('sss')
                         })
                         setTimeout(function(){
                             $('.color input').click()
@@ -4262,16 +4287,11 @@
                             e = e.touches[0];
                         }
                         if(replace) {
-                            var mouseX, mouseY;
+                            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                            var mouseX = (((e.clientX))-cdrag.x)/mainZoom;
+                            var mouseY = (((e.clientY))-cdrag.y)/mainZoom;
 
-                            if(e.offsetX) {
-                                mouseX = e.offsetX;
-                                mouseY = e.offsetY;
-                            }
-                            else if(e.layerX) {
-                                mouseX = e.layerX;
-                                mouseY = e.layerY;
-                            }
+                            
                             var ctx = document.getElementById('canvas').getContext('2d');
                             var c = ctx.getImageData(mouseX, mouseY, 1, 1).data;
                             console.log(c[0],c[1],c[2],c[3]);
@@ -4279,6 +4299,7 @@
                             replaceColor(c,hexToRgb(color))
                             write = true;
                             replace = false;
+                            $('.replacer').removeClass('selected')
                             $('body').css('cursor','initial')
                         }
                         else {
@@ -5221,10 +5242,11 @@
 
             var arr = []
             for (var i = 0, n = pix.length; i <n; i += 4) {
-                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2]){
+                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2] && pix[i+3] === color[3]){
                      pix[i] = repColor[0]; 
                      pix[i+2] = repColor[2];   
-                     pix[i+1] = repColor[1];     
+                     pix[i+1] = repColor[1];
+                     pix[i+3] = colorAlpa         
                 }
             }
 
@@ -5251,7 +5273,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v6.9</div>
+        <div class="version">v7</div>
     </body>
 
 </html>
