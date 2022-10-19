@@ -36,8 +36,8 @@
         }
         .initLayerCanvas {
             background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
-            background: url("https://freegestcrm.com/crm/assets/img/test.png");
-           background-size: 100% 100%;
+           /* background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;*/
         }
 
         .selectImage {
@@ -4341,7 +4341,7 @@
                 
                 $('.menuLayers').html('')
                 for (var i = layers.length-1 ; i >= 0; i--) {
-                    $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">#'+(layers.length-i)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
+                    $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">'+(layers[i].name)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
                     if(layers[i].active) {
                         $('#'+layers[i].id).show()
                     } else {
@@ -4412,7 +4412,7 @@
                 $('.menuLayers').html('')
             }
 
-                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'#'+0+'</div><div class="zero seeLayer '+''+'"></div><div class="zero deleteLayer"></div></div>');
+                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'curr'+'</div><div class="zero seeLayer '+''+'"></div></div>');
                 $('.seeLayer.zero').on('click',function(){
                     if( $(this).hasClass('done')) {
                         $('#canvas').show()
@@ -5182,7 +5182,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v6.8</div>
+        <div class="version">v6.9</div>
     </body>
 
 </html>
