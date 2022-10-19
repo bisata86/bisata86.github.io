@@ -272,8 +272,13 @@
                         //zoom(1,null)
                     })
                     $('.replacer').on('click', function(e) {
-                        $('body').css('cursor','crosshair')
-                        replace = true
+                        if(!$(this).hasClass('selected')) {
+                            $('body').css('cursor','crosshair')
+                            replace = true
+                        } else {
+                            replace = false;
+                            $('body').css('cursor','initial')
+                        }
                         $(this).toggleClass('selected')
                     })
                     $('.eraser').on('click', function(e) {
@@ -472,10 +477,10 @@
                             console.log(c[0],c[1],c[2],c[3]);
                             console.log(hexToRgb(color));
                             replaceColor(c,hexToRgb(color))
-                            write = true;
+                            /*write = true;
                             replace = false;
                             $('.replacer').removeClass('selected')
-                            $('body').css('cursor','initial')
+                            $('body').css('cursor','initial')*/
                         }
                         else {
                             write = true;
@@ -603,7 +608,7 @@
                     console.log(l)
                     menuItems.push(
                     {
-                        text:"Delete layer?"
+                        text:"Delete layer "+layers[l].name+'?'
                     },
                     {
                         text:"YES",
@@ -1414,7 +1419,7 @@
         function replaceColor(color,repColor){
             var ctx = $('#canvas')[0].getContext('2d');
             var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
-                pix = canvasData.data;
+            pix = canvasData.data;
 
             var arr = []
             for (var i = 0, n = pix.length; i <n; i += 4) {
@@ -1428,6 +1433,22 @@
 
             ctx.putImageData(canvasData, 0, 0);
         }
+        /*function stepper() {
+            var ctx = $('#canvas')[0].getContext('2d');
+            var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
+            pix = canvasData.data;
+
+            var index = 0
+            setInterval(function(){
+                console.log(index)
+                pix[index] = 0
+                pix[index+1] = 0
+                pix[index+2] = 0
+                pix[index+3] = 255
+                ctx.putImageData(canvasData, 0, 0);
+                index+=4;
+            },0)
+        }*/
         function hexToRgb(hex) {
           var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
           return result ? [
@@ -1445,7 +1466,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v7.4</div>
+        <div class="version">v7.5</div>
     </body>
 
 </html>
