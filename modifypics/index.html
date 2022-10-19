@@ -652,9 +652,9 @@
                 $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'Current'+'</div><div class="zero seeLayer '+''+'"></div></div>');
                 $('.seeLayer.zero').on('click',function(){
                     if( $(this).hasClass('done')) {
-                        $('#canvas').show()
+                        $('#canvas').css('visibility','visible')
                     } else {
-                        $('#canvas').hide() 
+                        $('#canvas').css('visibility','hidden')
                     }              
                     $(this).toggleClass('done')
                 })
@@ -1445,7 +1445,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v7.3</div>
+        <div class="version">v7.4</div>
     </body>
 
 </html>

@@ -234,7 +234,7 @@
             background: url('https://bisata86.github.io/modifypics/img/lock.png');
             background-size: 100% 100%;
             display: inline-block;
-
+            padding: 0 !important;
         }
 
         .text {
