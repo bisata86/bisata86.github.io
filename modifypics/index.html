@@ -3831,7 +3831,7 @@
         var linew = 5;
         var mainZoom = 1;
         var prev = {};
-        var color = 'black';
+        var color = '#000000';
         var layers = []
         var menuItems = [];
         $(document).ready(function() {
@@ -4062,6 +4062,7 @@
                 $('.handDraw').on('click', function() {
 
                     var write = false;
+                    var replace = false
                     var history = [document.getElementById('canvas').toDataURL('image/png')]
                     $('.dragEvents').hide();
                     $('.menu').hide();
@@ -4069,7 +4070,7 @@
                     $('.menuLayers').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
-                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div>')
+                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div><div class="button replacer">r</div>')
 
 
                     var ctx = document.getElementById('canvas').getContext('2d');
@@ -4081,6 +4082,10 @@
                         var ctx = document.getElementById('canvas').getContext('2d');
                         ctx.globalAlpha = $(this).val();
                         //zoom(1,null)
+                    })
+                    $('.replacer').on('click', function(e) {
+                        $('body').css('cursor','crosshair')
+                        replace = true
                     })
                     $('.eraser').on('click', function(e) {
                         if(ctx.globalCompositeOperation=='source-over') {
@@ -4256,19 +4261,45 @@
                         if (e.touches) {
                             e = e.touches[0];
                         }
-                        write = true;
-                        var ctx = document.getElementById('canvas').getContext('2d');
-                        var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                        if(replace) {
+                            var mouseX, mouseY;
+
+                            if(e.offsetX) {
+                                mouseX = e.offsetX;
+                                mouseY = e.offsetY;
+                            }
+                            else if(e.layerX) {
+                                mouseX = e.layerX;
+                                mouseY = e.layerY;
+                            }
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var c = ctx.getImageData(mouseX, mouseY, 1, 1).data;
+                            console.log(c[0],c[1],c[2],c[3]);
+                            console.log(hexToRgb(color));
+                            replaceColor(c,hexToRgb(color))
+                            write = true;
+                            replace = false;
+                            $('body').css('cursor','initial')
+                        }
+                        else {
+                            write = true;
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                            
+                            var curr = {
+                                x: (((e.clientX))-cdrag.x)/mainZoom,
+                                y: (((e.clientY))-cdrag.y)/mainZoom,
+                            }
+                            point(curr, ctx, color, linew)
+                            prev = JSON.parse(JSON.stringify(curr))
+                            if($('.brush').hasClass('active')) {
+                               $('.brush').click() 
+                            }
+                        }
+
+
                         
-                        var curr = {
-                            x: (((e.clientX))-cdrag.x)/mainZoom,
-                            y: (((e.clientY))-cdrag.y)/mainZoom,
-                        }
-                        point(curr, ctx, color, linew)
-                        prev = JSON.parse(JSON.stringify(curr))
-                        if($('.brush').hasClass('active')) {
-                           $('.brush').click() 
-                        }
+
                     })
                     $('#canvas').on(events.end, function(e) {
                         write = false
@@ -4301,6 +4332,15 @@
                 }
             })
         })
+
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+          return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
 
         function reloadMenuItems() {
             $('.panelOverlay').remove()
@@ -5173,6 +5213,35 @@
               return v.toString(16);
             }).toUpperCase();
         }
+        // Takes an array with 3 color components, rgb     
+        function replaceColor(color,repColor){
+            var ctx = $('#canvas')[0].getContext('2d');
+            var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
+                pix = canvasData.data;
+
+            var arr = []
+            for (var i = 0, n = pix.length; i <n; i += 4) {
+                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2]){
+                     pix[i] = repColor[0]; 
+                     pix[i+2] = repColor[2];   
+                     pix[i+1] = repColor[1];     
+                }
+            }
+
+            ctx.putImageData(canvasData, 0, 0);
+        }
+        function hexToRgb(hex) {
+          var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+          return result ? [
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16)
+          ] : null;
+        }
+
+        //alert(hexToRgb("#0033ff").g); // "51";
+
+        //replaceColor([0,0,0],[255,255,255]); // Removes blue.
     </script>
 </head>
 
@@ -5186,3 +5255,4 @@
     </body>
 
 </html>
+
