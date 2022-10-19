@@ -1408,7 +1408,6 @@
               return v.toString(16);
             }).toUpperCase();
         }
-        // Takes an array with 3 color components, rgb     
         function replaceColor(color,repColor){
             var ctx = $('#canvas')[0].getContext('2d');
             var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
@@ -1434,10 +1433,6 @@
             parseInt(result[3], 16)
           ] : null;
         }
-
-        //alert(hexToRgb("#0033ff").g); // "51";
-
-        //replaceColor([0,0,0],[255,255,255]); // Removes blue.
     </script>
 </head>
 
@@ -1447,7 +1442,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v7</div>
+        <div class="version">v7.1</div>
     </body>
 
 </html>
