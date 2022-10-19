@@ -221,6 +221,7 @@
                 $('.text').on('click', function() {
                     $('.menu').hide();
                     $('.dims').hide();
+                    $('.menuLayers').hide();
                     $('body').append('<input style="position:absolute;z-index:10; background:transparent; color: transparent;border:none;-webkit-appearance: none; outline: none !important;;" class="textMark" value=""></input>')
                     
                     if ($('.settings').length == 0)
@@ -512,9 +513,10 @@
             dragEvents()
             displayLayers()
             $(window).resize(function() {
-                isMobile();
-                /*$('body').css('height',$(window).height());
-                $('body').css('width',$(window).width());*/
+                if(!isMobile()) {
+                    $('body').css('height',$(window).height());
+                    $('body').css('width',$(window).width());
+                }
             })
             $(window).on('mousewheel',function(e) {
                 if($('.settings').length==0) {                    
@@ -647,7 +649,7 @@
                 $('.menuLayers').html('')
             }
 
-                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'curr'+'</div><div class="zero seeLayer '+''+'"></div></div>');
+                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'Current'+'</div><div class="zero seeLayer '+''+'"></div></div>');
                 $('.seeLayer.zero').on('click',function(){
                     if( $(this).hasClass('done')) {
                         $('#canvas').show()
@@ -1061,6 +1063,7 @@
                         $('.settings').remove();
                         $('.menu').show();
                         $('.inputfile').val('')
+                        $('.menuLayers').show();
                     })
                     $('.textMark').on('keyup',function(e){
                         text = $(this).val();
@@ -1442,7 +1445,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v7.2</div>
+        <div class="version">v7.3</div>
     </body>
 
 </html>
