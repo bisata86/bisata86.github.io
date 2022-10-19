@@ -34,13 +34,10 @@
             nomargin: auto;
             
         }
-        #canvas.initial {
-           background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
-           /*background: url("https://freegestcrm.com/crm/assets/img/test.png");
-           background-size: 100% 100%;*/
-        }
         .initLayerCanvas {
             background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQoU2NkYGDwZUAFm5G5jPRRgOYEVDeB3EBjBQBuSwU9/8GksAAAAABJRU5ErkJggg==); 
+            background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;
         }
 
         .selectImage {
@@ -535,9 +532,7 @@
         .plus, .minus {
             display: none !important;
         }
-        /*.menu, .menul, select {
-            display: none !important;
-        }*/
+        
         .overlay {
             z-index: 1000;
             position: absolute;
@@ -594,6 +589,9 @@
             padding: 10px;
             text-align: center;
         }
+        /*.menu, select {
+            display: none !important;
+        }*/
     </style>
     <script type="text/javascript">
         /*! jQuery v3.4.0 | (c) JS Foundation and other contributors | jquery.org/license */ ! function(e, t) {
@@ -4068,6 +4066,7 @@
                     $('.dragEvents').hide();
                     $('.menu').hide();
                     $('.dims').hide();
+                    $('.menuLayers').hide();
                     if ($('.settings').length == 0)
                         $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
                     $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div>')
@@ -4097,6 +4096,7 @@
                         write = false
                         ctx.globalCompositeOperation='source-over'
                         $('.menu').show();
+                        $('.menuLayers').show();
                         $('#canvas').off(events.move)
                         $('#canvas').off(events.start)
                         $('#canvas').off(events.end)
@@ -4333,13 +4333,15 @@
         }
 
         function displayLayers() {
+            //$('#canvas').show()
+            var hideCurrent = $('.zero.seeLayer.done').length
             if($('.menuLayers').length==0)
              $('body').append('<div class="menuLayers"></div>')
             if(layers.length) {
                 
                 $('.menuLayers').html('')
-                for (var i = 0 ; i < layers.length; i++) {
-                    $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">'+layers[i].name+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
+                for (var i = layers.length-1 ; i >= 0; i--) {
+                    $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">#'+(layers.length-i)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
                     if(layers[i].active) {
                         $('#'+layers[i].id).show()
                     } else {
@@ -4407,11 +4409,49 @@
                     }
                 }
             } else {
-
-                //$('.menuLayers').remove()
+                $('.menuLayers').html('')
             }
+
+                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'#'+0+'</div><div class="zero seeLayer '+''+'"></div><div class="zero deleteLayer"></div></div>');
+                $('.seeLayer.zero').on('click',function(){
+                    if( $(this).hasClass('done')) {
+                        $('#canvas').show()
+                    } else {
+                        $('#canvas').hide() 
+                    }              
+                    $(this).toggleClass('done')
+                })
+                if(hideCurrent) $('.seeLayer.zero').click()
+                $('.deleteLayer.zero').on('click',function(){
+                    menuItems.push(
+                    {
+                        text:"Clear current layer?"
+                    },
+                    {
+                        text:"YES",
+                        onClick:function(){
+                            $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                            $('.dims').show();
+                            menuItems = []
+                            reloadMenuItems();
+                        },
+                        width: '50%'
+                    },
+                    {
+                        text:"NO",
+                        onClick:function(){
+                            menuItems = []
+                            reloadMenuItems();
+
+                        },
+                        width: '50%'
+                    })
+                    reloadMenuItems();
+                })
+
+
             if($('.menuLayers .lock').length==0) {
-                 $('.menuLayers').append('<div class="lock"></div>');
+                $('.menuLayers').append('<div class="lock"></div>');
                  $('.lock').on('click', function() {
 
                         $('body').append('<canvas class="emptyCanvas" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
@@ -4635,6 +4675,7 @@
         function handleFiles(e) {
             if(e.target.files[0].type.indexOf('image')!=-1) {
                 $('.dims').hide();
+
                 $('body').append('<canvas id="imgCanvas"></canvas>')
                 document.getElementById('imgCanvas').width = $(window).width();
                 document.getElementById('imgCanvas').height = $(window).height();
@@ -5141,7 +5182,7 @@
         <div class="dims noselect"></div>
         <canvas id="canvas"></canvas>
         <canvas class="initLayerCanvas layerCanvas"></canvas>
-        <div class="version">v6.7</div>
+        <div class="version">v6.8</div>
     </body>
 
 </html>
