@@ -145,6 +145,7 @@
             transform-origin: right;
             height: fit-content;
             border-radius: 0px 15px 15px 0px;
+            box-shadow: 1px 1px 1px grey;
         }
         .menuLayers > div {
             padding: 5px 0;

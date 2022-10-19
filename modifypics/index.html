@@ -160,64 +160,6 @@
 
                     
                 })
-                $('.lock').on('click', function() {
-
-                    $('body').append('<canvas class="emptyCanvas" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
-                    var emptyCanvas = $('.emptyCanvas')[0].toDataURL('image/png',0.25)
-                    $('.emptyCanvas').remove()
-                    if($('#canvas')[0].toDataURL('image/png',0.25)==emptyCanvas) {
-                        menuItems.push({
-                            text:"Empty layer",
-                            type:"warn",
-                            onClick:function(){
-                                menuItems = [];
-                                reloadMenuItems();
-                            },
-                            timeout:500
-                        })
-                        reloadMenuItems();
-                        return;
-                    }
-
-                    for (var i = 0; i < layers.length; i++) {
-                        var datap =  $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
-                        if(datap==$('#canvas')[0].toDataURL('image/png',0.25)) {
-                            menuItems.push({
-                            text:"Duplicate layer",
-                            type:"warn",
-                            onClick:function(){
-                                menuItems = [];
-                                reloadMenuItems();
-                            },
-                            timeout:500
-                        })
-                        reloadMenuItems();
-                        }
-                    }
-
-
-                    $('.dims').hide();
-                    var nuovoId = newGuid()
-                    $('body').append('<canvas class="layerCanvas" id="'+nuovoId+'" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
-                    
-                    var ctxs = $('#'+nuovoId)[0].getContext("2d");
-                    data =  $('#canvas')[0].toDataURL('image/png',0.25);
-                    var image = new Image();
-                    image.onload = function() {
-                      ctxs.drawImage(image, 0, 0);
-                      
-                      $('#'+nuovoId).css('width',$('#canvas').width())
-                      $('#'+nuovoId).css('height',$('#canvas').height())
-                      $('#'+nuovoId).css('top',$('#canvas').position().top)
-                      $('#'+nuovoId).css('left',$('#canvas').position().left)
-                      $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
-                      $('#canvas').removeClass('initial')
-                      layers.push({id:nuovoId,name:'#'+(layers.length+1),active:true})
-                      displayLayers()
-                    };
-                    image.src = data
-                    
-                })
                 $('.text').on('click', function() {
                     $('.menu').hide();
                     $('.dims').hide();
@@ -583,11 +525,13 @@
                 
                 $('.menuLayers').html('')
                 for (var i = layers.length-1 ; i >= 0; i--) {
-                    $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">'+(layers[i].name)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
-                    if(layers[i].active) {
-                        $('#'+layers[i].id).show()
-                    } else {
-                        $('#'+layers[i].id).hide()
+                    if(!layers[i].removed) {
+                        $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">'+(layers[i].name)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
+                        if(layers[i].active) {
+                            $('#'+layers[i].id).show()
+                        } else {
+                            $('#'+layers[i].id).hide()
+                        }
                     }
                 }
                 $('.seeLayer').on('click',function(){
@@ -615,7 +559,7 @@
                         onClick:function(){
                             console.log(l)
                             if(l==0 || l) {
-                                layers.splice(l, 1)
+                                layers[l].removed = true;
                                 $('#'+u).remove();
                                 displayLayers()
                             }
@@ -701,7 +645,7 @@
                         $('.emptyCanvas').remove()
                         if($('#canvas')[0].toDataURL('image/png',0.25)==emptyCanvas) {
                             menuItems.push({
-                                text:"Empty layer",
+                                text:"Can't add an empty layer",
                                 type:"warn",
                                 onClick:function(){
                                     menuItems = [];
@@ -714,18 +658,20 @@
                         }
 
                         for (var i = 0; i < layers.length; i++) {
-                            var datap =  $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
-                            if(datap==$('#canvas')[0].toDataURL('image/png',0.25)) {
-                                menuItems.push({
-                                text:"Duplicate layer",
-                                type:"warn",
-                                onClick:function(){
-                                    menuItems = [];
-                                    reloadMenuItems();
-                                },
-                                timeout:500
-                            })
-                            reloadMenuItems();
+                            if(!layers[i].removed) {
+                                var datap =  $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
+                                if(datap==$('#canvas')[0].toDataURL('image/png',0.25)) {
+                                    menuItems.push({
+                                    text:"Duplicate layer",
+                                    type:"warn",
+                                    onClick:function(){
+                                        menuItems = [];
+                                        reloadMenuItems();
+                                    },
+                                    timeout:500
+                                })
+                                reloadMenuItems();
+                                }
                             }
                         }
 
@@ -1295,16 +1241,20 @@
             function step(i) {
                 console.log(layers[i])
                 if(i<layers.length) {
-                    var img = new Image();
-                    img.onload = function(e) {
-                        ctxo.drawImage(
-                            img,
-                            0,
-                            0
-                        );
-                        step(i+1)
+                    if(!layers[i].removed) {
+                        var img = new Image();
+                        img.onload = function(e) {
+                            ctxo.drawImage(
+                                img,
+                                0,
+                                0
+                            );
+                            step(i+1)
+                        }
+                        img.src = $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
+                    } else {
+                       step(i+1) 
                     }
-                    img.src = $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
                 } else {
                     var img = new Image();
                     img.onload = function(e) {
