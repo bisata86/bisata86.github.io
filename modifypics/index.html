@@ -10,6 +10,10 @@
     <link rel="stylesheet" type="text/css" href="https://bisata86.github.io/modifypics/css/style.css">
     <script type="text/javascript" src="https://bisata86.github.io/modifypics/js/jquery.js"></script>
     <script type="text/javascript">
+
+
+
+
         var events = {};
         var wcan;
         var hcan;
@@ -88,6 +92,7 @@
                     $('#canvas').css('right','initial');
                 //}
                 dragEvents()
+                coolAnimation();
             })
             $('.changeWH').on('change',function(){
                 n = $(this).find('option:selected').data('h')
@@ -103,6 +108,7 @@
                     })
                     //$(this).find('option:selected').attr('data-prehtml',prevHtml).html('x')
                 }
+                coolAnimation();
             })
             $('.changeH').on('change',function(){
                 hcan = $(this).val();
@@ -113,6 +119,7 @@
                     $('#canvas').css('bottom','initial');
                 //}
                 dragEvents()
+                coolAnimation();
             })
             addMenu();
 
@@ -475,6 +482,27 @@
                     dragEvents() 
                 }
             })
+            coolAnimation();
+            function coolAnimation(){
+                var direction = 0;
+                var coolInterval = setInterval(function(){
+                    if(direction==0) {
+                        zoom(.99,{clientX:$(window).width()/2,clientY:$(window).height()/2});
+                        if($('#canvas').position().top>50 && $('#canvas').position().left>50){
+                            direction = 1;
+                        }
+                    } else {
+                    //clearInterval(coolInterval)
+                       zoom(1.01,{clientX:$(window).width()/2,clientY:$(window).height()/2})
+                       
+                       if($('#canvas').position().left<20 || $('#canvas').position().top<20){
+                                console.log('fine')
+                                clearInterval(coolInterval)
+                            } 
+                       
+                    }
+                },2)
+            }
         })
 
         function componentToHex(c) {
