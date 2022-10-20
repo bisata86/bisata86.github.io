@@ -213,8 +213,8 @@
             background-size: 100% 100%;
             display: inline-block;
             background-color: white;
-            border-left: 10px solid white;
-            border-radius: 20px 0 0 0;
+            /*border-left: 10px solid white;
+            border-radius: 20px 0 0 0;*/
         }
 
         .drag {
@@ -364,8 +364,8 @@
             background-size: 100% 100%;
             display: inline-block;
             background-color: white;
-            border-right: 10px solid white;
-            border-radius: 0 20px 0 0;
+            /*border-right: 10px solid white;
+            border-radius: 0 20px 0 0;*/
         }
 
         label[for="input"] {
