@@ -80,7 +80,7 @@
                 
             }
             select3 += '</select>'
-            $('.dims').html(select1+' '+select3+' '+select2)
+            $('.dims').html('<div>'+select1+' '+select3+' '+select2+'</div>')
             var prevHtml = btoa($('.changeWH').find('option:selected').html());
             //$('.changeWH').find('option:selected').attr('data-prehtml',prevHtml).html('x')
             $('.changeW').on('change',function(){
@@ -470,6 +470,7 @@
                 if(!isMobile()) {
                     $('body').css('height',$(window).height());
                     $('body').css('width',$(window).width());
+                    coolAnimation()
                 }
             })
             $(window).on('mousewheel',function(e) {
