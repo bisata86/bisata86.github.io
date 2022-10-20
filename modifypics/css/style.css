@@ -109,6 +109,7 @@
             text-align: center;
             border: none;
             width: fit-content;
+            padding: 0;
         }
         /*.changeWH {
              -webkit-appearance: none;
@@ -488,6 +489,10 @@
         .dims > div {
             display: inline-block;
             width: fit-content;
+            padding: 10px;
+            background: white;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
         }
         .settings, .menu, .dims {
             z-index: 51;
