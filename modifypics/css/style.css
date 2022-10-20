@@ -493,6 +493,7 @@
             background: white;
             border-radius: 0 0 20px 20px;
             text-align: center;
+            box-shadow: 1px 1px 1px grey;
         }
         .settings, .menu, .dims {
             z-index: 51;
