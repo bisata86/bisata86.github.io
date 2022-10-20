@@ -126,13 +126,13 @@
 
             
             function addMenu() {
-                $('body').append('<div class="menu"></div>')
-                $('.menu').append('<div class="handDraw"></div>')
-                $('.menu').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
-                $('.menu').append('<div class="text"></div>')
-                $('.menu').append('<div class="save"></div>')
+                $('body').append('<div class="menu"><div class="menuCont"></div></div>')
+                $('.menu .menuCont').append('<div class="handDraw"></div>')
+                $('.menu .menuCont').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
+                $('.menu .menuCont').append('<div class="text"></div>')
+                $('.menu .menuCont').append('<div class="save"></div>')
                 //$('.menu').append('<div class="lock"></div>')
-                $('.menu').append('<div class="clear"></div>')
+                $('.menu .menuCont').append('<div class="clear"></div>')
 
                 $('.save').on('click', function() {
                     downloadCanvasAsImage();
