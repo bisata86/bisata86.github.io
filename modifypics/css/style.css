@@ -178,6 +178,9 @@
         .menuCont {
             box-shadow: 1px 1px 1px grey;
         }
+        .menuCont > div {
+            vertical-align: bottom;
+        }
         .selected {
             background-color: red !important;
         }
