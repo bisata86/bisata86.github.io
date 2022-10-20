@@ -175,7 +175,9 @@
             padding: 5px 15px;
             border-radius: 20px 20px 0 0; 
         }
-
+        .menuCont {
+            box-shadow: 1px 1px 1px grey;
+        }
         .selected {
             background-color: red !important;
         }
