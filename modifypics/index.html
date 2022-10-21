@@ -1402,11 +1402,12 @@
 
             var arr = []
             for (var i = 0, n = pix.length; i <n; i += 4) {
-                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2] && pix[i+3] === color[3]){
+                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2]){
                      pix[i] = repColor[0]; 
                      pix[i+2] = repColor[2];   
                      pix[i+1] = repColor[1];
-                     pix[i+3] = colorAlpa         
+                     if(pix[i+3]==0)
+                       pix[i+3] = colorAlpa         
                 }
             }
 
