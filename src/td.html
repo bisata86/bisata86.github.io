@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html>
+<head>
+	 <title>TD</title>
+    <meta name="theme-color" content="black">
+    <!-- <link rel="icon" href="./images/mainlogo.png" type="image/x-icon"/>
+    <link rel="shortcut icon" href="./images/mainlogo.png" type="image/x-icon"/> -->
+    <meta name="msapplication-navbutton-color" content="black">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style type="text/css">
+		body {
+			margin:0;
+			padding: 0;
+		}
+		.d, .e {
+			width: 100vw;
+			height: 100vw;
+			position: absolute;
+			top:50px;
+		}
+		.e {
+			pointer-events: none;
+		}
+		.enemy {
+			width: 10px;
+			height: 10px;
+			background: black;
+			position: absolute;
+			border-radius: 100%;
+			transition-duration: .5s;
+		}
+		.lifeCont {
+			height: 5px;
+			width: 20px;
+			position: absolute;
+			top:-7px;
+			left:-5px;
+		}
+		.life {
+			height: 100%;
+			width: 0%;
+			background: green;
+		}
+		.d .dot {
+			display: inline-block;
+			width: 10vw;
+			height: 10vw;
+			background: lightgray;
+			float: left;
+			border:1px solid white;
+			box-sizing: border-box;
+		}
+		.d .dot[data-p='2'], .bu [data-t='2'] {
+			background: orange;
+		}
+		.d .dot[data-p='3'], .bu [data-t='3'] {
+			background: gray;
+		}
+		.d .dot[data-p='4'], .bu [data-t='4'] {
+			background: lightblue;
+		}
+		.bu {
+			position: absolute;
+			top:0;
+			left: 0px;
+			width: 100%;
+		}
+		.bu [data-t] {
+			width: 30px;
+			height: 30px;
+			display: inline-block;
+			padding: 10px;
+			float: right;
+		}
+		.bu [data-t].selected {
+			noborder: 2px solid red;
+			padding: 5px;
+			border: 5px solid red;
+		}
+
+		.bullett {
+			width: 10px;
+			height: 10px;
+			background: blue;
+			position: absolute;
+			border-radius: 100%;
+			notransition-duration: .1s;
+		}
+		.popup {
+			position: absolute;
+		}
+
+	</style>
+	<script type="text/javascript">
+		$( document ).ready(function() {
+		  	var str = [];
+		  	for (var i = 0; i < 10; i++) {
+		  		var str2 = [];
+		  		for (var b = 0; b < 10; b++) {
+			  		str2.push(1)
+			  	}
+		  		str.push(str2)
+		  	}
+		  	draw(str)
+		  	function draw(s) {
+		  		$(".d").html(" ")
+		  		for (var i = 0; i < s.length; i++) {
+		  			for (var h = 0; h < s[i].length; h++) {
+			  			$('.d').append('<div class="dot" data-p="'+s[i][h]+'"></div>')
+			  		}
+			  		$('.d').append('<div></div>')
+		  		}
+		  		
+
+
+			  	$(".dot").off("click").on("click",function(e){
+			  		var c = $(this).attr('data-p');
+			  		var j = $(this).prevAll('.dot').length;
+			  		if(c==1) {
+				  		if(game.selectedBuilding) {
+					  		if(game.grano >= game.selectedBuilding.cost) {
+						  		str[Math.floor(j/10)][j%10] = game.selectedBuilding.type;
+						  		var tu = JSON.parse(JSON.stringify(game.selectedBuilding))
+						  		tu.pos = {x:Math.floor(j/10),y:j%10};
+						  		tu.posa = tu.pos.y+tu.pos.x*10
+						  		tu.busy = false;
+						  		game.towers.push(tu)
+						  		game.grano -= game.selectedBuilding.cost 
+						  		updateMoney(game.grano)
+
+						  		for (var i = 0; i < game.enemies.length; i++) {
+						  			delete game.enemies[i].path
+						  		}
+						  		draw(str)
+					  		}
+				  		} else {
+				  			/*$(this).after("<div class='popup'>diocane</div>");
+				  			var g = $(this).position()
+				  			$(".popup").css('top',g.top)
+				  			$(".popup").css('left',g.left)*/
+				  		}
+			  		} else {
+			  			$(this).after("<div class='popup'><div class='sell'>SELL</div></div>");
+			  			var g = $(this).position()
+			  			$(".popup").css('top',g.top)
+			  			$(".popup").css('left',g.left)
+			  			$(".sell").off("click").on("click",function(e){
+			  				str[Math.floor(j/10)][j%10] = 1;
+			  				draw(str)
+			  			})
+			  			
+			  		}
+			  	})
+		  	}
+		  	var game = {
+		  		grano:100,
+		  		life:10,
+		  		time:0,
+		  		grid:str,
+		  		enemies:[],
+		  		towers:[],
+		  		bulletsItervals:{},
+		  		selectedBuilding:null,
+		  		buildings:[
+			  		{
+			  			type:2,
+			  			cost:3
+			  		},
+			  		{
+			  			type:3,
+			  			cost:5,
+			  			range:2
+			  		},
+			  		{
+			  			type:4,
+			  			cost:10,
+			  			range:4
+			  		}
+		  		]
+		  	}
+		  	var gameInterval;
+		  	for (var i in game.buildings) {
+	  			$('.bu').append('<div data-t="'+game.buildings[i].type+'">'+game.buildings[i].cost+'</div>')
+	  		}
+	  		updateMoney(game.grano)
+	  		updateLives(game.life)
+	  		$(".bu [data-t]").on("click",function(e){
+	  				var t = $(this).attr("data-t");
+	  				var sel;
+	  				for (var i = game.buildings.length - 1; i >= 0; i--) {
+		  				if(game.buildings[i].type==t) {
+		  					sel = game.buildings[i];
+		  				}
+		  			}
+			  		if(!game.selectedBuilding) {
+			  			$(this).addClass("selected")
+			  			game.selectedBuilding = sel;
+			  			
+			  		} else {
+			  			$(".bu [data-t]").removeClass("selected");
+			  			if(game.selectedBuilding.type==sel.type) {
+			  				delete game.selectedBuilding;
+			  			} else {
+			  				$(this).addClass("selected")
+			  				game.selectedBuilding = sel;
+			  			}
+			  		}
+			  	})
+			  	var enh = 10
+		  	gameInterval = setInterval(function(){
+		  		if(game.time%10==0) {
+		  		  enh++
+		  			var en = {id:ID(),type:0,pos:0,life:enh, ilife:enh};
+		  			game.enemies.push(en)
+		  		}
+		  		gameMove(game)
+
+		  	},400)
+
+
+		  	function gameMove(g){
+		  		g.time++;
+		  		if(g.enemies) {
+		  			for (var i = 0; i < g.enemies.length; i++) {
+		  				if(g.enemies[i].started) {
+			  				if(!g.enemies[i].path) {
+			  					var start = g.enemies[i].pos;
+								var end = '99';
+								var solutions = solve(g.grid, start);
+								if(solutions[end]) {
+									var kk = []
+									g.enemies[i].path = solutions[end]
+									for (var u in g.enemies[i].path) {
+										if(u!='dist') {
+											kk.push(g.enemies[i].path[u])
+										}
+									}
+									g.enemies[i].path = kk;
+									g.enemies[i].pos = kk[0];
+									g.enemies[i].path = g.enemies[i].path.slice(1)
+								} else {
+									console.log("blocking")
+								}
+			  				} else {
+								g.enemies[i].pos = g.enemies[i].path[0];
+								g.enemies[i].path = g.enemies[i].path.slice(1)
+			  				}
+
+			  				
+			  				if(!g.enemies[i].pos && g.enemies[i].pos!=0) {
+			  					 g.enemies[i].rem = true;
+			  					 g.life--;
+			  					if(g.life<=0) {
+			  						clearInterval(gameInterval)
+			  						alert('gameover')
+			  					}
+			  					updateLives(game.life)
+			  				}
+
+		  				} else {
+		  					g.enemies[i].started = true;
+		  				}
+		  			}
+		  			console.log(g.towers)
+		  			for (var i = 0; i < g.towers.length; i++) {
+		  				
+		  				var yy = g.towers[i];
+		  				if(yy.range && yy.busy==false) {
+		  					
+			  				var gap = yy.range
+				  			for (var x = 0; x < g.enemies.length; x++) {
+				  				var rpos = {
+				  					u:Math.floor(g.enemies[x].pos/10),
+				  					d:g.enemies[x].pos%10
+				  				}
+				  				if(
+				  					rpos.u<yy.pos.x+gap &&
+				  					rpos.u>yy.pos.x-gap &&
+				  					rpos.d<yy.pos.y+gap &&
+				  					rpos.d>yy.pos.y-gap
+				  					) {
+				  					//g.enemies[x].life--;
+				  					sendBullet(yy,g.enemies[x].id,g.enemies[x])
+				  					yy.busy = true;
+				  					if(!g.enemies[x].rem && g.enemies[x].life<0) {
+				  						g.enemies[x].rem = true;
+				  						game.grano++;
+				  						updateMoney(game.grano)
+				  					} 
+				  				}
+				  			} 
+			  			}
+		  			}
+			  		var ne = [];
+		  			for (var i = 0; i < g.enemies.length; i++) {
+		  				if(!g.enemies[i].rem) ne.push(g.enemies[i])
+		  				drawEnemy(g.enemies[i])
+		  			} 
+		  			g.enemies = ne;
+
+		  		}
+
+		  		function sendBullet(a,b,e) {
+		  			var id = a.posa+b;
+		  			console.log('sendBullet',a.posa,b)
+		  			if(!$("#"+(id)).length ) {
+			  			$('.e').append("<div class='bullett' id='"+id+"'></div>")
+			  			var mi = $('.dot').eq(a.posa).position()
+		  				var gapp = $('.dot').width()/2-$('.bullett').width()/2 
+			  			$('#'+id).css('top',mi.top+gapp)
+			  			$('#'+id).css('left',mi.left+gapp)
+			  			console.log(g) 
+			  			g.bulletsItervals[id] = setInterval(function(){
+			  				if($('#'+b).length==0) {
+								clearInterval(g.bulletsItervals[id])
+								a.busy = false;
+								$('#'+id).remove()
+							}
+			  				var mi = $('#'+b).position()
+		  					var current = $('#'+id).position()
+		  					var al = mi.top - current.top;
+							var bl = mi.left - current.left;
+							var d = Math.sqrt( al*al + bl*bl);
+							if(d<10) {
+								clearInterval(g.bulletsItervals[id])
+								a.busy = false;
+								$('#'+id).remove()
+								e.life--;
+							} else {
+			  					var gap = 1;
+			  					var temp = {}
+			  					if(mi.top>current.top) temp.top = current.top+gap;
+				  				else if(mi.top<current.top) temp.top = current.top-gap;
+				  				if(mi.left>current.left) temp.left = current.left+gap;
+				  				else if(mi.left<current.left) temp.left = current.left-gap;
+				  				$('#'+id).css('top',temp.top)
+					  			$('#'+id).css('left',temp.left)
+				  			}
+			  			},5)
+		  			}
+		  			return;
+		  			if($("#"+(id)).length ) {
+		  				var mi = $('#'+b).position()
+		  				var current = $('#'+id).position()
+		  				var temp = {}
+		  				var gap = $('.dot').width()
+		  				if($('#'+b).length==0) {
+		  					$("#"+(id)).remove();
+		  				} else {
+			  				if(mi.top>current.top) temp.top = current.top+gap;
+			  				else if(mi.top<current.top) temp.top = current.top-gap;
+			  				if(mi.left>current.left) temp.left = current.left+gap;
+			  				else if(mi.left<current.left) temp.left = current.left-gap;
+			  				$('#'+id).css('top',mi.top)
+				  			$('#'+id).css('left',mi.left)
+				  			setTimeout(function(){
+				  				//sendBullet(a,b)
+				  				$("#"+(id)).remove();
+				  			},150)
+			  			}
+		  			} else {
+			  			$('.e').append("<div class='bullett' id='"+id+"'></div>")
+			  			var mi = $('.dot').eq(a).position()
+		  				var gapp = $('.dot').width()/2-$('.enemy').width()/2 
+			  			$('#'+id).css('top',mi.top+gapp)
+			  			$('#'+id).css('left',mi.left+gapp)
+			  			// setTimeout(function(){
+				  		// 		sendBullet(a,b)
+				  		// },100)
+		  			}
+		  		}
+		  		function drawEnemy(e) {
+
+		  			if($('#'+e.id).length) {
+
+		  			} else {
+		  				$('.e').append("<div id='"+e.id+"' class='enemy'></div>")
+		  			}
+		  			if(e.pos || e.pos==0) {
+		  				var mi = $('.dot').eq(e.pos).position()
+		  				var gapp = $('.dot').width()/2-$('.enemy').width()/2 
+			  			$('#'+e.id).css('top',mi.top+gapp)
+			  			$('#'+e.id).css('left',mi.left+gapp)
+		  			} 
+		  			if(e.rem) {
+		  				$('#'+e.id).remove();
+		  			}
+		  			$('#'+e.id+" .lifeCont").remove();
+		  			var j =  e.life*100 / e.ilife
+		  			$('#'+e.id).append("<div class='lifeCont'><div class='life' style='width:"+j+"%;'></div></div>")
+		  		}
+		  	}
+
+		  	function solve(graph, so) {
+		  		var s = graph;
+		  		var l = {}
+			  	for (var i = 0; i < s.length; i++) {
+		  			for (var h = 0; h < s[i].length; h++) {
+			  			l[h+i*s.length] = []
+			  			var k = h+i*s.length;
+			  			if(s[i][h] == 1) {
+			  			if(i>0 && s[i-1][h]==1) {
+			  				l[k.toString()].push((k-s.length).toString())
+			  			}
+			  			if(i<9 && s[i+1][h]==1) {
+			  				l[k.toString()].push((k+s.length).toString())
+			  			}
+			  			if(h<9 && s[i][h+1]==1) {
+			  				l[k.toString()].push((k+1).toString())
+			  			}
+			  			if(h>0 && s[i][h-1]==1) {
+			  				l[k.toString()].push((k-1).toString())
+			  			}
+			  			}
+			  		}
+		  		}
+				var graph = {};
+				var layout = {}
+				layout = l
+				for(var id in layout) {
+				  if(!graph[id])
+				    graph[id] = {};
+
+				  layout[id].forEach(function(aid) {
+				    graph[id][aid] = 1;
+				    if(!graph[aid])
+				      graph[aid] = {};
+				    graph[aid][id] = 1;
+				  });
+				}
+
+
+				  var solutions = {};
+				  solutions[so] = [];
+				  solutions[so].dist = 0;
+				  
+				  while(true) {
+				    var parent = null;
+				    var nearest = null;
+				    var dist = Infinity;
+				    
+				    //for each existing solution
+				    for(var n in solutions) {
+				      if(!solutions[n])
+				        continue
+				      var ndist = solutions[n].dist;
+				      var adj = graph[n];
+				      //for each of its adjacent nodes...
+				      for(var a in adj) {
+				        //without a solution already...
+				        if(solutions[a])
+				          continue;
+				        //choose nearest node with lowest *total* cost
+				        var d = adj[a] + ndist;
+				        if(d < dist) {
+				          //reference parent
+				          parent = solutions[n];
+				          nearest = a;
+				          dist = d;
+				        }
+				      }
+				    }
+				    
+				    //no more solutions
+				    if(dist === Infinity) {
+				        break;
+				    }
+				    
+				    //extend parent's solution path
+				    solutions[nearest] = parent.concat(nearest);
+				    //extend parent's cost
+				    solutions[nearest].dist = dist;
+				  }
+				  
+				  return solutions;
+			}
+
+			function updateMoney(i) {
+				$(".grano").remove()
+			  	$('.bu').append('<div class="grano">Money '+i+'</div>')
+			}
+			function updateLives(i) {
+				$(".gLife").remove()
+	  			$('.bu').append('<div class="gLife">lives '+i+'</div>')
+			}
+
+
+
+
+		});
+		var ID = function () {
+		  return '_' + Math.random().toString(36).substr(2, 9);
+		};
+
+
+
+	</script>
+</head>
+<body>
+	<div class="d"></div>
+	<div class="e"></div>
+	<div class="bu"></div>
+</body>
+</html>
+

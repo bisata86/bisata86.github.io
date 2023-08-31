@@ -1,0 +1,192 @@
+.point {
+	width:10px;
+	height:10px;
+	background:red;
+	border-radius: 100%;
+}
+#bar {
+	height: 50px;
+	width:100%;
+	position:fixed;
+	top:0;
+}
+#bar > div {
+    height: 100%;
+    display: inline-block;
+}
+#bar > div > div[id], .label {
+    width: 50%;
+    /* padding: 10px; */
+    height: 50px;
+    display: block;
+    box-sizing: border-box;
+    background:gainsboro;
+}
+body {
+    overflow:hidden;
+}
+#bar .draw {
+    background-image: url('./icons/draw.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #showhide {
+    background-image: url('./icons/showhide.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #point {
+	background-image: url('./icons/point.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #line {
+	background-image: url('./icons/line.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #circle {
+	background-image: url('./icons/circle.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #save {
+    background-image: url('./icons/savef.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #load {
+    background-image: url('./icons/loadf.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #savetxt {
+    background-image: url('./icons/save.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #loadtxt {
+    background-image: url('./icons/load.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar .tools {
+    background-image: url('./icons/tools.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #medium {
+    background-image: url('./icons/medium.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #visector {
+    background-image: url('./icons/visector.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #select {
+    background-image: url('./icons/select.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #prefs {
+    background-image: url('./icons/prefs.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #clear {
+    background-image: url('./icons/clear.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #cancel {
+    background-image: url('./icons/cancel.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar .edit {
+    background-image: url('./icons/edit.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar .cursor {
+    background-image: url('./icons/cursor.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 30px;
+}
+#bar #move {
+    background-image: url('./icons/move.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #zoom {
+    background-image: url('./icons/zoom.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #zoomm {
+    background-image: url('./icons/zoomm.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #parallel {
+    background-image: url('./icons/parallela.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #perpendicolar {
+    background-image: url('./icons/perpendicolare.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+#bar #retta {
+    background-image: url('./icons/retta.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 40px;
+}
+.primary {
+    width:100px;
+    text-align:left;
+    position:relative;
+    top:50px;
+}
+.label {
+    display: inline-block;
+    text-align:center;
+    position: absolute;
+    left: 0px;
+    top:-50px;
+}
+.selected {
+    position: absolute;
+    right: 0px;
+    top:-50px;
+}
+.inuse {
+    background-color: blanchedalmond !important;
+}

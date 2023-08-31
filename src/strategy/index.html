@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>f</title>
+    <meta name="theme-color" content="black">
+    <meta name="msapplication-navbutton-color" content="black">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<style type="text/css">
+		:root {
+		  --ai-color: #FF6961;
+		  --ai2-color: #61ff82;
+		  --mine-color: #00a0da;
+		  --empty-color: orange;
+		}
+		body, html {
+			margin:0;
+			padding:0;
+			overflow: hidden;
+			background: #F6E4AD;
+		}
+		.button {
+			padding:10px;
+			display: inline-block;
+		}
+		.pos {
+			width: 10%;
+			display: inline-block;
+			height: 10%;
+			float: left;
+			position: relative;
+		}
+		.pos .units {
+			top:0px;
+			left:0px;
+			right: 0px;
+			bottom: 0px;
+			margin: auto;
+			color:white;
+			position: absolute;
+			height: 10px;
+			font-weight: bold;
+			text-align: center;
+			font-size: 11px;
+			line-height: 11px;
+			pointer-events: none;
+			text-shadow: 1px 0 black, 0 1px black, 1px 0 black, 0 1px black;
+		}
+		.pos.void {
+			background: transparent;
+			color:transparent;
+			visibility: hidden;
+		}
+		.pos.void .units {
+			display: none;
+		}
+		.floorCont {
+			position: absolute;
+			top:0px;
+			left:0px;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			background: url('./hole.png');
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: 100% auto;
+		}
+		.houseCont {
+			position: absolute;
+			top:0px;
+			left:0px;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			background-repeat: no-repeat !important;
+			background-position: center !important;
+			z-index: 1;
+		}
+		.pos.empty .houseCont {
+			background: url('./house.png');
+		}
+		.pos.empty .unitsBar {
+			background: var(--empty-color);
+		}
+		.pos.mine .houseCont {
+			background: url('./houseMine.png');
+		}
+		.pos.mine .unitsBar {
+			background: var(--mine-color);
+		}
+		.pos.ai .houseCont {
+			background: url('./houseAi.png');
+		}
+		.pos.ai .unitsBar {
+			background: var(--ai-color);
+		}
+		.pos.ai2 .houseCont {
+			background: url('./houseAi2.png');
+		}
+		.pos.ai2 .unitsBar {
+			background: var(--ai2-color);
+		}
+		.pos[data-level="1"] .houseCont {
+			background-size: 80% auto;
+		}
+		.pos[data-level="2"] .houseCont {
+			background-size: 87% auto;
+		}
+		.pos[data-level="3"] .houseCont {
+			background-size: 94% auto;
+		}
+		.pos[data-level="4"] .houseCont {
+			background-size: 100% auto;
+		}
+		.pos[data-autosend="true"] .houseCont:after {
+			content: " ";
+		    width: 20px;
+		    height: 20px;
+		    position: absolute;
+		    right: 0px;
+		    left: 0px;
+		    top: 0px;
+		    bottom: 0px;
+		    margin: auto;
+		    background: url(./load.gif);
+		    background-size: 100% auto;
+		}
+		.pos {
+			background-position: 50% 50% !important;
+		}
+		/*.pos.ai:before {
+			content: ' ';
+			width: 150%;
+			height: 150%;
+			position: absolute;
+			left:-25%;
+			top: -25%;
+			nobackground: rgba(255,0,0,.2);
+			border-radius: 100%;
+		}*/
+		.mainGrid {
+			background:transparent;
+			z-index: 2;
+		}
+		.bgCont {
+			background : #F6E4AD;
+		}
+		.pointsCont, .arrowcanvas {
+			z-index: 3;
+		}
+		.connectionCanvas {
+			z-index: 1;
+		}
+		.mainGrid, .mainCanvas, .pointsCont, .bgCont {
+			position: absolute;
+			top:0px;
+			bottom:0px;
+			right:0px;
+			left:0px;
+			margin:auto;
+		}
+		.mainCanvas, .pointsCont {
+			pointer-events: none;
+		}
+		.point {
+			position: absolute;
+			width: 1%;
+			height: 1%;
+			background: black;
+			transition-timing-function: linear;
+			transition-duration: 1s;
+			border-radius: 100%;
+		}
+		@media screen and (orientation:portrait) { 
+			.mainGrid, .mainCanvas, .pointsCont, .bgCont {
+				width: 90vw;
+				height: 90vw;
+			}
+		}
+ 		@media screen and (orientation:landscape) {
+ 			.mainGrid, .mainCanvas, .pointsCont, .bgCont  {
+				width: 90vh;
+				height: 90vh;
+			}
+ 		}
+ 		* {
+		  -webkit-touch-callout: none; /* iOS Safari */
+		    -webkit-user-select: none; /* Safari */
+		     -khtml-user-select: none; /* Konqueror HTML */
+		       -moz-user-select: none; /* Old versions of Firefox */
+		        -ms-user-select: none; /* Internet Explorer/Edge */
+		            user-select: none; /* Non-prefixed version, currently
+		                                  supported by Chrome, Edge, Opera and Firefox */
+		}
+		.aiStep {
+			position: absolute;
+			top:0px;
+			left:0px;
+			display: none;
+		}
+		.unitsCapacity {
+			position: absolute;
+			bottom:-12px;
+			width: 100%;
+			height: 12px;
+			border: 1px solid black;
+			box-sizing: border-box;
+			pointer-events: none;
+			overflow: hidden;
+			background: white;
+			border-radius: 5px;
+			z-index: 2;
+
+		}
+		.unitsCapacity .unitsBar {
+			width: 100%;
+			height: 100%;
+			transition-duration: .2s
+		}
+		/*.upgrade {
+			background: #3fc95f !important;
+		}*/
+		.upgrade:after {
+			content: " ";
+		    width: 20px;
+		    height: 20px;
+		    position: absolute;
+		    bottom: -12px;
+		    left: -25px;
+		    background: url(https://media2.giphy.com/media/1rRTzaCmwLKjrLRn88/source.gif);
+		    background-size: 100% auto;
+		}
+		a.button1{display:inline-block;
+			padding:0.35em 1.2em;
+			border:0.1em solid #FFFFFF;
+			border-radius:0.12em;
+			box-sizing: border-box;
+			text-decoration:none;
+			font-family:'Roboto',sans-serif;
+			font-weight:300;
+			color:#FFFFFF;
+			text-align:center;
+			transition: all 0.2s;
+		}
+		a.button1:hover{color:#000000;background-color:#FFFFFF;
+		}
+		@media all and (max-width:30em){
+		 a.button1{display:block;margin:0.4em auto;
+		 }
+		}
+		.level {
+			font-family:courier,arial,helvetica;
+			position: absolute;
+			top:5px;
+			left:5px;
+			display: none;
+		}
+		.title {
+			    z-index: 10;
+    			position: absolute;
+		}
+		.start {
+			    position: absolute;
+			    top: 100px;
+			    width: fit-content;
+			    left: 0;
+			    margin: auto;
+			    text-align: center;
+			    right: 0;
+			    z-index: 10;
+		}
+		.panel {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            font-size: 20px;
+            width: max-content;
+            height: max-content;
+            z-index: 4;
+            border-radius: 5px;	
+        }
+        .disabled {
+        	pointer-events: none;
+        	opacity: .6;
+        }
+
+        .panrelOverlay {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            background-color: rgba(0, 0, 0, .5);
+            z-index: 3;
+        }
+
+        .panel > div {
+            padding: 15px;
+            background: black !important;
+            width: 50vw;
+            color:white;
+            font-size: 15px;
+            text-align: center
+        }
+	</style>
+	<script type="text/javascript">
+		var mainLevel = 1
+		var isMobile;
+		var events = {};
+		var mainGrid = []
+		var connections = []
+		var doubleClickTimeout;
+		var doubleClickFlag = false;
+		var contaBestemmie;
+		var engineTime = 2000;
+		var mainTimeout;
+		function init(level) {
+			$('body').append('<div class="panrelOverlay"></div><div class="panel"></div>')
+			try {
+				$(".mainGrid").html("")
+				$(".level").html('Level '+level);	
+				$('canvas').remove(); ///?
+			
+			mainGrid = []
+			connections = []
+			for (var i = 0; i < 10; i++) {
+				var row  = [];
+				for (var ik = 0; ik < 10; ik++) {
+					row.push({type:'void',units:0,row:i,column:ik,id:uId(),level:0})
+				}
+				mainGrid.push(row)
+			}
+			contaBestemmie = 0;
+			// for (var i = 0; i <2; i++) {
+			// 	addCell(mainGrid,'empty');
+			// }
+			for (var i = 0; i <2; i++) {
+				addCell(mainGrid,'mine');
+				// addCell(mainGrid,'ai');
+				// addCell(mainGrid,'ai2');
+			}
+			for (var i = 0; i <level; i++) {
+				//addCell(mainGrid,'mine');
+				addCell(mainGrid,'ai');
+				addCell(mainGrid,'ai2');
+			}
+			for (var i = 0; i <7; i++) {
+				addCell(mainGrid,'empty');
+			}
+			contaBestemmie = 0;
+			for (var i = 0; i <3; i++) {
+				addMoreConnection();
+			}
+			//distanceBetweenConnectionsComplete(mainGrid,connections,true)
+			detectMobile();
+			draw(mainGrid);
+			//bind(mainGrid)
+			drawConnections(mainGrid,connections)
+		} catch(e) {
+			console.log(mainGrid)
+			console.log(e);
+			//alert("bestemmie");
+			//init()
+		}
+		}
+		$(function() {
+		init(mainLevel)
+			  $(".start").on("click",function(){
+			  	$('.panel').remove();
+		        $('.panrelOverlay').remove();
+			  	$(this).hide()
+			  	$(".reload").hide()
+			  	$(".title").hide()
+			  	$(".level").show()
+			  	//document.body.requestFullscreen();
+			  	bind(mainGrid);
+			  	engine(mainGrid);
+			  })
+			  $(".speed").on("change",function(){
+			  	console.log($(this).val())
+			  	engineTime = $(this).val()
+			  })
+			  $(".reload").on("click",function(){
+			  	init(mainLevel)
+			  })
+		});
+		function addCell(s,t){
+			var pr = [];
+			var voids = [];
+				for (var i = 0; i < s.length; i++) {
+			  		for (var ik = 0; ik < s[i].length; ik++) {
+			  			if(s[i][ik].type!='void') {
+			  				pr.push(s[i][ik])
+			  			} else {
+			  				if((!s[i+1] || !s[i+1][ik+1]) || (s[i+1][ik+1] && s[i+1][ik+1].type=='void'))
+			  				if((!s[i-1] || !s[i-1][ik-1]) || (s[i-1][ik-1] && s[i-1][ik-1].type=='void'))
+			  				if((!s[i+1] || !s[i+1][ik-1]) || (s[i+1][ik-1] && s[i+1][ik-1].type=='void'))
+			  				if((!s[i-1] || !s[i-1][ik+1]) || (s[i-1][ik+1] && s[i-1][ik+1].type=='void'))
+			  				if(!s[i][ik+1] || (s[i][ik+1] && s[i][ik+1].type=='void'))
+			  					if(!s[i][ik-1] || (s[i][ik-1] && s[i][ik-1].type=='void'))
+			  						if(!s[i+1] || (s[i+1] && s[i+1][ik].type=='void'))
+			  							if((!s[i-1] || s[i-1] && s[i-1][ik].type=='void')) {
+			  								/*if(t=='mine') {
+			  									if(i<s.length/2) {
+			  										voids.push(s[i][ik])
+			  									}
+											} else if(t=='ai') {
+			  									if(i>s.length/2) {
+			  										voids.push(s[i][ik])
+			  									}
+											} else if(t=='empty') {
+			  									if(i>s.length/3 && i<s.length-s.length/3) {
+			  										voids.push(s[i][ik])
+			  									}
+											} else {
+												voids.push(s[i][ik])
+											}*/
+											voids.push(s[i][ik])
+			  								
+			  							}
+
+			  								
+			  			}
+				  	}
+			  	}
+
+	  		var rndm3  = Math.floor(Math.random() * voids.length)
+	  		//console.log(voids,voids[rndm3])
+	  		voids[rndm3].prevtype = voids[rndm3].type;
+	  		voids[rndm3].type = t;
+	  		voids[rndm3].units = 5;
+	  		voids[rndm3].level = 1;
+	  		voids[rndm3].maxunits = voids[rndm3].level*10;
+
+	  		;
+
+
+			if(pr.length>0) {
+			  var connectedTo = pr[Math.floor(Math.random() * pr.length)];
+			  /*var tCount = 0;
+			  while(
+
+			  	tCount<200 && (
+			    	intersections(connections,{from:voids[rndm3],to:connectedTo}) ||
+			    	angles(connections,{from:voids[rndm3],to:connectedTo}) ||
+			    	distanceBetweenConnectionsComplete(s,connections)
+			    )
+			    ) {
+			  	tCount++;
+			  	connectedTo = pr[Math.floor(Math.random() * pr.length)];
+			  }*/
+			  var bubo = JSON.parse(JSON.stringify(connections))
+			  bubo.push({from:voids[rndm3],to:connectedTo})
+			  if(
+			    	intersections(connections,{from:voids[rndm3],to:connectedTo}) ||
+			    	angles(connections,{from:voids[rndm3],to:connectedTo}) ||
+			    	distanceBetweenConnectionsComplete(s,bubo)
+			    	// ||
+			    	//distanceBetweenConnections(s,voids[rndm3],connections)
+			    	//distanceBetweenConnectionsComplete(s,connections)
+			    ) {
+			  	
+			 	contaBestemmie++
+			  	voids[rndm3].type = voids[rndm3].prevtype;
+			  	if(contaBestemmie<100)
+			  		return addCell(s,t)
+			  	else {
+			  		console.log('qua si bestemmia '+contaBestemmie)
+			  		//window.location.reload();
+			  	 	return false;
+			  	}
+			  }
+			  else {
+			  	  
+			   	 //angles(connections,{from:voids[rndm3],to:connectedTo})
+			  	 connections.push({from:voids[rndm3],to:connectedTo,disturb:Math.floor(Math.random() * 5)  - 5})
+			  }
+
+			 
+			}
+		}
+		function addMoreConnection(){
+			var pr = [];
+			var voids = [];
+			var s = mainGrid
+				for (var i = 0; i < s.length; i++) {
+			  		for (var ik = 0; ik < s[i].length; ik++) {
+			  			if(s[i][ik].type!='void') {
+			  				pr.push(s[i][ik])
+			  			}
+				  	}
+			  	}
+
+			if(pr.length>0) {
+			  var connectedFrom = pr[Math.floor(Math.random() * pr.length)];
+			  var connectedTo = pr[Math.floor(Math.random() * pr.length)];
+			  var tCount = 0;
+			  var bubo = JSON.parse(JSON.stringify(connections))
+			  bubo.push({from:connectedFrom,to:connectedTo})
+			  /*while(
+
+			  	tCount<1000 && (
+				    intersections(connections,{from:connectedFrom,to:connectedTo}) ||
+				    connectedFrom.id == connectedTo.id ||
+				    //angles(connections,{from:connectedFrom,to:connectedTo}) ||
+				    isAlreadyPresent(connections,{from:connectedFrom,to:connectedTo}) ||
+				    distanceBetweenConnectionsComplete(s,bubo)
+			    )
+			    ) {
+
+			  	tCount++;
+			  	connectedTo = pr[Math.floor(Math.random() * pr.length)];
+			  	connectedFrom = pr[Math.floor(Math.random() * pr.length)];
+			  }*/
+			  // if(treeInaRow(s)) {
+			  // 	voids[rndm3].type = voids[rndm3].prevtype;
+			  // 	return addCell(t)
+			  // }
+			  if(
+			  		intersections(connections,{from:connectedFrom,to:connectedTo}) ||
+				    connectedFrom.id == connectedTo.id ||
+				    //angles(connections,{from:connectedFrom,to:connectedTo}) ||
+				    isAlreadyPresent(connections,{from:connectedFrom,to:connectedTo}) ||
+				    distanceBetweenConnectionsComplete(s,bubo)
+
+			  	) {
+
+			  	contaBestemmie++
+			  	if(contaBestemmie<100)
+			  		return addMoreConnection()
+			  	else {
+			  		console.log('qua si bestemmia 2 '+contaBestemmie)
+			  		init()
+			  	 	return false;
+			  	}
+
+			  }
+
+			  else {
+			   	 //angles(connections,{from:voids[rndm3],to:connectedTo})
+			  	 connections.push({from:connectedFrom,to:connectedTo,disturb:Math.floor(Math.random() * 5)  - 5})
+			  }
+
+			 
+			}
+			function isAlreadyPresent(l,j) {
+				for (var i = 0; i < l.length; i++) {
+					if(
+							 (l[i].from.id == j.from.id && l[i].to.id == j.to.id) ||
+							 (l[i].to.id == j.from.id && l[i].from.id == j.to.id)
+						) {
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		function distanceBetweenConnections(s,b,a,print) {
+			for (var i = 0; i < a.length; i++) {
+				var d = distToSegment({ x:b.column, y:b.row },{ sx:a[i].from.column, sy:a[i].from.row, ex:a[i].to.column, ey:a[i].to.row });
+				if(print) console.log(d)
+				if(d<2) {
+					return true;
+				}
+			}
+			return false;
+		}
+		function distanceBetweenConnectionsComplete(s,a,print) {
+			for (var i = 0; i < s.length; i++) {
+		  		for (var ik = 0; ik < s[i].length; ik++) {
+		  			if(s[i][ik].type!="void")
+		  			for (var im = 0; im < a.length; im++) {
+		  				if(s[i][ik].id!=a[im].from.id && s[i][ik].id!=a[im].to.id) {
+							var d = distToSegment({ x:s[i][ik].column, y:s[i][ik].row },{ sx:a[im].from.column, sy:a[im].from.row, ex:a[im].to.column, ey:a[im].to.row });
+							if(d<1) {
+								if(print) {
+									console.log(d,s[i][ik],a[im])	
+								} 
+								return true;
+							}
+						}
+					}
+			  	}
+			}		  	
+			return false;
+		}
+		function dist(point, x, y){
+	        var dx = x - point.x;
+	        var dy = y - point.y;
+	        return Math.sqrt(dx * dx + dy * dy);
+	    }
+	    function distToSegment(point, line)
+	    {
+	        var dx = line.ex - line.sx;
+	        var dy = line.ey - line.sy;
+	        var l2 = dx * dx + dy * dy;
+	        
+	        if (l2 == 0)
+	            return this.dist(point, line.sx, line.sy);
+
+	        var t = ((point.x - line.sx) * dx + (point.y - line.sy) * dy) / l2;
+	        t = Math.max(0, Math.min(1, t));
+
+	        return this.dist(point, line.sx + t * dx, line.sy + t * dy);
+	    }
+		function treeInaRow(s) {
+			for (var i = 0; i < s.length; i++) {
+				var count = 0;
+		  		for (var ik = 0; ik < s[i].length; ik++) {
+		  			if(s[i][ik].type!='void') {
+		  				count++;
+		  			}
+			  	}
+			  	if(count==3) return true;
+		  	}
+		  	return false;
+		}
+
+		function treeInaColumn(s) {
+			for (var i = 0; i < s.length; i++) {
+				var count = 0;
+		  		for (var ik = 0; ik < s[i].length; ik++) {
+		  			if(s[ik][i].type!='void') {
+		  				count++;
+		  			}
+			  	}
+			  	if(count==3) return true;
+		  	}
+		  	return false;
+		}
+
+		function find_angle(p0,p1,c) {
+		  //console.log(p0,p1,c)
+		  var p0c = Math.sqrt(Math.pow(c.x-p0.x,2)+
+		                      Math.pow(c.y-p0.y,2));  
+		  var p1c = Math.sqrt(Math.pow(c.x-p1.x,2)+
+		                      Math.pow(c.y-p1.y,2));
+		  var p0p1 = Math.sqrt(Math.pow(p1.x-p0.x,2)+
+		                       Math.pow(p1.y-p0.y,2));
+		  var angle = Math.acos((p1c*p1c+p0c*p0c-p0p1*p0p1)/(2*p1c*p0c));
+		  //console.log(angle * (180 / Math.PI))
+
+		  return angle * (180 / Math.PI);
+		}
+
+		function angles(a,b) {
+			for (var i = 0; i < a.length; i++) {
+				var anglel;
+				if((a[i].from.row == b.to.row) && (a[i].from.column == b.to.column)) {
+					anglel = find_angle({x:b.from.column,y:b.from.row},{x:a[i].to.column,y:a[i].to.row},{x:b.to.column,y:b.to.row})
+				}
+				if((a[i].to.row == b.to.row) && (a[i].to.column == b.to.column)) {
+					anglel = find_angle({x:b.from.column,y:b.from.row},{x:a[i].from.column,y:a[i].from.row},{x:b.to.column,y:b.to.row})
+				}
+				if(anglel<30) {
+					return true
+				}
+				if(anglel>170) {
+					return true
+				} 
+				// if(intersects(a[i].from.row,a[i].from.column,a[i].to.row,a[i].to.column,b.from.row,b.from.column,b.to.row,b.to.column)) {
+				// 	//return true;
+				// }
+			}
+			//console.log(anglel)
+				
+			return false;
+			//return false;
+		}
+
+		function intersections(a,b) {
+			for (var i = 0; i < a.length; i++) {
+				if(intersects(a[i].from.row,a[i].from.column,a[i].to.row,a[i].to.column,b.from.row,b.from.column,b.to.row,b.to.column)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		function intersects(a,b,c,d,p,q,r,s) {
+		  var det, gamma, lambda;
+		  det = (c - a) * (s - q) - (r - p) * (d - b);
+		  if (det === 0) {
+		    return false;
+		  } else {
+		    lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+		    gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+		    return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+		  }
+		};
+
+		function lineSegmentsIntersect(x1, y1, x2, y2, x3, y3, x4, y4) {
+		    var a_dx = x2 - x1;
+		    var a_dy = y2 - y1;
+		    var b_dx = x4 - x3;
+		    var b_dy = y4 - y3;
+		    var s = (-a_dy * (x1 - x3) + a_dx * (y1 - y3)) / (-b_dx * a_dy + a_dx * b_dy);
+		    var t = (+b_dx * (y1 - y3) - b_dy * (x1 - x3)) / (-b_dx * a_dy + a_dx * b_dy);
+		    return (s >= 0 && s <= 1 && t >= 0 && t <= 1);
+		}
+
+		function drawConnections(s,c) {
+			//console.log(s,c)
+			$(".connectionCanvas").remove()
+			var canv = document.createElement('canvas');
+		    canv.id = uId();// gives canvas id
+		    canv.classList = 'mainCanvas connectionCanvas'; // gives canvas id
+		    canv.height = $(".pointsCont").height(); //get original canvas height
+		    canv.width = $(".pointsCont").width();  // get original canvas width
+		    document.body.appendChild(canv); // adds the canvas to the body element
+		    var canvas1 = document.getElementById(canv.id); //find new canvas we created
+		    var ctx = canvas1.getContext('2d');
+		    ctx.clearRect(0, 0, canv.width, canv.height);
+	  		
+			for (var i = 0; i < c.length; i++) {
+				var e = $('[data-id="'+c[i].from.id+'"]').position();
+				var x = e.left+$('.pos').width()/2;
+				var y = e.top+$('.pos').height()/2;
+				var e1= $('[data-id="'+c[i].to.id+'"]').position();
+				var x1 = e1.left+$('.pos').width()/2;
+				var y1 = e1.top+$('.pos').height()/2;
+				var mx = (x+x1)/2 
+				var my = (y+y1)/2 
+				var mx0 = (x+mx)/2 
+				var my0 = (y+my)/2 
+				var mx2 = (mx+x1)/2 
+				var my2 = (my+y1)/2
+				ctx.beginPath();
+				ctx.setLineDash([]);
+				var disturb = c[i].disturb;
+				ctx.lineWidth = $(".mainGrid").width()/35;
+				ctx.strokeStyle = '#DCC59F';
+		  		ctx.moveTo(x,y);
+				ctx.lineTo(mx0+disturb, my0+disturb);
+				ctx.lineTo(mx, my);
+				ctx.lineTo(mx2+disturb, my2+disturb);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+
+
+				var ciglio  = $(".mainGrid").width()/200;
+
+
+				ctx.beginPath();
+				ctx.setLineDash([]);
+				var disturb = c[i].disturb;
+				ctx.lineWidth = $(".mainGrid").width()/37;
+				ctx.strokeStyle = '#FFFFE3';
+				//console.log((Math.abs(x1-x) / mainGrid.length))
+				ciglio = ciglio*(Math.abs(x1-x) / $(".mainGrid").width());
+				
+
+
+		  		ctx.moveTo(x,y);
+				ctx.lineTo(mx0+disturb+ciglio, my0+disturb+ciglio);
+				ctx.lineTo(mx+ciglio, my+ciglio);
+				ctx.lineTo(mx2+disturb+ciglio, my2+disturb+ciglio);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();
+
+
+				/*ctx.beginPath();
+				ctx.setLineDash([]);
+				var disturb = c[i].disturb;
+				ctx.lineWidth = $(".mainGrid").width()/70;
+				ctx.strokeStyle = '#FFFFE3';
+		  		ctx.moveTo(x,y);
+				ctx.lineTo(mx0+disturb-ciglio, my0+disturb-ciglio);
+				ctx.lineTo(mx-ciglio, my-ciglio);
+				ctx.lineTo(mx2+disturb-ciglio, my2+disturb-ciglio);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();*/
+
+
+				/*ctx.beginPath();
+				ctx.setLineDash([]);
+				var disturb = c[i].disturb;
+				ctx.lineWidth = $(".mainGrid").width()/70;
+				ctx.strokeStyle = '#FFFFE3';
+		  		ctx.moveTo(x,y);
+				ctx.lineTo(mx0+disturb-ciglio, my0+disturb-ciglio);
+				ctx.lineTo(mx-ciglio, my-ciglio);
+				ctx.lineTo(mx2+disturb-ciglio, my2+disturb-ciglio);
+				ctx.lineTo(x1, y1);
+				ctx.stroke();*/
+
+				/*ctx.beginPath();
+				ctx.lineWidth = $(".mainGrid").width()/37;
+				ctx.strokeStyle = 'gray';
+				var e = $('[data-id="'+c[i].from.id+'"]').position();
+		  		ctx.moveTo(e.left+$('.pos').width()/2, e.top+$('.pos').height()/2);
+		  		var e = $('[data-id="'+c[i].to.id+'"]').position();
+				ctx.lineTo(e.left+$('.pos').width()/2, e.top+$('.pos').height()/2);
+				ctx.stroke();*/
+
+
+				/*ctx.beginPath();
+				ctx.setLineDash([5, 15]);
+				ctx.lineWidth = 2;
+				ctx.strokeStyle = 'white';
+				var e = $('[data-id="'+c[i].from.id+'"]').position();
+		  		ctx.moveTo(e.left+$('.pos').width()/2, e.top+$('.pos').height()/2);
+		  		var e = $('[data-id="'+c[i].to.id+'"]').position();
+				ctx.lineTo(e.left+$('.pos').width()/2, e.top+$('.pos').height()/2);
+				ctx.stroke();*/
+			}
+		}
+
+		function engine(s) {
+			//return false;
+			/*for (var i = 0; i < salm.length; i++) {
+				sendUnits()
+			}*/
+
+
+			var m = 0;
+			var a = 0;
+			var a2 = 0;
+			for (var i = 0; i < s.length; i++) {
+		  		for (var ik = 0; ik < s[i].length; ik++) {
+
+		  			if(s[i][ik].autoSend) {
+		  				sendUnits(mainGrid,s[i][ik].autoSend.from,s[i][ik].autoSend.to)
+		  			}
+
+
+		  			if(s[i][ik].type!='void' && s[i][ik].type!='empty') {
+		  				if(s[i][ik].units<s[i][ik].maxunits) {
+		  					s[i][ik].units++;
+		  				}
+		  				else if(s[i][ik].units>s[i][ik].maxunits) {
+		  					s[i][ik].units--;
+		  				}
+
+		  				if(s[i][ik].type=='mine') {
+		  					m++
+		  				}
+		  				if(s[i][ik].type=='ai') {
+		  					a++
+		  				}
+		  				if(s[i][ik].type=='ai2') {
+		  					a2++
+		  				}
+
+		  			}
+			  	}
+		  	}
+		  	if((m==0 && a==0) || (m==0 && a2==0)) {
+		  		$('.panel').remove();
+		        $('.panrelOverlay').remove();
+		        $('body').append('<div class="panrelOverlay"></div><div class="panel"></div>')
+		        if (true) {
+		            $('.panel').append('<div>AI WINS</div>');
+		        }
+		        $('.panel').append('<div class="exit"><a href="#" class="button1">' + "RETRY" + '</a></div>');
+		        $('.exit').off('click').on('click', function() {
+		        	window.location.reload()
+		        })
+		        $('.panrelOverlay').off('click').on('click', function() {
+		            $('.panel').remove();
+		            $('.panrelOverlay').remove();
+		        })
+
+		  		return false;
+		  	}
+		  	else if(a==0 && a2==0) {
+
+		  		clearTimeout(mainTimeout)
+		  		$(".pointsCont").html("")
+
+
+  				$('.panel').remove();
+		        $('.panrelOverlay').remove();
+		        $('body').append('<div class="panrelOverlay"></div><div class="panel"></div>')
+		        if (true) {
+		            $('.panel').append('<div>YOU WIN</div>');
+		        }
+		        $('.panel').append('<div class="exit"><a href="#" class="button1">' + "NEXT LEVEL" + '</a></div>');
+		        $('.exit').off('click').on('click', function() {
+		        	mainLevel++;
+		  			$(".pointsCont").html("")
+		  			init(mainLevel)
+		  			$('.start').show();
+		  			$('.reload').show();
+		            $('.panel').remove();
+		            $('.panrelOverlay').remove();
+		        })
+		        $('.panrelOverlay').off('click').on('click', function() {
+		            $('.panel').remove();
+		            $('.panrelOverlay').remove();
+		        })
+
+		  		return false;
+		  	}
+		  	if(a!=0)
+		  		ai(s,'ai')
+		  	if(a2!=0)
+		  		ai(s,'ai2')
+		  	//ai(s,'ai2')
+		  	//ai(s,'mine')
+		  	draw(mainGrid);
+		  	drawConnections(mainGrid,connections)
+
+			mainTimeout = setTimeout(function(){
+				engine(s);
+			},engineTime)
+		}
+		function draw(s) {
+	  		if($(".mainGrid").html()=='') {
+			  	for (var i = 0; i < s.length; i++) {
+			  		for (var ik = 0; ik < s[i].length; ik++) {
+			  			var structure;
+			  			structure = "<div class='pos "+s[i][ik].type+"' data-autosend='"+(s[i][ik].autoSend ? true : false)+"' data-id='"+s[i][ik].id+"' data-level='"+s[i][ik].level+"'><div class='houseCont'></div><div class='floorCont'></div><div class='unitsCapacity'><div class='unitsBar' style='width:"+100 * s[i][ik].units / s[i][ik].maxunits+"%;'></div><div class='units'>"+s[i][ik].units+"</div></div></div>"
+				  		$(".mainGrid").append(structure)
+				  	}
+			  	}
+		  	} else {
+		  		for (var i = 0; i < s.length; i++) {
+			  		for (var ik = 0; ik < s[i].length; ik++) {
+			  			$('[data-id="'+s[i][ik].id+'"]').attr('class','pos '+s[i][ik].type)
+			  			$('[data-id="'+s[i][ik].id+'"]').attr('data-autosend',(s[i][ik].autoSend ? true : false))
+			  			$('[data-id="'+s[i][ik].id+'"]').attr('data-level',s[i][ik].level)
+			  			$('[data-id="'+s[i][ik].id+'"] .units').html(s[i][ik].units)
+			  			$('[data-id="'+s[i][ik].id+'"] .unitsCapacity .unitsBar').css("width",100 * s[i][ik].units / s[i][ik].maxunits+"%");
+			  			if((s[i][ik].units >= s[i][ik].maxunits-5) && s[i][ik].type=="mine" && s[i][ik].level<=3) {
+			  				$('[data-id="'+s[i][ik].id+'"]').addClass("upgrade")
+			  			} else {
+			  				$('[data-id="'+s[i][ik].id+'"]').removeClass("upgrade")
+			  			}
+				  	}
+			  	}
+		  	}
+		  	
+		}
+		var sendInterval;
+		function bind(s) {
+
+			$(".mainGrid").on("mouseleave",function(e){$('.arrowcanvas').remove();})
+		  	$(".mainGrid").off(events.start).on(events.start,function(e){
+		  		$('.arrowcanvas').remove();
+			    var canv = document.createElement('canvas');
+			    canv.id = uId();// gives canvas id
+			    canv.classList = 'mainCanvas arrowcanvas'; // gives canvas id
+			    canv.height = $(".pointsCont").height(); //get original canvas height
+			    canv.width = $(".pointsCont").width();  // get original canvas width
+			    document.body.appendChild(canv); // adds the canvas to the body element
+			    var canvas1 = document.getElementById(canv.id); //find new canvas we created
+			    var ctx = canvas1.getContext('2d');
+
+
+		  		if($(e.target).hasClass("mine")) {
+
+					var startFrom = {}
+					startFrom.id = $(e.target).data('id')
+					startFrom.x = $(e.target).position().left+$(e.target).width()/2;
+					startFrom.y = $(e.target).position().top+$(e.target).height()/2;
+					var endTo = {}
+					var yyy = findCellById(mainGrid,startFrom.id); 
+					yyy.autoSend = null;
+					if(doubleClickFlag==true) {
+			  			console.log("doubleClick")
+			  			var yy = findCellById(mainGrid,startFrom.id)
+			  			if(yy.level<=3)
+			  				upgradeCell(mainGrid,startFrom.id)
+			  		}
+			  		doubleClickFlag = true;
+			  		clearTimeout(doubleClickTimeout)
+			  		doubleClickTimeout = setTimeout(function(){
+			  			doubleClickFlag = false;
+			  		},300)
+
+
+					$(".mainGrid").off(events.move).on(events.move,function(e){
+						var target;
+		  				if(isMobile) {
+		  					var myLocation = e.originalEvent.changedTouches[0];
+							var realTarget = document.elementFromPoint(myLocation.clientX, myLocation.clientY)
+							e = e.originalEvent.touches[0];
+							target = realTarget
+		  				} else {
+		  					target = e.target;
+		  				}
+				  		ctx.clearRect(0, 0, canv.width, canv.height);
+				  		ctx.beginPath();
+				  		ctx.lineWidth = $(".mainGrid").width()/40;
+				  		ctx.strokeStyle = '#FF6961';
+				  		ctx.fillStyle = '#FF6961';
+						canvas_arrow(ctx, startFrom.x, startFrom.y, e.pageX-$(this).offset().left, e.pageY-$(this).offset().top,ctx.lineWidth);
+						ctx.stroke();
+						
+						if(!$(target).hasClass("void") && $(target).data('id') !=  startFrom.id && isConnected(startFrom.id,$(target).data('id'))) {
+							endTo.id = $(target).data('id')
+							endTo.x = $(target).position().left+$(target).width()/2;
+							endTo.y = $(target).position().top+$(target).height()/2;
+
+							clearInterval(sendInterval)
+							var from  = findCellById(mainGrid,startFrom.id)
+							var moving = Math.ceil(from.units/2)
+
+							ctx.clearRect(0, 0, canv.width, canv.height);
+					  		ctx.beginPath();
+					  		ctx.lineWidth = $(".mainGrid").width()/40;;
+					  		ctx.strokeStyle = '#3fc95f';
+					  		ctx.fillStyle = '#3fc95f';
+							canvas_arrow(ctx, startFrom.x, startFrom.y, endTo.x, endTo.y,ctx.lineWidth);
+							/*ctx.fillStyle = 'white';
+							ctx.font = "20px Georgia";
+							ctx.fillText(moving, (startFrom.x+endTo.x)/2, (startFrom.y+endTo.y)/2);*/
+							ctx.stroke();
+							// var to = 0;
+							// sendInterval = setInterval(function(){
+							// 	from  = findCellById(mainGrid,startFrom.id)
+							// 	moving = Math.ceil(from.units/2)
+
+							// 	ctx.clearRect(0, 0, canv.width, canv.height);
+						 //  		ctx.beginPath();
+						 //  		ctx.lineWidth = $(".mainGrid").width()/40;;
+						 //  		ctx.strokeStyle = '#3fc95f';
+						 //  		ctx.fillStyle = '#3fc95f';
+							// 	canvas_arrow(ctx, startFrom.x, startFrom.y, endTo.x, endTo.y,ctx.lineWidth);
+							// 	ctx.fillStyle = 'black';
+							// 	ctx.fillText(moving+to, (startFrom.x+endTo.x)/2, (startFrom.y+endTo.y)/2);
+							// 	endTo.mo = moving+to;
+							// 	ctx.stroke();
+							// 	if((moving+to)<from.units) {
+							// 		to++
+							// 	} else {
+							// 		clearInterval(sendInterval)
+							// 	}
+							// },200)
+						} else {
+							endTo = {}
+						}
+				  	})
+				  	$(".mainGrid").off(events.end).on(events.end,function(e){
+				  		
+				  		$(".mainGrid").off(events.move)
+				  		$(".mainGrid").off(events.end)
+				  		$('#'+canv.id).fadeOut(500);
+				  		setTimeout(function(){
+				  			$('#'+canv.id).remove();
+				  		},500)
+				  		if(JSON.stringify(endTo) === JSON.stringify({})) {
+				  			//ctx.clearRect(0, 0, canv.width, canv.height);
+				  		
+				  		} else {
+				  			var ttt  = findCellById(mainGrid,startFrom.id)
+				  			ttt.autoSend = {from:startFrom,to:endTo};
+				  			//sendUnits(mainGrid,startFrom,endTo)
+				  		}
+				  	})
+				}
+		  	})
+		}
+		function isConnected(a,b) {
+			for (var i = 0; i < connections.length; i++) {
+				if(
+					(connections[i].from.id==a && connections[i].to.id==b) ||
+					(connections[i].to.id==a && connections[i].from.id==b)
+				) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+		function upgradeCell(s,c) {
+			c = findCellById(s,c);
+			if(c.units>=c.maxunits-5) {
+				c.level++;
+				c.units = Math.floor(c.maxunits/2);
+				c.maxunits = c.level*10;
+				draw(s)
+			}
+		}
+		function sendUnits(mainGrid,startFrom,endTo) {
+			var from  = findCellById(mainGrid,startFrom.id)
+			var ftype = from.type
+			var to  = findCellById(mainGrid,endTo.id)
+			var moving = Math.ceil(from.units/2)
+			if(from.units==1) moving = 0
+			var cb = function(){
+				//from  = findCellById(mainGrid,startFrom.id)
+				to  = findCellById(mainGrid,endTo.id)
+				if(ftype==to.type) {
+					to.units ++
+				}
+				else if(ftype!=to.type) {
+					if(to.units>0)
+						to.units --
+				}
+				if(to.units<=0) {
+					to.level = 1;
+					to.maxunits = to.level*10;
+					to.type = ftype
+					to.autoSend = false
+				}
+				draw(mainGrid)
+			}
+			var counter = 0;
+			var c;
+			c = setInterval(function(){
+				if(counter>=moving) {
+					clearInterval(c)
+				} else {
+					if(from.units<=0) {
+						clearInterval(c)
+					} else {
+						from.units --
+						draw(mainGrid)
+						addPoint(startFrom.x,startFrom.y,endTo.x,endTo.y,cb,counter,moving,from.type)
+						counter++;
+					}
+				}
+			},150)
+		}
+		function addPoint(x,y,x1,y1,cb,counter,moving,fromtype) {
+			var id = uId();
+			var a = x - x1;
+			var b = y - y1;
+			var distance = Math.sqrt( a*a + b*b );	
+			var cColor = getComputedStyle(document.documentElement).getPropertyValue('--'+fromtype+'-color')
+			var bg = cColor		
+			$(".pointsCont").append("<div style='background:"+bg+";' class='point' id='"+id+"'></div>")
+			$('#'+id).css('transition-duration',(.01*distance).toFixed(2)+'s');
+			$('#'+id).css('left',x-5)
+			$('#'+id).css('top',y-5)
+			setTimeout(function(){
+				$('#'+id).css('left',x1-5)
+				$('#'+id).css('top',y1-5)
+			},10)
+			setTimeout(function(){
+				cb()
+				$('#'+id).remove();
+			},((.01*distance).toFixed(2)*1000)-10)
+		}
+		function ai(s,ty) {
+			var ais = []
+			var max = 0;
+			var pointer;
+			for (var i = 0; i < s.length; i++) {
+		  		for (var ik = 0; ik < s[i].length; ik++) {
+		  			s[i][ik].x = $('[data-id="'+s[i][ik].id+'"]').position().left+$('[data-id="'+s[i][ik].id+'"]').width()/2;
+		  				s[i][ik].y = $('[data-id="'+s[i][ik].id+'"]').position().top+$('[data-id="'+s[i][ik].id+'"]').width()/2;
+		  			if(s[i][ik].type==ty) {
+		  				if(s[i][ik].units>max) {
+		  					max = s[i][ik].units;
+		  					pointer = s[i][ik];
+		  				}
+		  				ais.push(s[i][ik])
+		  			}
+			  	}
+		  	}
+		  	if(ais.length) {
+			  	
+		    
+
+			    var canUpgrade = upgradeProcedure(ais);
+			    if(false) {
+			    	upgradeCell(s,canUpgrade.el.id)
+			    } else {
+			    	var fromo = ais[Math.floor(Math.random() * ais.length)]
+			    	var tare = findOtherByconnection(connections,fromo.id)
+				    var canAttack = attackProcedure(ais,connections);
+				    if(canAttack.flag) {
+				    	fromo = canAttack.el.attacker;
+				    	tare = canAttack.el;
+				    } 
+				    if(canUpgrade.flag && canAttack.flag==false) {
+				    	upgradeCell(s,canUpgrade.el.id)
+				    } else {
+				    	sendUnits(s,fromo,tare)
+					}
+				}
+			}
+		}
+		function upgradeProcedure(a) {
+			for (var i = 0; i < a.length; i++) {
+				if(a[i].units>=a[i].maxunits-5 && a[i].level<=3) {
+					return {flag:true,el:a[i]}
+				}
+
+			}
+			return {flag:false}
+		}
+		function attackProcedure(a,c) {
+			var opp = []
+			for (var i = 0; i < a.length; i++) {
+				var topp = findOpponentByconnection(c,a[i].id,a[i].type)
+				for (var n = 0; n < topp.length; n++) {
+					topp[n].attacker = a[i];
+					opp.push(topp[n])
+				}
+
+			}
+			for (var n = 0; n < opp.length; n++) {
+
+				if(opp[n].attacker.units>opp[n].units*2) {
+					console.log("attack")
+					return {flag:true,el:opp[n]}
+				}
+				else {
+					var treinf = findSameByconnection(c,opp[n].attacker.id,opp[n].attacker.type)
+					if(treinf.length) {
+						//console.log(opp[n].attacker.units)
+						//console.log("reinforce")
+						var tempa = opp[n].attacker
+						var curr = treinf[Math.floor(Math.random() * treinf.length)];
+						if(curr.units<5) {
+							console.log("no units")
+							return {flag:false}
+						} else {
+							console.log("reinforce")
+						}
+						tempa.attacker = curr
+						return {flag:true,el:tempa}
+					} else {
+						console.log("reinforce fail")
+					}
+				}
+			}
+			return {flag:false}
+		}
+		function findSameByconnection(a,o,t) {
+			var p = [];
+			for (var i = 0; i < a.length; i++) {
+				if(a[i].from.id==o && a[i].to.type==t)  p.push(a[i].to)
+				if(a[i].to.id==o && a[i].from.type==t) p.push(a[i].from)
+			}
+			return p
+		}
+		function findOpponentByconnection(a,o,t) {
+			var p = [];
+			for (var i = 0; i < a.length; i++) {
+				if(a[i].from.id==o && a[i].to.type!=t)  p.push(a[i].to)
+				if(a[i].to.id==o && a[i].from.type!=t) p.push(a[i].from)
+			}
+			return p
+		}
+		function findOtherByconnection(a,o) {
+			var p = [];
+			for (var i = 0; i < a.length; i++) {
+				if(a[i].from.id==o) p.push(a[i].to)
+				if(a[i].to.id==o) p.push(a[i].from)
+			}
+			return p[Math.floor(Math.random() * p.length)]
+		}
+		function findCellById(mainGrid,id) {
+			for (var i = 0; i < mainGrid.length; i++) {
+				for (var ik = 0; ik < mainGrid[i].length; ik++) {
+					if(mainGrid[i][ik].id==id) {
+						return mainGrid[i][ik];
+						break;
+					}
+				}
+			}
+			return false;
+		}
+
+		function canvas_arrow(context, fromx, fromy, tox, toy ,lw) {
+		  var headlen = 40; // length of head in pixels
+		  var dx = tox - fromx;
+		  var dy = toy - fromy;
+		  var angle = Math.atan2(dy, dx);
+		  context.lineWidth = 1;
+		  context.beginPath();
+		  context.moveTo(fromx, fromy);
+		  
+		  //context.stroke()
+		  // context.closePath();
+		  // context.beginPath();
+		  context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+		  context.lineTo(tox, toy);
+		  context.lineTo(tox, toy);
+		  context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+		  context.fill();
+		}
+
+		function uId() {
+		  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+		    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+		    return v.toString(16);
+		  });
+		}
+		function detectMobile() {
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+                isMobile = true;
+                events.start = 'touchstart';
+                events.end = 'touchend';
+                events.move = 'touchmove';
+                $('body').addClass('mobile');
+            } else {
+                isMobile = false;
+                events.start = 'mousedown';
+                events.end = 'mouseup';
+                events.move = 'mousemove';
+                $('body').removeClass('mobile');
+            }
+        }
+
+	</script>
+</head>
+<body>
+	<h2 class="title" style = "font-family:courier,arial,helvetica;width: 100%; text-align: center;">STRATEGY</h2>
+	<div class="level"></div>
+	<div>
+		<a href="#" class="start button button1">START</a>
+		<!-- <a href="#" class="reload button button1">NEW MAP</a> -->
+	</div>
+	<div class="bgCont"></div>
+	<div class="mainGrid"></div>
+	
+	<div class="pointsCont"></div>
+	<!-- <input type="range" class="speed" value="2000" step="100" max="5000" min="500"></input>
+	<input type="button" class="aiStep" value="AI"></input> -->
+</body>
+</html>

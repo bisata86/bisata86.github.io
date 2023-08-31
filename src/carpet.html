@@ -1,0 +1,313 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style type="text/css">
+
+    body {
+      margin:0;
+      padding:0;
+      overflow: hidden;
+    }
+    canvas {
+      max-height: 90vh;
+      max-width: 90vw;
+      margin: auto;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top:0;
+      bottom: 0;
+    }
+    .button {
+      padding:5px;
+      border:1px solid black;
+      width: 100px;
+      background-color: white !important;
+      cursor: pointer;
+    }
+    .gen {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      width: 50px;
+      height: 50px;
+      background: black;
+      border-radius: 100%;
+      font-size: 20px;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Noun_Project_process_icon_2519390.svg/1200px-Noun_Project_process_icon_2519390.svg.png');
+            background-size: 70% 70%; 
+      background-position: center center;
+      background-repeat: no-repeat; 
+    }
+    .dl {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 50px;
+      height: 50px;
+      background: black;
+      border-radius: 100%;
+      font-size: 20px;
+      line-height: 50px;
+      text-align: center;
+      color: white;
+      background: url('https://s3.amazonaws.com/www.mathnasium.com/upload/990/images/download.png');
+      background-size: 70% 70%; 
+      background-position: center center;
+      background-repeat: no-repeat; 
+    }
+    .loader {
+      width:100vw;
+      height: 100vh;
+      nobackground: black;
+      noopacity: .5;
+      position: fixed;
+      z-index: 10;
+      top:0;
+      pointer-events: none;
+      display: inline-block;
+    }
+    .loader.visible {
+      pointer-events: all;
+    }
+    .loader div {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      margin: auto;
+      left: 0;
+      right: 0;
+      width: 0px;
+      height: 0px;
+      background-color: white !important;
+      transition-duration: .1s;
+      border-radius: 100%;
+      background:url('https://cdn.dribbble.com/users/3374/screenshots/2059439/loader.gif');
+      background-size: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .loader.visible div {
+      width: 50px;
+      height: 50px;
+    }
+
+  </style>
+  <script>
+    var ctx,x,k;
+      var palettes = [
+        ['#5F0F40','#9A031E','#FB8B24','#E36414','#0F4C5C']
+      ]
+      var types = [
+        //'squares2'
+        'bubbles','squares','stripes','squares-oriented'
+      ]
+      var aaa;
+    $(function() {
+        x = document.createElement("CANVAS");
+        x.width  = 1080;//window.innerWidth;
+        x.height = 2340;//window.innerHeight;
+        document.body.appendChild(x);
+        ctx = x.getContext("2d");
+        k = {squares:[],bg:""}
+        $('body').append('<div class="button gen"></div>')
+        $('.gen').on('click',function(){
+          k.type = types[Math.floor(Math.random() * types.length)]
+          k.squares = [];
+
+          for (var i = 0; i < Math.floor(Math.random() * 500)+50; i++) {
+            k.squares.push(
+              {
+                x:Math.floor(Math.random() * x.width),
+                y:Math.floor(Math.random() * x.height),
+                dim1:Math.floor(Math.random() * x.width)/2,
+                dim2:Math.floor(Math.random() * x.height)/2,
+                angle:Math.floor(Math.random() * 360),
+              }
+            )
+          }
+          apiColor();
+        })
+        $('.gen').click();
+        $('body').append('<div class="button dl"></div>')
+        $('.dl').on('click',function(){
+            var link = document.createElement('a');
+            link.download = 'filename.png';
+            link.href = x.toDataURL()
+            link.click();
+        })
+
+
+    });
+    function go() {
+        //aaa();
+        $(".cane").remove();
+        $("body").append('<img style="display:none;" onLoad="aaa()" class="cane" src="https://picsum.photos/1080/2340?random='+Math.floor(Math.random() * 10000)+'">')
+
+        aaa = function() {
+
+
+          ctx.clearRect( 0, 0, x.width, x.height);
+          ctx.fillStyle='white';//k.squares.bg;
+          ctx.fillRect( 0, 0, x.width, x.height);
+
+
+          var grd = ctx.createLinearGradient(x.width/2,0,x.width/2,x.height);
+          grd.addColorStop(0,k.squares.bg);
+          grd.addColorStop(1,k.squares.bg2);
+
+          ctx.fillStyle=ctx.createPattern($('.cane')[0], 'repeat');//grd;
+          ctx.fillRect( 0, 0, x.width, x.height);
+
+          var ang = Math.floor(Math.random() * 45);
+        
+          for (var i = 0; i < k.squares.length; i++) {
+            drawRotatedRect(
+              k.type,
+              k.squares[i].x,
+              k.squares[i].y,
+              k.squares[i].dim1,
+              k.squares[i].dim2,
+              k.squares[i].angle,
+              k.squares[i].color,
+              ang,
+            );
+          }
+
+          setTimeout(function(){  loaderOff();},200)
+
+        }
+
+        function drawRotatedRect(type,x1,y1,width,height,degrees,color,ang){
+            ctx.fillStyle=color;
+            ctx.filter = 'blur(1px)';
+            if(type=='squares') {
+              x1-=200;
+              y1-=200;
+              ctx.save();
+              ctx.beginPath();
+              ctx.translate( x1+width/2, y1+height/2 );
+              ctx.rotate(degrees*Math.PI/180);
+              ctx.rect( -width/2, -height/2, width,height);
+              ctx.fill();
+              ctx.restore();
+            }
+            if(type=='squares2') {
+              x1-=100;
+              y1-=100;
+              width = Math.floor(Math.random() * 200);
+              height = Math.floor(Math.random() * 200);
+              ctx.save();
+              ctx.beginPath();
+              ctx.translate( x1+width/2, y1+height/2 );
+              ctx.rotate(degrees*Math.PI/180);
+              ctx.rect( -width/2, -height/2, width,height);
+              ctx.fill();
+              ctx.restore();
+            }
+            if(type=='bubbles') {
+              ctx.beginPath();
+              ctx.arc(x1,y1,width,0, 2 * Math.PI);
+              ctx.fill();
+            }
+            if(type=='squares-oriented') {
+              x1-=200;
+              y1-=200;
+              ctx.save();
+              ctx.beginPath();
+              ctx.translate( x1+width/2, y1+height/2 );
+              ctx.rotate(ang*Math.PI/180);
+              ctx.rect( -width/2, -height/2, width,height);
+              ctx.fill();
+              ctx.restore();
+            }
+            if(type=='stripes') {
+              height = 500;
+              width = height*4;
+              x1 = -400
+              y1 -= 300
+              ctx.save();
+              ctx.beginPath();
+              ctx.translate( x1+width/2, y1+height/2 );
+              ctx.rotate(-ang*Math.PI/180);
+              ctx.rect( -width/2, -height/2, width,height);
+              ctx.fill();
+              ctx.restore();
+            }
+        }
+
+        
+    }
+    function getRandomColor(a) {
+      /*var colors = ['red','blue','gold','green','yellow','violet','cyan','black','white']
+      var colors = ['#5F0F40','#9A031E','#FB8B24','#E36414','#0F4C5C',ctx.createPattern($('.cane')[0], 'repeat')]*/
+      return hexToRgbA(palette[Math.floor(Math.random() * palette.length)],a)
+    }
+    function hexToRgbA(hex,a){
+      var c;
+      if(!a) a = 1
+      if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+          c= hex.substring(1).split('');
+          if(c.length== 3){
+              c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+          }
+          c= '0x'+c.join('');
+          return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+a+')';
+      }
+      throw new Error('Bad Hex');
+    }
+    function getRandomHex() {
+    var letters = '0123456789ABCDEF';
+    var color = '';
+    for (var i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    console.log(color);
+    return color;
+  }
+  function loaderOn() {
+    if($('.loader').length==0)
+    $('body').append('<div class="loader"><div></div></div>')
+    $('.loader').addClass('visible');
+  }
+  function loaderOff() {
+    $('.loader').removeClass('visible');
+  }
+  function apiColor() {
+      loaderOn();
+      var colorSchemes = ['analogic-complement','analogic','complement']
+      $.ajax({
+        url: "https://www.thecolorapi.com/scheme?format=json&hex="+getRandomHex()+"&mode="+colorSchemes[Math.floor(Math.random() * colorSchemes.length)]+"&count=7",
+        cache: false
+      })
+        .done(function( resp ) {
+          var cane = [];
+          for (var i = resp.colors.length - 1; i >= 0; i--) {
+            cane.push(resp.colors[i].hex.value)
+          }
+          palette= cane
+          var rA = Math.random().toFixed(2)/2;
+          for (var i = 0; i < k.squares.length; i++) {
+            k.squares[i].color = getRandomColor(rA);
+          }
+          k.squares.bg = getRandomColor(rA);
+          k.squares.bg2 = getRandomColor(.5);
+          go();
+        });
+    }
+
+  </script>
+</head>
+<body>
+  
+  <!-- <img class="cane" style="display:none;" src='https://mdn.mozillademos.org/files/222/Canvas_createpattern.png'></img> -->
+</body>
+</html>
