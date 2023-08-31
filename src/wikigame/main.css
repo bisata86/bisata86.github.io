@@ -1,0 +1,317 @@
+.big {
+-moz-transform: scale(-1, 1);
+-webkit-transform: scale(-1, 1);
+-o-transform: scale(-1, 1);
+-ms-transform: scale(-1, 1);
+transform: scale(-1, 1);
+
+}
+.final {
+  position:relative;
+}
+.fade {
+    pointer-events: none;
+    position: fixed;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    z-index: 0;
+    -moz-opacity: 0.8;
+    opacity: 0;
+    transition-duration: 1000ms;
+    background: black url("./wiki.png") no-repeat;
+        background-position: 50% 110%;
+    background-size: 50px;
+}
+.infoDisplayed .fade {
+  pointer-events:auto;
+  opacity:0.8;
+   background-position: 50% 30%;
+
+
+}
+::-webkit-scrollbar { /* required, although an apparent no-op */
+    display: none;
+}
+#start, #startWord, #end, #chain div{font-size:20px; transition-duration: 1000ms;}
+#startWord {
+    width: 100%;
+    background:  url("./edito.png") no-repeat center center;
+    background-size: 100%;
+    border:none;
+  }
+#chain {
+  padding: 5px 0;
+}
+#end {
+}
+body {
+  margin:15px;
+      font-family: sans-serif;
+}
+#getWords {
+  -webkit-appereance:none;
+  width:100%;
+  height: 40px;
+  margin-top: 10px !important;
+  text-align: center !important;
+}
+.title{font-weight:bold; font-size:20px;}
+#error{font-weight:bold; font-size:20px; color:red; padding-top:10px;}
+#step0,#step1,#step2,#step3,#step4 {display:none;}
+div[id*='step'] > div, #getWords {
+    text-align: left;
+    font-size: 20px;
+    text-transform: uppercase;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin: 8px 0;
+
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+  background-color:rgb(41,127,184);
+  color:rgb(255,255,255);
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+-ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=1,Color=#ff123852,Positive=true)";zoom:1;
+filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=1,Color=#ff123852,Positive=true);
+
+  -moz-box-shadow:0px 2px 2px rgba(0,0,0,0.2);
+  -webkit-box-shadow:0px 2px 2px rgba(0,0,0,0.2);
+  box-shadow:0px 2px 2px rgba(0,0,0,0.2);
+  -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=2,Color=#33000000,Positive=true)";
+filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=2,Color=#33000000,Positive=true);
+
+
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  text-shadow:0px 1px 0px rgba(0,0,0,0.5);
+}
+div[id*='step'] > div > a {
+  display: inline-block;
+  width: 100%;
+  background-color: transparent;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 90%;
+      text-overflow: ellipsis;
+    overflow: hidden;
+}
+#steps > div {
+  padding: 10px;
+}
+#steps  span {
+  width: 90%;
+  display:inline-block;
+}
+.infoIcon {
+  display:inline-block;
+  height: 15px;
+    width: 15px;
+    background:  url("./info.png") no-repeat center center;
+    background-size: 100%;
+}
+.loader {
+  background:  url("./loader.gif") no-repeat center center !important;
+  background-size: 20px !important;
+}
+.wiki {
+    width: 100%;
+    height: 50px;
+    background: url("./wiki.png") no-repeat;
+    background-position: 50% 50%;
+    background-size: 50px;
+}
+.info {
+
+    position: absolute;
+    top: 150%;
+    background-color: white;
+    /* padding: 20px; */
+
+    /* margin: 16px; */
+    padding:20px;
+    overflow: auto;
+    text-overflow: ellipsis;
+    right: 20;
+    left: 20;
+    border-radius: 15px 15px 0 0;
+    bottom: 0;
+}
+.noevent {pointer-events:none;}
+.pnone a {pointer-events:none;}
+.infoDisplayed #game, .infoDisplayed input {
+    pointer-events:none;
+}
+.getInfo {
+   float: right;
+    height: 100%;
+    width: 30px;
+    background: url("./info.png") no-repeat center center;
+    background-size: 20px;
+    position: absolute;
+    top: 0;
+    right: 10;
+}
+.final .getInfo {
+      display: inline-block;
+    float: none;
+    position: relative;
+    height: 20px;
+    background-size: 100%;
+    width: 20px;
+    right:0;
+    bottom:0;
+}
+#game {
+	display:none;
+}
+
+#lievesCont {
+	float: right;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    max-width: 50%;
+}
+#lievesCont div {
+  margin:1px;
+	width:25px;
+	height:25px;
+	display:inline-block;
+	background:  url("./life.png") no-repeat center center;
+	background-size: 100%;
+}
+ .displayLife {
+  width:15px;
+  height:15px;
+  display:inline-block;
+  background:  url("./life.png") no-repeat center center;
+  background-size: 100%;
+}
+.lacrime {
+    width:150px;
+  height:150px;
+    display:inline-block;
+    background:  url("./life.png") no-repeat center center;
+    background-size: 100%;
+}
+.red {
+  background-color: orangered !important;
+  border-radius: 10px;
+}
+.green {
+  background-color: lightgreen !important;
+  border-radius: 10px;
+}
+h3 {
+	text-align:center;
+}
+.thecube {
+  display:none;
+  width: 75px;
+  height: 75px;
+  margin: auto auto;
+  top:0;
+  bottom:0;
+  right:0;
+  left:0;
+  position: absolute;
+  -webkit-transform: rotateZ(45deg);
+  transform: rotateZ(45deg);
+}
+.thecube .cube {
+  position: relative;
+  -webkit-transform: rotateZ(45deg);
+  transform: rotateZ(45deg);
+}
+.thecube .cube {
+  float: left;
+  width: 50%;
+  height: 50%;
+  position: relative;
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.thecube .cube:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+      background-color: rgb(41,127,184);
+  -webkit-animation: foldthecube 2.4s infinite linear both;
+  animation: foldthecube 2.4s infinite linear both;
+  -webkit-transform-origin: 100% 100%;
+  -ms-transform-origin: 100% 100%;
+  transform-origin: 100% 100%;
+}
+.thecube .c2 {
+  -webkit-transform: scale(1.1) rotateZ(90deg);
+  transform: scale(1.1) rotateZ(90deg);
+}
+.thecube .c3 {
+  -webkit-transform: scale(1.1) rotateZ(180deg);
+  transform: scale(1.1) rotateZ(180deg);
+}
+.thecube .c4 {
+  -webkit-transform: scale(1.1) rotateZ(270deg);
+  transform: scale(1.1) rotateZ(270deg);
+}
+.thecube .c2:before {
+  -webkit-animation-delay: 0.3s;
+  animation-delay: 0.3s;
+}
+.thecube .c3:before {
+  -webkit-animation-delay: 0.6s;
+  animation-delay: 0.6s;
+}
+.thecube .c4:before {
+  -webkit-animation-delay: 0.9s;
+  animation-delay: 0.9s;
+}
+@-webkit-keyframes foldthecube {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+    transform: perspective(140px) rotateX(-180deg);
+    opacity: 0;
+  }
+  25%,
+        75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+    transform: perspective(140px) rotateX(0deg);
+    opacity: 1;
+  }
+  90%,
+        100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+    transform: perspective(140px) rotateY(180deg);
+    opacity: 0;
+  }
+}
+@keyframes foldthecube {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+    transform: perspective(140px) rotateX(-180deg);
+    opacity: 0;
+  }
+  25%,
+        75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+    transform: perspective(140px) rotateX(0deg);
+    opacity: 1;
+  }
+  90%,
+        100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+    transform: perspective(140px) rotateY(180deg);
+    opacity: 0;
+  }
+}
+.center {
+  text-align:center;
+}

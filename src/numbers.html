@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <script src="https://unpkg.com/vue@3.2.47/dist/vue.global.js"></script>
+<style type="text/css">
+  body {
+    padding: 0;
+    margin:0;
+    overflow: hidden;
+    font-family: Roboto, Arial, sans-serif;
+    background: whitesmoke;
+  } 
+  * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+  }
+  .grid {
+/*    position: absolute;
+    top:0px;
+    bottom: 0px;
+    right:0px;
+    left:0px;
+    margin: auto;*/
+    position: relative;
+    
+
+  }
+  @media (orientation: landscape) {
+      .grid {
+        width: 100vh;
+        nomargin: 5vh;
+        height: 100vh;
+      }
+    }
+
+    @media (orientation: portrait) {
+      .grid {
+        width: 100vw;
+        nomargin-right: 5vw;
+        nomargin-left: 5vw;
+        nomargin-top: 5vw;
+        height: 100vw;
+      }
+    }
+  .grid > div {
+    position: absolute;
+    background: lightgray;
+    border:1px solid white;
+    box-sizing: border-box;
+    text-align: center;
+    border-radius: 30%;
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+    text-shadow: 1px 1px black;
+  }
+  .disabled {
+    display: none;
+  }
+</style>
+<script type="text/javascript">
+  function rint(min, max) { 
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
+ window.onload = function () {
+
+            app = Vue.createApp({
+              data() {
+                var dim = 5
+                var grid = [];
+                var oo = [];
+                for (var i = 0; i < dim; i++) {
+                    for (var l = 0; l< dim; l++) {
+                      var k = -1
+                      while(k==-1 || oo.indexOf(k)!=-1){
+                         k = rint(1,(dim*dim)/2);
+                         var pro = rint(0,1);
+                         if(pro==0) k = -k
+                      }
+                      oo.push(k)
+                      grid.push({x:i,y:l,moving:false,v:k,color:'lightgray'})
+                  }
+                }
+                var y = window.innerWidth < window.innerHeight ? window.innerWidth : window.innerHeight;
+                return {
+                  grid,
+                  griddim: dim,
+                  dim: y,
+                  moves: 0
+                }
+              },
+              mounted:function() {
+                this.dim =  window.innerWidth < window.innerHeight ? window.innerWidth : window.innerHeight;
+                var self = this
+                window.addEventListener('resize', function(){
+                  self.dim =  window.innerWidth < window.innerHeight ? window.innerWidth : window.innerHeight;
+                });
+                
+              },
+              methods: {
+                sync: function(){
+                  this.count = 432
+                }
+              }
+            })
+
+            app.component('grid-item', {
+              props: ['grid','dim','griddim'],
+              template: '<div class="grid" @mousemove="move(grid,$event)" @touchmove="move(grid,$event)" @mouseup="stopMoving(grid,$event)" @touchend="stopMoving(grid,$event)">'
+                  +'<div v-for="item in grid" :class="{ disabled: item.disabled }"  @mousedown="setMoving(item,$event)" @touchstart="setMoving(item,$event)"   v-bind:style="'
+                  +'{ \'width\': (item.w)+\'px\','
+                  +' \'height\': (item.h)+\'px\','
+                  +'  \'left\': (item.l)+\'px\','
+                  +'  \'line-height\': (item.w)+\'px\','
+                  +'\'top\': (item.t)+\'px\' ,'
+                  +'\'background\': item.color ,'
+                  +'\'z-index\': (item.moving ? 1 : 0) ,'
+                  +'\'opacity\': (item.moving ? .5 : 1) ,'
+                  +'\'transition-duration\': (item.moving ? \'0s\' : \'.3s\') '
+                  +' }">{{item.v}}</div>'
+                  +'</div>',
+              mounted:function() {
+                var self = this
+                window.addEventListener('resize', function(){
+                  self.draw()
+                });
+                /*window.addEventListener('orinetationchange', function(){
+                  self.draw()
+                });*/
+                this.draw() 
+                this.check() 
+                
+              },
+              methods: {
+                  draw:function(){
+                    var calcDim = this.dim 
+                    for (var i = 0; i < (this.grid.length); i++) {
+                      this.grid[i].w = (calcDim/this.griddim)
+                      this.grid[i].h = this.grid[i].w
+
+                      this.grid[i].l = this.grid[i].x*(calcDim/this.griddim)
+                      this.grid[i].t = this.grid[i].y*(calcDim/this.griddim)
+
+                      /*this.grid[i].il = this.grid[i].x*(calcDim/this.griddim)
+                      this.grid[i].it = this.grid[i].y*(calcDim/this.griddim)*/
+                    }
+                    console.log('drawed')
+                  },
+                  move: function(e,a) {
+                    if(a.changedTouches)
+                      a = a.changedTouches[0]
+                    var k = {}
+                    for (var i = 0; i < e.length; i++) {
+                      if(e[i].moving){
+                          var gap = e[i].spos.x - a.pageX;
+                          e[i].l= (e[i].x*(this.dim/this.griddim))-gap
+
+                          gap = e[i].spos.y - a.pageY;
+                          e[i].t = (e[i].y*(this.dim/this.griddim))-gap
+                          k.l = e[i].l
+                          k.t = e[i].t
+                      }
+                    }
+                    if(k.l)
+                    for (var i = 0; i < e.length; i++) {
+                      if(!e[i].moving && !e[i].disabled){
+                          if(
+                            a.pageX>e[i].l 
+                            && a.pageX-(this.dim/this.griddim)<e[i].l 
+                            && a.pageY>e[i].t 
+                            && a.pageY-(this.dim/this.griddim)<e[i].t
+                            ) {
+                            e[i].p = true;
+                            e[i].color = 'gray';  
+                          } else {
+                            e[i].p = false;
+                            e[i].color = 'lightgray';
+                          }
+                      }
+                    }
+                  },
+                  setMoving: function(e,a) {
+                    if(a.changedTouches)
+                      a = a.changedTouches[0]
+                    e.moving = true
+                    e.spos = {x:a.pageX,y:a.pageY}
+                  },
+                  stopMoving: function(e,a) {
+                      if(a.changedTouches)
+                        a = a.changedTouches[0]
+                      var m,mi;
+                      for (var i = 0; i < e.length; i++) {
+                        if(e[i].moving) {
+                           m = e[i];
+                           mi = i;
+                        }
+                      }
+                      var p = e.find(function(b){return b.p && !b.disabled})
+
+
+                      if(m && p) {
+                        app._instance.data.moves++
+                        p.v = p.v+m.v
+
+                        m.disabled = true;
+                        for (var i = 0; i < e.length; i++) {
+                          if(m.x==e[i].x && e[i].y<m.y) {
+                             e[i].t+=(this.dim/this.griddim)
+                             e[i].y++
+                          }
+                        }
+                        //this.draw()
+
+                        /*var newe = [];
+                        for (var i = 0; i < e.length; i++) {
+                          //console.log(e[i].disabled)
+                          if(!e[i].disabled) newe.push(e[i])
+                        }
+                        app._instance.data.grid = newe*/
+                        //console.log(newe)
+                        //this.draw()
+                        var self = this
+                        setTimeout(function(){
+                          self.check()
+                        },300)
+                      } else {
+                        if(m) {
+                          m.l = m.x*(this.dim/this.griddim)
+                          m.t = m.y*(this.dim/this.griddim)
+                        }
+                      }
+                      for (var i = 0; i < e.length; i++) {
+                        e[i].moving = false
+                        e[i].p = false;
+                        e[i].color = 'lightgray';
+                        //e[i].x++;
+                      }
+                      //console.log(e)
+
+                  },
+                  check: function(e,a) {
+                    console.log('ceck')
+                    //return false;
+                    var c = [];
+                    var va = [0];
+                    for (var i = 0; i < this.grid.length; i++) {
+                      if(!this.grid[i].disabled) {
+                        if(c.indexOf(this.grid[i].v)!=-1) {
+                          if(va.indexOf(this.grid[i].v)==-1) {
+                            va.push(this.grid[i].v)
+                          }
+                        }
+                        c.push(this.grid[i].v)
+                      }
+                      
+                    }
+                    for (var i = 0; i < this.grid.length; i++) {
+                        if(va.indexOf(this.grid[i].v)!=-1) {
+                          if(!this.grid[i].disabled)
+                           this.grid[i].p = true; 
+                           this.grid[i].color = 'orange'; 
+                        }
+                    }
+                    var self = this;
+                    //if(false)
+                    setTimeout(function(){
+                      var done = false
+                      for (var i = 0; i < self.grid.length; i++) {
+                          if(va.indexOf(self.grid[i].v)!=-1) {
+                            if(!self.grid[i].disabled) {
+                               self.grid[i].disabled= true; 
+                               done=true
+                               var m = self.grid[i];
+
+                               for (var n = 0; n < self.grid.length; n++) {
+                                if(self.grid[n].x == m.x && self.grid[n].y<m.y  && !self.grid[n].disabled) {
+                                   self.grid[n].y++;
+                                   
+                                }
+                              }
+                            }
+
+                          }
+                      }
+                      //if(false)
+                      if(!done) {
+                         var p;
+                         var u,o
+                         var d = false;
+                         for (var i = Math.sqrt(self.grid.length)-1; i >= 0; i--) {
+                           for (var j = Math.sqrt(self.grid.length)-1; j >= 0; j--) {
+                              //console.log(i,j)
+                              if(true || !o) {
+                                var p = self.grid.find(function(b){return !b.disabled && b.x==i && b.y==j})
+                                //console.log(p)
+                                if(!d && !p) {  
+                                  console.log('èèè',i,j)
+                                  u=i;
+                                  o=j
+                                  d= true
+                                  break;
+                                  break;
+                                }
+                              }
+                             
+                           }
+
+                         }
+                         var m = self.grid.find(function(b){return b.disabled})
+                         if(u && m) {
+                            console.log(u,o)
+                            m.x = u;
+                            m.y = o;
+                            var q = -1;
+                            var s = [];
+                            for (var i = 0; i < self.grid.length; i++) {
+                              if(!self.grid[i].disabled) s.push(self.grid[i].v)
+                            }
+
+                            while(q==-1 || s.indexOf(q)!=-1) {
+                               q = rint(1,(self.grid.length)/2);
+                               var pro = rint(0,1);
+                               if(pro==0) q = -q
+                            }
+                            m.v = q
+                            
+                            m.color = 'red'
+                            self.draw()
+                            setTimeout(function(){
+                              m.disabled = false
+                              self.draw()
+                              setTimeout(function(){
+                                m.color = 'lightgray'
+                                self.draw()
+                              },500)
+                            },500)
+                         }
+                      }
+                      self.draw()
+                    },500)
+                  },
+                  
+                }
+            })
+            app.mount('#app')
+ }
+</script>
+
+</head>
+
+<body>
+  <div id="app">
+    <grid-item :grid="grid" :dim="dim" :griddim="griddim"></grid-item>
+    <!-- {{moves}} -->
+  </div>
+</body>
+
+</html>

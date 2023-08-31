@@ -1,0 +1,568 @@
+
+        * {
+          -webkit-touch-callout: none;
+            -webkit-user-select: none;
+             -khtml-user-select: none;
+               -moz-user-select: none;
+                -ms-user-select: none;
+                    user-select: none;
+        }
+
+        body {
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            background: whitesmoke;
+            position: fixed;
+        }
+
+        canvas {
+            position: absolute;
+            left:0px;
+            right:0px;
+            top:0px;
+            bottom:0px;
+            nomargin: auto;
+            
+        }
+        .initLayerCanvas {
+            background: url(https://bisata86.github.io/modifypics/img/empty.png); 
+           /* background: url("https://freegestcrm.com/crm/assets/img/test.png");
+           background-size: 100% 100%;*/
+        }
+
+        .selectImage {
+            position: absolute;
+        }
+        .changeWH {
+                -webkit-appearance: none;
+                overflow: -moz-hidden-unscrollable;
+                background: url(https://bisata86.github.io/modifypics/img/close.png) no-repeat right;
+                background-size: 20px 20px;
+                background-position: center;
+                /* border: none; */
+                color: transparent;
+                background-color: white;
+        }
+        .changeWH option, .changeWH optgroup {
+                color: black;
+        }
+        .layerCanvas {
+            pointer-events: none;
+            z-index: -1;
+        }
+        .seeLayer {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            background: url('https://bisata86.github.io/modifypics/img/see.png');
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center;
+            padding: 5px;
+        }
+        .seeLayer.done {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            background: url('https://bisata86.github.io/modifypics/img/unsee.png');
+            background-size: 20px 20px;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        .nameLayer {
+            display: inline-block;
+            padding-left: 5px;
+        }
+        .deleteLayer {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            background: url('https://bisata86.github.io/modifypics/img/trash.png');
+            background-size: 100% 100%;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -webkit-padding-end: 20px;
+            -moz-padding-end: 20px;
+            -webkit-padding-start: 2px;
+            -moz-padding-start: 2px;
+            background-position: center right;
+            background-repeat: no-repeat;
+            border: 1px solid #AAA;
+            border-radius: 2px;
+            nobox-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+            color: #555;
+            font-size: inherit;
+            margin: 0;
+            overflow: hidden;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+            border: none;
+            width: fit-content;
+            padding: 0;
+        }
+        /*.changeWH {
+             -webkit-appearance: none;
+             background: url('');
+        }*/
+        .menu {
+            position: absolute;
+            bottom: 0px;
+            /* right: 0px; */
+            /* left: 0px; */
+            z-index: 10;
+            /* margin: auto; */
+            text-align: center;
+            width: 100%;
+        }
+
+        .menul {
+            position: absolute;
+            bottom: 50%;
+            right:0px;
+            z-index: 100;
+            text-align: center;
+            transform: scale(.5);
+            transform-origin: right;
+            
+        }
+        .menuLayers {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            margin: auto;
+            left:0px;
+            z-index: 100;
+            text-align: center;
+            background: white;
+            transform-origin: right;
+            height: fit-content;
+            border-radius: 0px 15px 15px 0px;
+            box-shadow: 1px 1px 1px grey;
+        }
+        .menuLayers > div {
+            padding: 5px 0;
+        }
+        .menul.scale {
+            transform: scale(1);
+            transform-origin: right;
+        }
+
+        .settings, .gamone {
+            position: absolute;
+            bottom: 0px;
+            /* right: 0px; */
+            /* left: 0px; */
+            z-index: 10;
+            /* margin: auto; */
+            text-align: center;
+            width: 100%;
+        }
+        .settingsCont, .menuCont {
+           width: fit-content;
+            background: white;
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px 20px 0 0; 
+        }
+        .menuCont {
+            box-shadow: 1px 1px 1px grey;
+        }
+        .menuCont > div {
+            vertical-align: bottom;
+        }
+        .selected {
+            background-color: red !important;
+        }
+        .menul .selected {
+            background-color: #e4685d;
+        }
+
+        #tempImg {
+            display: none;
+        }
+        .colorPicker {
+            background: url('https://bisata86.github.io/modifypics/img/colorPicker.png');
+                background-size: 25px 25px;
+            background-repeat: no-repeat;
+            background-position: center center;
+                padding: 0 !important;
+            width: 40px;
+            height: 30px;
+        }
+        .eraser {
+            background: url('https://bisata86.github.io/modifypics/img/eraser.png');
+                background-size: 25px 25px;
+            background-repeat: no-repeat;
+            background-position: center center;
+                padding: 0 !important;
+            width: 40px;
+            height: 30px;
+        }
+        .handDraw {
+            width: 40px;
+            height: 40px;
+            background: url('https://bisata86.github.io/modifypics/img/handDraw.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            background-color: white;
+            /*border-left: 10px solid white;
+            border-radius: 20px 0 0 0;*/
+        }
+
+        .drag {
+             width: 40px;
+            height: 40px;
+            background: red;
+            background-size: 80% 80%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: white;
+            border-radius: 20px 0 0 20px;
+        }
+
+
+        .save {
+            width: 40px;
+            height: 40px;
+            background: url('https://bisata86.github.io/modifypics/img/save.png');
+            background-size: 100% 100%;
+            display: inline-block;
+
+            background-color: white;
+        }
+        .lock {
+            width: 30px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/lock.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            padding: 0 !important;
+        }
+
+        .text {
+            width: 40px;
+            height: 40px;
+            background: url('https://bisata86.github.io/modifypics/img/text.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            background-color: white;
+        }
+
+        .move {
+            padding: 0 !important;
+            width: 40px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/move.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            background-size: 25px 25px;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+        .move.selected {
+            background-color: red !important;
+        } 
+        
+        .rotate {
+            padding: 0 !important;
+            width: 40px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/rotate.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            background-size: 25px 25px;
+            background-repeat: no-repeat;
+            background-position: center center; 
+        }
+        .cut.selected, .rotate.selected {
+            background-color: red;
+        }
+        .setImg {
+            padding: 0 !important;
+            width: 40px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/set.png');
+            background-size: 100% 100%;
+            display: inline-block;
+            background-size: 25px 25px;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-color: green !important;  
+        }
+
+        .back {
+            padding: 0 !important;
+            width: 50px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/undo.png'); 
+            background-size: 100% 100%;
+            display: inline-block;
+            
+        }
+
+        .undo {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/undo.png'); 
+            background-size: 100% 100%;
+            display: inline-block;
+            
+        }
+        .brush {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/brush.png'); 
+            background-size: 80% 80%;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            
+        }
+        .replacer {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/fill.png'); 
+            background-size: 30px 30px;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: inline-block;
+            
+        }
+        /*.brush.active {
+            background-color: black;
+        }*/
+        .redo {
+            padding: 0 !important;
+            width: 30px;
+            height: 30px;
+            background: url('https://bisata86.github.io/modifypics/img/redo.png'); 
+            background-size: 100% 100%;
+            display: inline-block;
+            
+        }
+
+        .undo.disabled, .redo.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .clear {
+            width: 40px;
+            height: 40px;
+            background: url('https://bisata86.github.io/modifypics/img/clear.png'); 
+            background-size: 100% 100%;
+            display: inline-block;
+            background-color: white;
+            /*border-right: 10px solid white;
+            border-radius: 0 20px 0 0;*/
+        }
+
+        label[for="input"] {
+            width: 40px;
+            height: 40px;
+            background: url('https://bisata86.github.io/modifypics/img/upload.png'); 
+            background-size: 100% 100%;
+            display: inline-block;
+            background-color: white;
+            vertical-align: middle;
+        }
+
+        .inputfile {
+            display: none;
+
+        }
+
+        .thick {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .color {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            width: 10px;
+            height: 10px;
+            visibility: hidden;
+        }
+
+        .color input {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            width: 50px;
+            height: 30px;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+
+        .button {
+            nobox-shadow: inset 0px 39px 0px -24px #e67a73;
+            background-color: #e4685d;
+            border-radius: 4px;
+            display: inline-block;
+            cursor: pointer;
+            color: #ffffff;
+            font-family: Arial;
+            font-size: 15px;
+            padding: 6px 15px;
+            text-decoration: none;
+            text-shadow: 0px 1px 0px #b23e35;
+            min-width: 40px;
+            vertical-align: bottom;
+            MARGIN: 0 1PX;
+        }
+
+
+
+        .button:hover {
+            nobackground-color: #eb675e;
+        }
+
+        .button:active {
+            position: relative;
+            top: 1px;
+        }
+
+        .version {
+            position: absolute;
+            right: 0px;
+            bottom: 0px;
+            font-size: 15px;
+        }
+
+        #linew {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 24px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+        }
+
+        #opacitySelector {
+            -webkit-appearance: none;
+            width: 200px;
+            height: 24px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+        .dims {
+            position: absolute;
+            z-index: 10;
+            width: 100%;
+            text-align: center;
+        }
+        .dims > div {
+            display: inline-block;
+            width: fit-content;
+            padding: 10px;
+            background: white;
+            border-radius: 0 0 20px 20px;
+            text-align: center;
+            box-shadow: 1px 1px 1px grey;
+        }
+        .settings, .menu, .dims {
+            z-index: 51;
+        }
+        .plus, .minus {
+            display: none !important;
+        }
+        
+        .overlay {
+            z-index: 1000;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: white;
+            bottom: 0px;
+            right: 0px;
+            width: 200px;
+            height: 200px;
+            bottom: 40px;
+            overflow: hidden;
+                border: 2px solid white;
+        }
+        .lineDisp {
+            position: absolute;
+            margin: auto;
+            display: block;
+            bottom: 0px;
+            top: 0px;
+            left: 50%;
+            transform: translate(-50%, 0);
+            border-radius: 100%;
+            border: 1px solid black;
+        }
+        .testo {
+            padding: 0;
+            height: 30px;
+            line-height: 30px;
+        }
+        .panelOverlay {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+            margin: auto;
+            background: rgba(0,0,0,.5);
+            z-index: 10000000;
+        }
+        .panel {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            left: 0px;
+            margin: auto;
+            width: fit-content;
+            height: fit-content;
+             z-index: 10000001;
+        }
+        .panel > div {
+            background: white;
+            padding: 10px;
+            text-align: center;
+        }
+        /*.menu, select {
+            display: none !important;
+        }*/

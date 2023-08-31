@@ -1,0 +1,645 @@
+<html>
+	<head>
+		<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+		<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+		<script>
+			$( document ).ready(function() {
+
+				var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+				if(!isChrome) {
+					return $('body').append('<div id="question">Use Chrome!</div>');
+				}
+				
+			    $('body').append('<input id="go" type="button" value="go"></input>');
+			    $('body').append('<div id="typeContainer"></div>');
+			    $('body').append('<input id="mix" type="button" value="mix"></input>');
+			    $('#typeContainer').append('<input id="numbers" type="button" value="numbers"></input>');
+			    $('#typeContainer').append('<input id="img" type="button" value="image"></input>');
+			    $('body').append('<input id="file" type="file" value=""></input>');
+			    $('#typeContainer').append('<input id="fil" type="button" value="file"></input>');
+			    $('body').append('<canvas id="cnv"></canvas>')
+			    $('body').append('<div id="question"><div><h2>How much time do you have?</h2><div class="answer" data-int="3">Almost nothing</div><div class="answer" data-int="4">A little</div><div class="answer" data-int="5">Some time</div><div class="answer" data-int="6">A lot...</div></div>');
+			    var structure = [];
+			    var supportStructure = [];
+			    var  len;
+			    var dim;
+			    
+			    $('#go').on('click',function(){
+			    	$('body').append('<div class="lds-circle"><div></div></div>');
+			    	$('#go').hide();
+			    	structure = [];
+			    	for (var i = 0; i < len; i++) {
+			    		structure.push([]);
+			    		for (var k = 0; k < len; k++) {
+				    		structure[i].push([(i*len)+k+1]);
+				    	}
+			    	}
+			    	structure[len-1][len-1] = '0';
+
+			    	for (var i = 0; i < len; i++) {
+			    		for (var k = 0; k < len; k++) {
+				    		localStorage.removeItem(k+'_'+i);
+				    	}
+			    	}
+
+
+			    	drawStructure();
+			    	$('#mix').click();
+			    	$( window ).resize(function() {
+					  drawStructure();
+					});
+			    });
+				$('#mix').on('click',function(){
+
+						getImg();
+
+
+
+				});
+
+
+				$('#file').on('change',function(evt){
+
+					structure = [];
+			    	for (var i = 0; i < len; i++) {
+			    		structure.push([]);
+			    		for (var k = 0; k < len; k++) {
+				    		structure[i].push([(i*len)+k+1]);
+				    	}
+			    	}
+			    	structure[len-1][len-1] = '0';
+
+			    	for (var i = 0; i < len; i++) {
+			    		for (var k = 0; k < len; k++) {
+				    		localStorage.removeItem(k+'_'+i);
+				    	}
+			    	}
+
+
+					 var files = evt.target.files;
+			        var file = files[0];
+
+			        if (file) {
+			            var reader = new FileReader();
+			            reader.onload = function(e) {
+			                ResizeImage();
+			            };
+			            reader.readAsDataURL(file);
+			        }
+				});
+				function getImg(theSrc) {
+						var randomImgNumber = Math.floor(Math.random() * (1000));
+						var img = new Image,
+						    canvas = document.getElementById('cnv'),
+						    ctx = canvas.getContext("2d");
+						if(!theSrc)
+						  var src = "https://picsum.photos/"+(len*dim+(len*2))+"/"+(len*dim+(len*2))+'/?image='+randomImgNumber;
+						else {
+							src = theSrc;
+							
+						}
+						img.crossOrigin = "Anonymous";
+
+						img.onload = function() {
+							//alert(img.width);
+						    canvas.width = 200;
+						    canvas.height =200;
+						   
+						    /*for (var i = 0; i < len; i++) {
+						    	ctx.clearRect(0, 0, canvas.width, canvas.height)
+							    ctx.drawImage( img, 0+i*dim, 0, dim, dim, 0, 0, canvas.width, canvas.height);
+							    localStorage.setItem(i+'_0',canvas.toDataURL("image/png"))
+							    $('.tile').eq(i).css('background','url("'+canvas.toDataURL("image/png")+'")')
+						    }*/
+						    for (var i = 0; i < len; i++) {
+					    		for (var k = 0; k < len; k++) {
+					    			ctx.clearRect(0, 0, canvas.width, canvas.height)
+								    ctx.drawImage( img, i*dim, k*dim, dim, dim, 0, 0, canvas.width, canvas.height);
+								    localStorage.setItem(k+'_'+i,(canvas.toDataURL("image/png")))
+						    	}
+					    	}
+
+					    	for (var l = 0; l < 100; l++) {
+					    		doValid(structure)
+					    	}
+					    	drawStructure();
+					    	$('#numbers').show()
+					    	$('#img').show()
+					    	$('#fil').show()
+						   /* for (var i = 0; i < len; i++) {
+						    	ctx.clearRect(0, 0, canvas.width, canvas.height)
+						    ctx.drawImage( img, 0+i*dim, dim, dim, dim, 0, 0, canvas.width, canvas.height);
+						    $('.tile').eq(parseInt(len)+i).css('background','url("'+canvas.toDataURL("image/png")+'")')
+						    }
+						    for (var i = 0; i < len; i++) {
+						    	ctx.clearRect(0, 0, canvas.width, canvas.height)
+						    ctx.drawImage( img, 0+i*dim, 2*dim, dim, dim, 0, 0, canvas.width, canvas.height);
+						    $('.tile').eq(parseInt(2*len)+i).css('background','url("'+canvas.toDataURL("image/png")+'")')
+						    }*/
+
+
+
+						}
+						img.onerror = function() {
+							$('#mix').click();
+						}
+						img.src = src;
+						// make sure the load event fires for cached images too
+						if ( img.complete || img.complete === undefined ) {
+						    img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+						    img.src = src;
+						}
+				}
+				function ResizeImage() {
+				    if (window.File && window.FileReader && window.FileList && window.Blob) {
+				        var filesToUploads = document.getElementById('file').files;
+				        var file = filesToUploads[0];
+				        if (file) {
+
+				            var reader = new FileReader();
+				            // Set the image once loaded into file reader
+				            reader.onload = function(e) {
+
+				                var img = document.createElement("img");
+				                img.src = e.target.result;
+				                var canvass = document.createElement("canvas");
+				              /*  $('body').append(img) */
+				                $('body').append(canvass)
+				                var ctxs = canvass.getContext("2d");
+				                ctxs.drawImage(img, 0, 0);
+
+				                var MAX_WIDTH = 200;
+				                var MAX_HEIGHT = 200;
+				                var width = img.width;
+				                var height = img.height;
+				                console.log(width,height)
+				                if(width==0 || height==0) {
+				                	return ResizeImage();				                }
+				               
+				                width = len*dim+(len*2);
+				                height = len*dim+(len*2);
+				                canvass.width = width;
+				                canvass.height = height;
+				                var ctxs = canvass.getContext("2d");
+				                ctxs.drawImage(img, 0, 0, width, height);
+
+				                dataurl = canvass.toDataURL();
+				                console.log(dataurl)
+				               
+				                getImg(dataurl)
+				                
+				            }
+				            reader.readAsDataURL(file);
+
+				        }
+
+				    } else {
+				        alert('The File APIs are not fully supported in this browser.');
+				    }
+				}
+
+				$('#numbers').on('click',function(){
+					localStorage.setItem('pzdisptype','numbers')
+					drawStructure();
+				});
+
+				$('#img').on('click',function(){
+					localStorage.setItem('pzdisptype','image')
+					drawStructure();
+				});
+
+				$('#fil').on('click',function(){
+					$('#file').click();
+				});
+
+				 $('.answer').on('click',function(){
+				 	len = $(this).attr('data-int');
+				 	$('#question').remove();
+				 	$('#go').click();
+				 })
+				function doValid(structure) {
+					var zeroCoords = {top:false,bottom:false,left:false,right:false};
+					var availables = [];
+					for (var i = 0; i < len; i++) {
+			    		for (var k = 0; k < len; k++) {
+				    		if(structure[i][k] == 0) {
+				    			zeroCoords.x = i;
+				    			zeroCoords.y = k;
+				    		}
+				    	}
+		    		}
+		    		if(zeroCoords.x>0) {
+		    			zeroCoords.top  = true;
+		    		}
+		    		if(zeroCoords.x<len-1) {
+		    			zeroCoords.bottom  = true;
+		    		}
+		    		if(zeroCoords.y>0) {
+		    			zeroCoords.left  = true;
+		    		}
+		    		if(zeroCoords.y<len-1) {
+		    			zeroCoords.right  = true;
+		    		}
+		    		var dir = findRandomDirection(zeroCoords);
+		    		var zeros = {};
+		    		if(dir==0) {
+		    			var temp = structure[zeroCoords.x-1][zeroCoords.y]
+			    		structure[zeroCoords.x][zeroCoords.y] = temp;
+				    	structure[zeroCoords.x-1][zeroCoords.y] = 0;
+				    	zeros.x = zeroCoords.x-1;
+				    	zeros.y = zeroCoords.y;
+		    		} else if(dir==1) {
+		    			var temp = structure[zeroCoords.x][zeroCoords.y+1]
+			    		structure[zeroCoords.x][zeroCoords.y] = temp;
+				    	structure[zeroCoords.x][zeroCoords.y+1] = 0;
+				    	zeros.x = zeroCoords.x;
+				    	zeros.y = zeroCoords.y+1;
+		    		} else if(dir==2) {
+		    			var temp = structure[zeroCoords.x+1][zeroCoords.y]
+			    		structure[zeroCoords.x][zeroCoords.y] = temp;
+				    	structure[zeroCoords.x+1][zeroCoords.y] = 0;
+				    	zeros.x = zeroCoords.x+1;
+				    	zeros.y = zeroCoords.y;
+		    		}
+		    		 else if(dir==3) {
+		    			var temp = structure[zeroCoords.x][zeroCoords.y-1]
+			    		structure[zeroCoords.x][zeroCoords.y] = temp;
+				    	structure[zeroCoords.x][zeroCoords.y-1] = 0;
+				    	zeros.x = zeroCoords.x;
+				    	zeros.y = zeroCoords.y-1;
+		    		}
+		    		var temp = localStorage.getItem((zeros.x)+'_'+zeros.y);
+		    		localStorage.setItem((zeros.x)+'_'+zeros.y,localStorage.getItem((zeroCoords.x)+'_'+zeroCoords.y));
+		    		localStorage.setItem((zeroCoords.x)+'_'+zeroCoords.y, temp);
+				}
+
+				function findRandomDirection(zeroCoords) {
+					var r  = Math.floor(Math.random()*(4-0+1)+0);
+					if(r==0) {
+						if(zeroCoords.top==true) {
+							return r;
+						} else {
+							findRandomDirection(zeroCoords);
+						}
+					}
+					else if(r==1) {
+						if(zeroCoords.right==true) {
+							return r;
+						} else {
+							findRandomDirection(zeroCoords);
+						}
+					}
+					else if(r==2) {
+						if(zeroCoords.bottom==true) {
+							return r;
+						} else {
+							findRandomDirection(zeroCoords);
+						}
+					}
+					else if(r==3) {
+						if(zeroCoords.left==true) {
+							return r;
+						} else {
+							findRandomDirection(zeroCoords);
+						}
+					}
+				}
+
+		    	function drawStructure() {
+		    		var finished = false;
+		    		var prev = 0;
+		    		// for (var i = 0; i < structure.length; i++) {
+			    	// 	for (var k = 0; k < structure[i].length; k++) {
+			    	// 		console.log('----')
+			    	// 		console.log($('.tile[data-row='+(i)+'][data-col='+(k)+']').html())
+			    	// 		console.log($('.tile[data-row='+(i)+'][data-col='+(k)+']').prevAll().length)
+				    // 	}
+			    	// }
+		    		if($(window).width()>$(window).height()) {
+				    	dim = ($(window).height()-(15*len)) / (len);
+				    } else dim = ($(window).width()-(15*len)) / (len);
+		    		$('#tiles').remove();
+			    	$('body').append('<div id="tiles"></div>');
+			    	var disptype = localStorage.getItem('pzdisptype');
+			    	for (var i = 0; i < structure.length; i++) {
+			    		$('#tiles').append('<div id="tileRow'+i+'"></div>');
+			    		for (var k = 0; k < structure[i].length; k++) {
+			    			var selClass = ''
+			    			if(structure[i][k]==0) {
+				    			selClass = 'selected';
+				    		}
+				    		$('#tileRow'+i).append('<div data-row="'+i+'" data-col="'+k+'" class="tile '+selClass+'" id="tile'+i+'-'+k+'">'+structure[i][k]+'</div>');
+				    		
+				    		
+					    		if(localStorage.getItem(i+'_'+k) && structure[i][k]!=0) {
+					    			if(disptype=='numbers') {
+
+						    			$('#tiles').css('visibility','visible');
+						    			$('#tiles').addClass('numbers');
+						    			$('.lds-circle').remove();
+					    			}
+					    			else {
+						    			$('.tile').last().css('background','white url("'+localStorage.getItem(i+'_'+k)+'")')
+						    			$('#tiles').css('visibility','visible');
+						    			$('.lds-circle').remove();
+						    			
+
+						    		}
+						    		//$('#numbers').show();
+					    		}
+				    		
+
+				    	}
+			    	}
+
+			    	if(disptype=='numbers') {
+		    			$('#numbers').addClass('activeButton')
+		    			$('#img').removeClass('activeButton')
+		    			$('#fil').removeClass('activeButton')
+	    			}
+	    			else {
+		    			$('#img').addClass('activeButton');
+		    			$('#numbers').removeClass('activeButton')
+
+		    		}
+			    	
+			    	$('.tile').css('height', dim)
+			    	$('.tile').css('width', dim)
+			    	$('.tile').css('line-height', (dim)+'px')
+			    	$('.tile').css('font-size', (dim/2)+'px')
+
+			    	$('#tiles').css('height',len*dim+(len*2))
+			    	$('#tiles').css('width',len*dim+(len*2))
+			    	$('canvas').css('height',len*dim+(len*2))
+			    	$('canvas').css('width',len*dim+(len*2))
+			    	$('.tile').css('transition-duration' , '.2s');
+			    	bindTiles();
+			    	/*$('#numbers').show()
+			    	$('#img').show()*/
+		    	}
+		    	function bindTiles() {
+		    		$('.tile').each(function(){
+		    			$(this).attr('data-top',$(this).position().top)
+		    			$(this).attr('data-left',$(this).position().left)
+		    		})
+
+		    		$('.tile').each(function(){
+		    			$(this).css('position','absolute')
+		    			$(this).css('top',$(this).attr('data-top'))
+		    			$(this).css('left',$(this).attr('data-left'))
+		    		})
+
+
+		    		$('.tile').on('touchstart click',function(){				    		
+			    		var currVal  = $(this).html()
+			    		var currRow = $(this).data('row');
+			    		var currCol = $(this).data('col');
+			    		var top = 'no';
+			    		if(currRow>0) {
+			    			top = $('.tile[data-row='+(currRow-1)+'][data-col='+(currCol)+']').html()
+			    		}
+
+			    		if(top==0) {
+			    			structure[currRow][currCol] = 0;
+			    			structure[currRow-1][currCol] = currVal;
+			    			var temp = localStorage.getItem((currRow-1)+'_'+currCol);
+			    			localStorage.setItem((currRow-1)+'_'+currCol,localStorage.getItem((currRow)+'_'+currCol));
+			    			localStorage.setItem((currRow)+'_'+currCol, temp);
+			    			var ano = $(this).position().top
+			    			$(this).css('z-index','1')
+			    			$(this).css('top',ano-dim-2)
+			    			$('.tile').off('touchstart');
+			    		$('.tile').off('click');
+			    			setTimeout(function(){ drawStructure(); }, 250);
+			    		}
+
+			    		var bottom = 'no';
+			    		if(currRow<len-1) {
+			    			bottom = $('.tile[data-row='+(currRow+1)+'][data-col='+(currCol)+']').html()
+			    		}
+
+			    		if(bottom==0) {
+			    			structure[currRow][currCol] = 0;
+			    			structure[currRow+1][currCol] = currVal;
+			    			var temp = localStorage.getItem((currRow+1)+'_'+currCol);
+			    			localStorage.setItem((currRow+1)+'_'+currCol,localStorage.getItem((currRow)+'_'+currCol));
+			    			localStorage.setItem((currRow)+'_'+currCol, temp);
+			    			var ano = $(this).position().top
+			    			$(this).css('z-index','1')
+			    			$(this).css('top',ano+dim+2)
+			    			$('.tile').off('touchstart');
+			    		$('.tile').off('click');
+			    			setTimeout(function(){ drawStructure(); }, 250);
+			    		}
+
+			    		var left = 'no';
+			    		if(currCol>0) {
+			    			left = $('.tile[data-row='+(currRow)+'][data-col='+(currCol-1)+']').html()
+			    		}
+
+			    		if(left==0) {
+			    			structure[currRow][currCol] = 0;
+			    			structure[currRow][currCol-1] = currVal;
+			    			var temp = localStorage.getItem((currRow)+'_'+(currCol-1));
+			    			localStorage.setItem((currRow)+'_'+(currCol-1),localStorage.getItem((currRow)+'_'+currCol));
+			    			localStorage.setItem((currRow)+'_'+currCol, temp);
+			    			var ano = $(this).position().left
+			    			$(this).css('z-index','1')
+			    			$(this).css('left',ano-dim-2)
+			    			$('.tile').off('touchstart');
+			    		$('.tile').off('click');
+			    			setTimeout(function(){ drawStructure(); }, 250);
+			    		}
+
+			    		var right = 'no';
+			    		if(currCol<len-1) {
+			    			right = $('.tile[data-row='+(currRow)+'][data-col='+(currCol+1)+']').html()
+			    		}
+
+			    		if(right==0) {
+			    			structure[currRow][currCol] = 0;
+			    			structure[currRow][currCol+1] = currVal;
+			    			var temp = localStorage.getItem((currRow)+'_'+(currCol+1));
+			    			localStorage.setItem((currRow)+'_'+(currCol+1),localStorage.getItem((currRow)+'_'+currCol));
+			    			localStorage.setItem((currRow)+'_'+currCol, temp);
+			    			var ano = $(this).position().left
+			    			$(this).css('z-index','1')
+			    			$(this).css('left',ano+dim+2)
+			    			$('.tile').off('touchstart');
+			    		$('.tile').off('click');
+			    			setTimeout(function(){ drawStructure(); }, 250);
+			    		}
+
+
+			    	})
+		    	}
+				
+			});	
+
+		</script>
+		<style type="text/css">
+			body {
+				margin:0;
+				padding:0;
+				background: #BFD7EA;
+				 font-family: Arial, Helvetica, sans-serif;
+			}
+			#go, #mix, #numbers, #img, #file, #fil {
+				display:none;
+			}
+			#tiles {
+				position: absolute;
+				top: 0;
+			    bottom: 0;
+			    margin: auto;
+			    left: 0;
+			    right: 0;
+			    background: #0B3954;
+			    border: 3px solid #0B3954;
+			     border-radius: 5px;
+			     visibility: hidden;
+			}
+			canvas {
+				position: absolute;
+				top: 0;
+			    bottom: 0;
+			    margin: auto;
+			    left: 0;
+			    right: 0;	
+			    z-index: 1;
+			    display: none;
+			}
+			.tile {
+				display: inline-block;
+    			text-align: center;
+    			    border-radius: 5px;
+    			
+    			background: red;
+    			background: #FF6663;
+    			margin: 1px;
+    			color:#FEFFFE;
+    			color:transparent;
+    			    background-size: 100% 100% !important;
+    			       -moz-user-select: none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+
+   /*
+     Introduced in IE 10.
+     See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+   */
+   -ms-user-select: none;
+   user-select: none;
+			}
+			#tiles.numbers .tile {
+				color:#FEFFFE;
+			}
+			.tile.selected {
+				color: #0B3954 !important;
+				background: #0B3954 !important;
+			}
+			#question {
+				position: absolute;
+			    top: 0;
+			    bottom: 0;
+			    right: 0;
+			    left: 0;
+			    margin: auto;
+			    width: 100%;
+			    height: 300px;
+			    text-align: center;
+			    color:#0B3954;
+
+			}
+			.answer {
+				text-decoration: underline;
+				cursor: pointer;
+				padding: 10px 0;
+			}
+			.answer::before {content: "\2022   "; color: #0B3954}
+			.lds-circle {
+			  display: inline-block;
+			  transform: translateZ(1px);
+			  position: absolute;
+			  top:0;
+			  bottom: 0;
+			  right: 0;
+			  left: 0;
+			  margin: auto;
+			  
+			}
+			.lds-circle > div {
+			  display: inline-block;
+			  width: 51px;
+			  height: 51px;
+			  margin: 6px;
+			  border-radius: 50%;
+			  background: #fff;
+			  animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+			  position: absolute;
+			  top:0;
+			  bottom: 0;
+			  right: 0;
+			  left: 0;
+			  margin: auto;
+
+			}
+			@keyframes lds-circle {
+			  0%, 100% {
+			    animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+			  }
+			  0% {
+			    transform: rotateY(0deg);
+			  }
+			  50% {
+			    transform: rotateY(1800deg);
+			    animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+			  }
+			  100% {
+			    transform: rotateY(3600deg);
+			  }
+			}
+			#typeContainer {
+				    text-align: center;
+    /* margin-top: 5px; */
+    position: absolute;
+    width: 100%;
+    top: 5;
+    z-index: 1;
+			}
+			input[type=button], input[type=file] {
+	                /** Offset the Position **/
+  position: relative;
+  top: 0;
+  margin-top: 0;
+  margin-bottom: 10px;
+
+  /** 3D Block Effect **/
+  box-shadow: 0 5px 0 0 #0B3954 ;
+
+  /** Make it look pretty **/
+  background: #FF6663;
+  color: #eee;
+  padding: 10px;
+  border: 0;
+  cursor: pointer;
+  opacity: 0.9;
+  border-radius: 5px;
+    text-transform: capitalize;
+    min-width: 75px;
+
+
+
+
+				}
+	         input[type=button].activeButton, input[type=file].activeButton {
+	         	  box-shadow: none;
+				  top: 5px;
+				  margin-bottom: 0;
+	         }
+		</style>
+	</head>
+	<body>
+	<body>
+</html>

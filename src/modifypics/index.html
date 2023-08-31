@@ -1,0 +1,1470 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ModifyPics</title>
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="https://bisata86.github.io/modifypics/css/style.css">
+    <script type="text/javascript" src="https://bisata86.github.io/modifypics/js/jquery.js"></script>
+    <script type="text/javascript">
+
+
+
+
+        var events = {};
+        var wcan;
+        var hcan;
+        var linew = 5;
+        var mainZoom = 1;
+        var prev = {};
+        var color = '#000000';
+        var colorAlpa = 255;
+        var layers = []
+        var menuItems = [];
+        $(document).ready(function() {
+            wcan = $(window).width();
+            hcan = $(window).height();
+            $('body').css('height',hcan);
+            $('body').css('width',wcan);
+            document.getElementById('canvas').width = wcan;
+            document.getElementById('canvas').height = hcan;
+            $('canvas').css('height',hcan);
+            $('canvas').css('width',wcan);
+            var select1 = '<select class="changeW">'
+            for (var i = 3000; i > 0; i=i-200) {
+                select1 += '<option value="'+i+'">'+i+'</option>'
+                if(i>wcan && (i-200)<wcan)
+                    select1 += '<option selected value="'+wcan+'">'+wcan+'</option>'
+                
+            }
+            select1 += '</select>'
+            var select2 = '<select class="changeH">'
+            for (var i = 3000; i > 0; i=i-200) {
+                select2 += '<option value="'+i+'">'+i+'</option>'
+                if(i>hcan && (i-200)<hcan)
+                    select2 += '<option selected value="'+hcan+'">'+hcan+'</option>'
+            }
+            select2 += '</select>'
+            var select3 = '<select class="changeWH" style="width: 20px;">'
+            var commonImages = [
+                {name:'window',w:$(window).width(),h:$(window).height()},
+                {name:'icon',w:57,h:57},
+                {name:'HVGA',w:320,h:480},
+                {name:'avatar',w:500,h:500},
+                {name:'MOBILE',s:"start"},
+                {name:'720p',w:720,h:1280},
+                {name:'1080p',w:1080,h:1920},
+                {name:'MOBILE',s:"end"},
+                {name:'DESKTOP',s:"start"},
+                {name:'VGA',w:640,h:480},
+                {name:'XGA',w:1024,h:768},
+                {name:'720p',w:1280,h:720},
+                {name:'1080p',w:1920,h:1080},
+                {name:'1440p',w:2560,h:1440},
+                {name:'4K',w:3840,h:2160},
+                {name:'DESKTOP',s:"end"}
+            ]
+            for (var i = 0; i < commonImages.length; i++) {
+                if(commonImages[i].s) {
+                    if(commonImages[i].s=="start") {
+                        select3 += '<optgroup label="'+commonImages[i].name+'">'
+                    } else if(commonImages[i].s=="end") {
+                        select3 += '</optgroup>'
+                    }
+                } else {
+                    select3 += '<option data-w="'+commonImages[i].w+'" data-h="'+commonImages[i].h+'" value="'+i+'">'+commonImages[i].w+'x'+commonImages[i].h+' '+commonImages[i].name+'</option>'
+                }
+                
+            }
+            select3 += '</select>'
+            $('.dims').html('<div>'+select1+' '+select3+' '+select2+'</div>')
+            var prevHtml = btoa($('.changeWH').find('option:selected').html());
+            //$('.changeWH').find('option:selected').attr('data-prehtml',prevHtml).html('x')
+            $('.changeW').on('change',function(){
+                wcan = $(this).val();
+                document.getElementById('canvas').width = wcan;
+                $('#canvas').css('width',wcan*mainZoom);
+                //if(!$('#canvas').attr('moved')) {
+                    $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
+                    $('#canvas').css('right','initial');
+                //}
+                dragEvents()
+                coolAnimation();
+            })
+            $('.changeWH').on('change',function(){
+                n = $(this).find('option:selected').data('h')
+                an = $(this).find('option:selected').data('w')
+                if(n&&an) {
+                    $('.changeH').append( '<option value="'+n+'">'+n+'</option>')
+                    $('.changeH').val($(this).find('option:selected').data('h')).change()
+                    $('.changeW').append( '<option value="'+an+'">'+an+'</option>')
+                    $('.changeW').val($(this).find('option:selected').data('w')).change()
+                    var prevHtml = btoa($(this).find('option:selected').html());
+                    $('option[data-prehtml]').each(function(){
+                        $(this).html(atob($(this).attr('data-prehtml')));
+                    })
+                    //$(this).find('option:selected').attr('data-prehtml',prevHtml).html('x')
+                }
+                coolAnimation();
+            })
+            $('.changeH').on('change',function(){
+                hcan = $(this).val();
+                document.getElementById('canvas').height = hcan;
+                $('#canvas').css('height',hcan*mainZoom);
+                //if(!$('#canvas').attr('moved')) {
+                    $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
+                    $('#canvas').css('bottom','initial');
+                //}
+                dragEvents()
+                coolAnimation();
+            })
+            addMenu();
+
+
+            
+            function addMenu() {
+                $('body').append('<div class="menu"><div class="menuCont"></div></div>')
+                $('.menu .menuCont').append('<div class="handDraw"></div>')
+                $('.menu .menuCont').append('<input type="file" id="input" class="selectImage inputfile"><label for="input"></label>');
+                $('.menu .menuCont').append('<div class="text"></div>')
+                $('.menu .menuCont').append('<div class="save"></div>')
+                //$('.menu').append('<div class="lock"></div>')
+                $('.menu .menuCont').append('<div class="clear"></div>')
+
+                $('.save').on('click', function() {
+                    downloadCanvasAsImage();
+                })
+                $('.clear').on('click', function() {
+
+                    menuItems.push(
+                    {
+                        text:"Clear current layer?"
+                    },
+                    {
+                        text:"YES",
+                        onClick:function(){
+                            $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                            $('.dims').show();
+                            menuItems = []
+                            reloadMenuItems();
+                        },
+                        width: '50%'
+                    },
+                    {
+                        text:"NO",
+                        onClick:function(){
+                            menuItems = []
+                            reloadMenuItems();
+
+                        },
+                        width: '50%'
+                    })
+                    reloadMenuItems();
+
+
+                    
+                })
+                $('.text').on('click', function() {
+                    $('.menu').hide();
+                    $('.dims').hide();
+                    $('.menuLayers').hide();
+                    $('body').append('<input style="position:absolute;z-index:10; background:transparent; color: transparent;border:none;-webkit-appearance: none; outline: none !important;;" class="textMark" value=""></input>')
+                    
+                    if ($('.settings').length == 0)
+                    $('body').append('<div class="settings"></div>')
+                    $('.settings').html('<div class="settingsCont"><div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="testo button">Aa</div><div class="rotate button"></div><div class="move button selected"></div><div class="button colorPicker"></div></div>');
+                    $('body').append('<canvas id="textCanvas"></canvas>')
+                    document.getElementById('textCanvas').width = $(window).width();
+                    document.getElementById('textCanvas').height = $(window).height();
+                    $('.textMark').focus();
+                    var move = false;
+                    var mmove = true;
+                    var fsize = 40;
+                    var fsx = wcan/2;
+                    var fsy = hcan/2;
+                    var ctx = $('#textCanvas')[0].getContext('2d');
+                    function draw(ctx,img,imagParams,text,fosize) {
+                        ctx.font = fosize+"px Georgia";
+                        console.log(imagParams)
+                        ctx.fillText(text, imagParams.fx, fosize+imagParams.fy);
+                    }
+                    ctx.globalAlpha = 1;
+                    handleCanvas(ctx,null,0,0,$('#textCanvas'),draw,'Text here',fsize)
+                    
+                });
+                $('.handDraw').on('click', function() {
+
+                    var write = false;
+                    var replace = false
+                    var history = [document.getElementById('canvas').toDataURL('image/png')]
+                    $('.dragEvents').hide();
+                    $('.menu').hide();
+                    $('.dims').hide();
+                    $('.menuLayers').hide();
+                    if ($('.settings').length == 0)
+                        $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
+                    $('.settingsCont').append('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min="0" step=".1"></div><div class="button undo"></div><div class="button redo"></div><div class="button setImg"></div><div class="button brush"></div><div class="button eraser"></div><div class="button colorPicker"></div><div class="button replacer"></div>')
+
+
+                    var ctx = document.getElementById('canvas').getContext('2d');
+                    ctx.globalCompositeOperation='source-over'
+                    ctx.globalAlpha = 1;
+                    $('.undo').addClass('disabled');
+                    $('.redo').addClass('disabled');
+                    $('#opacitySelector').on('input', function(e) {
+                        var ctx = document.getElementById('canvas').getContext('2d');
+                        ctx.globalAlpha = $(this).val();
+                        colorAlpa = ctx.globalAlpha*255
+                        //zoom(1,null)
+                    })
+                    $('.replacer').on('click', function(e) {
+                        if(!$(this).hasClass('selected')) {
+                            $('body').css('cursor','crosshair')
+                            replace = true
+                        } else {
+                            replace = false;
+                            $('body').css('cursor','initial')
+                        }
+                        $(this).toggleClass('selected')
+                    })
+                    $('.eraser').on('click', function(e) {
+                        if(ctx.globalCompositeOperation=='source-over') {
+                            ctx.globalCompositeOperation="destination-out"
+                        } else {
+                            ctx.globalCompositeOperation='source-over'
+                        }
+                        $(this).toggleClass('selected')
+                        //ctx.globalCompositeOperation="source-over"
+                    })
+                    $('.setImg').on('click', function(e) {
+                        $('.settings').remove();
+                        write = false
+                        replace = false
+                        ctx.globalCompositeOperation='source-over'
+                        $('.menu').show();
+                        $('.menuLayers').show();
+                        $('#canvas').off(events.move)
+                        $('#canvas').off(events.start)
+                        $('#canvas').off(events.end)
+                        $('.dragEvents').show();
+                        $('.overlay').remove();
+                        $('body').css('cursor','initial')
+                    })
+                     $('.colorPicker').css('background-color',color)
+                    var pickerTimeout;
+                    $('.colorPicker').on('click', function(e) {
+                        $('body').append('<div class="color"><input type="color" value="' + color + '"/></div>')
+                        $('.color input').on('input', function(e) {
+                            color = $(this).val();
+                            //zoom(1,null)
+                            clearTimeout(pickerTimeout)
+                            pickerTimeout = setTimeout(function(){
+                                $('.color input').hide()
+                            },500)
+                            
+                            $('.colorPicker').css('background-color',color)
+                        })
+                        $('.color input').on('change', function(e) {
+                            console.log('sss')
+                        })
+                        setTimeout(function(){
+                            $('.color input').click()
+                        },10)
+                        if($('.brush').hasClass('active')) {
+                           $('.brush').click() 
+                        }
+                        
+                    })
+                    $('.undo').on('click', function(e) {
+                        var cStep = $(this).attr('data-step');
+                        if(!cStep) {
+                            cStep = history.length-2
+                        } else {
+                            if(cStep>=0) {
+                                cStep = parseInt(cStep)-1
+                            }
+                        }
+                        $(this).attr('data-step',cStep);
+                        $('.redo').attr('data-step',cStep+1).removeClass('disabled');
+                        var t = document.getElementById('canvas').getContext('2d');
+                        t.clearRect(0, 0, wcan, hcan)
+                        var img = new Image();
+                        img.onload = function(e) {
+                            t.drawImage(
+                                img,
+                                0,
+                                0
+                            );
+                        }
+                        img.src = history[cStep];
+                        if(cStep==0) {
+                           $(this).addClass('disabled');
+                        } else {
+                           
+                           
+                        }
+                        console.log(cStep)
+                        console.log(history)
+                        
+                        
+                        /*$('.redo').show();
+                        var cStep = parseInt($(this).attr('data-step'));
+                        $(this).attr('data-step',cStep+1)
+                        console.log(cStep)
+                        var t = document.getElementById('canvas').getContext('2d');
+                        t.clearRect(0, 0, wcan, hcan)
+                        var img = new Image();
+                        img.onload = function(e) {
+                            t.drawImage(
+                                img,
+                                0,
+                                0
+                            );
+                        }
+                        img.src = history[history.length-cStep];
+                        if(history.length==cStep) {
+                            $('.undo').hide()
+                        }*/
+                    })
+                    $('.redo').on('click', function(e) {
+                        $('.undo').removeClass('disabled');
+                        var cStep = $(this).attr('data-step');
+                        var t = document.getElementById('canvas').getContext('2d');
+                        t.clearRect(0, 0, wcan, hcan)
+                        var img = new Image();
+                        img.onload = function(e) {
+                            t.drawImage(
+                                img,
+                                0,
+                                0
+                            );
+                        }
+                        img.src = history[cStep];
+                        cStep = parseInt(cStep)+1
+                        $(this).attr('data-step',cStep)
+                        $('.undo').attr('data-step',cStep-1).show();
+                        if(cStep<history.length) {
+                            console.log(cStep)
+                            
+                        } else {
+                            $(this).addClass('disabled');
+                        }
+
+                    
+                    })
+                    $('.brush').on('click', function(e) {
+                        
+                        if($(this).hasClass('active')) {
+                            $('.overlay').remove();
+                            $('.settings').show();
+                        } else {
+                            $('.overlay').remove();
+                            //$('.settings').hide();
+                            $('body').append('<div class="overlay"></div>')
+                            $('.overlay').css('left',$('.brush').position().left)
+                            if(($('.overlay').position().left+$('.overlay').width())>$('body').width())
+                                $('.overlay').css('left','inherit')
+                            var k = linew*mainZoom
+                            console.log('k',k)
+                            $('.overlay').html('<div class="lineDisp" style="background:'+color+';display:inline-block;"></div><div class="gamone"><div class="settingsConpt"><div class="thick"><input id="linew" type="range" value="' + linew + '" max="' + 100 + '" min="1" step="1"/></div></div></div>')
+                            $('.lineDisp').css('width',k)
+                            $('.lineDisp').css('height',k)
+
+                            /*$('.lineDisp').on('click', function(e) {
+                                $('.color input').click()
+                            })*/
+                            $('#linew').on('input', function(e) {
+                                linew = $(this).val()
+                                var k = linew*mainZoom
+                                $('.lineDisp').css('width',k)
+                                $('.lineDisp').css('height',k)
+                            })
+                            $('.color input').on('input', function(e) {
+                                color = $(this).val();
+                                $('.lineDisp').css('background',color)
+                            })
+                        }
+                        
+                        $(this).toggleClass('active');
+                    })
+                    
+                    $('#canvas').on(events.move, function(e) {
+
+                        if (e.touches) {
+                            e = e.touches[0];
+                        }
+                        if (write) {
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                            
+                            var curr = {
+                                x: (((e.clientX))-cdrag.x)/mainZoom,
+                                y: (((e.clientY))-cdrag.y)/mainZoom,
+                            }
+                            
+                            line(curr, prev, ctx, color, linew)
+                            prev = JSON.parse(JSON.stringify(curr))
+
+                        }
+                    })
+                    var hideSettingsTimeout;
+                    $('#canvas').on(events.start, function(e) {
+                        if (e.touches) {
+                            e = e.touches[0];
+                        }
+                        if(replace) {
+                            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                            var mouseX = (((e.clientX))-cdrag.x)/mainZoom;
+                            var mouseY = (((e.clientY))-cdrag.y)/mainZoom;
+
+                            
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var c = ctx.getImageData(mouseX, mouseY, 1, 1).data;
+                            console.log(c[0],c[1],c[2],c[3]);
+                            console.log(hexToRgb(color));
+                            replaceColor(c,hexToRgb(color))
+                            /*write = true;
+                            replace = false;
+                            $('.replacer').removeClass('selected')
+                            $('body').css('cursor','initial')*/
+                        }
+                        else {
+                            write = true;
+                            var ctx = document.getElementById('canvas').getContext('2d');
+                            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+                            
+                            var curr = {
+                                x: (((e.clientX))-cdrag.x)/mainZoom,
+                                y: (((e.clientY))-cdrag.y)/mainZoom,
+                            }
+                            point(curr, ctx, color, linew)
+                            prev = JSON.parse(JSON.stringify(curr))
+                            if($('.brush').hasClass('active')) {
+                               $('.brush').click() 
+                            }
+                        }
+
+
+                        
+
+                    })
+                    $('#canvas').on(events.end, function(e) {
+                        write = false
+                        prev = {};
+                        history.push(document.getElementById('canvas').toDataURL('image/png'))
+                        $('.undo').removeClass('disabled').attr('data-step',history.length-1);
+                        $('.redo').addClass('disabled');
+                    })
+                })
+
+                var input = document.getElementById('input');
+                input.addEventListener('change', handleFiles);
+            }
+            isMobile()
+            dragEvents()
+            displayLayers()
+            $(window).resize(function() {
+                if(!isMobile()) {
+                    $('body').css('height',$(window).height());
+                    $('body').css('width',$(window).width());
+                    coolAnimation()
+                }
+            })
+            $(window).on('mousewheel',function(e) {
+                if($('.settings').length==0) {                    
+                    if(e.originalEvent.wheelDelta  < 0) {
+                        zoom(0.9,e)
+                    }else {
+                        zoom(1.1,e)
+                    }
+                    dragEvents() 
+                }
+            })
+            coolAnimation();
+            function coolAnimation(){
+                var direction = 0;
+                var coolInterval = setInterval(function(){
+                    if(direction==0) {
+                        zoom(.99,{clientX:$(window).width()/2,clientY:$(window).height()/2});
+                        if($('#canvas').position().top>50 && $('#canvas').position().left>50){
+                            direction = 1;
+                        }
+                    } else {
+                    //clearInterval(coolInterval)
+                       zoom(1.01,{clientX:$(window).width()/2,clientY:$(window).height()/2})
+                       
+                       if($('#canvas').position().left<20 || $('#canvas').position().top<20){
+                                console.log('fine')
+                                clearInterval(coolInterval)
+                            } 
+                       
+                    }
+                },2)
+            }
+        })
+
+        function componentToHex(c) {
+          var hex = c.toString(16);
+          return hex.length == 1 ? "0" + hex : hex;
+        }
+
+        function rgbToHex(r, g, b) {
+          return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+        }
+
+        function reloadMenuItems() {
+            $('.panelOverlay').remove()
+            $('.panel').remove()
+            if(menuItems.length) {
+                $('body').append('<div class="panelOverlay"></div>')
+                $('body').append('<div class="panel"></div>')
+                for (var i = 0; i < menuItems.length; i++) {
+                    let cane = menuItems[i]
+                    let nuovoId = newGuid();
+                    $('.panel').append('<div id="'+nuovoId+'">'+menuItems[i].text+'</div>')
+                    if(menuItems[i].timeout) {
+                        setTimeout(function(){cane.onClick()},menuItems[i].timeout)
+                    }
+                    else if(menuItems[i].onClick) {
+                        $('#'+nuovoId).on('click',function(){
+                            cane.onClick()
+                        })
+                    }
+                    if(menuItems[i].width) {
+                        $('#'+nuovoId).css('width',cane.width)
+                        $('#'+nuovoId).css('display','inline-block')
+                        $('#'+nuovoId).css('box-sizing','border-box')
+                    }
+                }
+            } else {
+                /*$('.panelOverlay').remove()
+                $('.panel').remove()*/
+            }
+        }
+
+        function displayLayers() {
+            //$('#canvas').show()
+            var hideCurrent = $('.zero.seeLayer.done').length
+            if($('.menuLayers').length==0)
+             $('body').append('<div class="menuLayers"></div>')
+            if(layers.length) {
+                
+                $('.menuLayers').html('')
+                for (var i = layers.length-1 ; i >= 0; i--) {
+                    if(!layers[i].removed) {
+                        $('.menuLayers').append('<div data-id="'+layers[i].id+'"><div class="nameLayer">'+(layers[i].name)+'</div><div class="seeLayer '+(layers[i].active?'':'done')+'"></div><div class="deleteLayer"></div></div>');
+                        if(layers[i].active) {
+                            $('#'+layers[i].id).show()
+                        } else {
+                            $('#'+layers[i].id).hide()
+                        }
+                    }
+                }
+                $('.seeLayer').on('click',function(){
+                    
+                    var l = findLayer($(this).parent().attr('data-id'))
+                    if(l==0 || l) {
+                        layers[l].active = !layers[l].active
+                        displayLayers()
+                    }                    
+                    //$(this).toggleClass('done')
+                })
+                /*$('.seeLayer').on(events.end,function(){
+                    $('canvas').show()
+                })*/
+                $('.deleteLayer').on('click',function(){
+                    let u = $(this).parent().attr('data-id')
+                    let l = findLayer(u)
+                    console.log(l)
+                    menuItems.push(
+                    {
+                        text:"Delete layer "+layers[l].name+'?'
+                    },
+                    {
+                        text:"YES",
+                        onClick:function(){
+                            console.log(l)
+                            if(l==0 || l) {
+                                layers[l].removed = true;
+                                $('#'+u).remove();
+                                displayLayers()
+                            }
+                            menuItems = []
+                            reloadMenuItems();
+                        },
+                        width: '50%'
+                    },
+                    {
+                        text:"NO",
+                        onClick:function(){
+                            menuItems = []
+                            reloadMenuItems();
+
+                        },
+                        width: '50%'
+                    })
+                    reloadMenuItems();
+
+
+                    /*if(confirm('Dlete layer?')) {
+                        
+                        if(l==0 || l) {
+                            layers.splice(l, 1)
+                            $('#'+$(this).parent().attr('data-id')).remove();
+                            displayLayers()
+                        }
+                    }*/
+                })
+                function findLayer(d){
+                    for (var i = 0; i < layers.length; i++) {
+                       if(layers[i].id==d) return i;
+                    }
+                }
+            } else {
+                $('.menuLayers').html('')
+            }
+
+                $('.menuLayers').prepend('<div data-id="'+1+'"><div class="nameLayer">'+'Current'+'</div><div class="zero seeLayer '+''+'"></div></div>');
+                $('.seeLayer.zero').on('click',function(){
+                    if( $(this).hasClass('done')) {
+                        $('#canvas').css('visibility','visible')
+                    } else {
+                        $('#canvas').css('visibility','hidden')
+                    }              
+                    $(this).toggleClass('done')
+                })
+                if(hideCurrent) $('.seeLayer.zero').click()
+                $('.deleteLayer.zero').on('click',function(){
+                    menuItems.push(
+                    {
+                        text:"Clear current layer?"
+                    },
+                    {
+                        text:"YES",
+                        onClick:function(){
+                            $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                            $('.dims').show();
+                            menuItems = []
+                            reloadMenuItems();
+                        },
+                        width: '50%'
+                    },
+                    {
+                        text:"NO",
+                        onClick:function(){
+                            menuItems = []
+                            reloadMenuItems();
+
+                        },
+                        width: '50%'
+                    })
+                    reloadMenuItems();
+                })
+
+
+            if($('.menuLayers .lock').length==0) {
+                $('.menuLayers').append('<div class="lock"></div>');
+                 $('.lock').on('click', function() {
+
+                        $('body').append('<canvas class="emptyCanvas" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
+                        var emptyCanvas = $('.emptyCanvas')[0].toDataURL('image/png',0.25)
+                        $('.emptyCanvas').remove()
+                        if($('#canvas')[0].toDataURL('image/png',0.25)==emptyCanvas) {
+                            menuItems.push({
+                                text:"Can't add an empty layer",
+                                type:"warn",
+                                onClick:function(){
+                                    menuItems = [];
+                                    reloadMenuItems();
+                                },
+                                timeout:500
+                            })
+                            reloadMenuItems();
+                            return;
+                        }
+
+                        for (var i = 0; i < layers.length; i++) {
+                            if(!layers[i].removed) {
+                                var datap =  $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
+                                if(datap==$('#canvas')[0].toDataURL('image/png',0.25)) {
+                                    menuItems.push({
+                                    text:"Duplicate layer",
+                                    type:"warn",
+                                    onClick:function(){
+                                        menuItems = [];
+                                        reloadMenuItems();
+                                    },
+                                    timeout:500
+                                })
+                                reloadMenuItems();
+                                }
+                            }
+                        }
+
+
+                        $('.dims').hide();
+                        var nuovoId = newGuid()
+                        $('body').append('<canvas class="layerCanvas" id="'+nuovoId+'" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
+                        
+                        var ctxs = $('#'+nuovoId)[0].getContext("2d");
+                        data =  $('#canvas')[0].toDataURL('image/png',0.25);
+                        var image = new Image();
+                        image.onload = function() {
+                          ctxs.drawImage(image, 0, 0);
+                          
+                          $('#'+nuovoId).css('width',$('#canvas').width())
+                          $('#'+nuovoId).css('height',$('#canvas').height())
+                          $('#'+nuovoId).css('top',$('#canvas').position().top)
+                          $('#'+nuovoId).css('left',$('#canvas').position().left)
+                          $('#canvas')[0].getContext('2d').clearRect(0, 0, wcan, hcan)
+                          $('#canvas').removeClass('initial')
+                          layers.push({id:nuovoId,name:'#'+(layers.length+1),active:true})
+                          displayLayers()
+                        };
+                        image.src = data
+                        
+                })
+            }
+
+        }
+
+        function dragEvents() {
+            //console.log('dragEvents')
+            var startPos = {x:0,y:0};
+            var cdrag = {x:$('#canvas').position().left,y:$('#canvas').position().top};
+            /*if(!$('#canvas').attr('moved'))
+                cdrag = {x:tx,y:ty};
+            if((($(window).width()<wcan) || $(window).height()<hcan) && !$('#canvas').attr('moved')) {
+                cdrag.x = $('#canvas').position().left
+                cdrag.y = $('#canvas').position().top
+            }*/
+            // if($(window).height()<$('#canvas').height()) {
+            //     cdrag.y = $('#canvas').position().top
+            // }
+
+            var dist = {x:0,y:0};
+            var startZoom;
+            var startPosF;
+            var midPos;
+            var prevTouchCounter = 0;
+            var touchCounter = 0;
+            var canefix = 0;
+            $('.dragEvents').remove();
+            $('body').append('<div class="dragEvents" style="z-index:50;position:absolute;width:100%;height:100%;"></div>')
+            $('.dragEvents').off(events.move).on(events.move, function(e) {
+
+                e.stopPropagation();
+                e.preventDefault();
+                var constantZoom = 1
+                if (e.touches) {
+                    try {
+                        if(touchCounter==2) {
+                            y = e.touches[0];
+                            k = e.touches[1];
+                            var d = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
+                            var midpoint = {clientX:(k.clientX + y.clientX)/2,clientY: (k.clientY + y.clientY)/2}
+                            if(startZoom>d) {
+                                var l = startZoom-d;
+                                startZoom = d+l/2
+                                zoom(d/startZoom,midpoint)
+                            }
+                            if(d>startZoom) {
+                                var l = d-startZoom;
+                                startZoom = startZoom+l/2
+                                zoom(d/startZoom,midpoint)
+                            }
+                        }
+                    } catch(e) {
+                        
+                    }
+                    e = e.touches[0];
+                }
+                if(touchCounter==1 && (prevTouchCounter==0)) {
+                    //console.log(cdrag)
+                    var prop1 = $('body').width()/$('#canvas').width();
+                    var prop2 = $('body').height()/$('#canvas').height();
+                    dist = {
+                        x: (e.clientX-startPos.x),
+                        y: (e.clientY-startPos.y)
+                    }
+                    $('#canvas').attr('moved','true')
+                    $('#canvas').css('left',dist.x+cdrag.x)
+                    $('#canvas').css('top',dist.y+cdrag.y)
+                    $('#canvas').css('right','initial')
+                    $('#canvas').css('bottom','initial')
+                    //console.log('salamono',startPos)
+                }
+                else if(touchCounter==1 && (prevTouchCounter==2)) {
+                    console.log('non di qua')
+                    if(canefix==0) {
+                        canefix = 1;
+                        startPos = {x:e.clientX,y:e.clientY};
+                    }
+                     dist = {
+                        x: e.clientX-startPos.x,
+                        y: e.clientY-startPos.y
+                    }
+                    $('#canvas').attr('moved','true')
+                    $('#canvas').css('left',dist.x+cdrag.x)
+                    $('#canvas').css('top',dist.y+cdrag.y)
+                    $('#canvas').css('right','initial')
+                    $('#canvas').css('bottom','initial')
+                }
+                $('.layerCanvas').css('width',$('#canvas').width())
+                $('.layerCanvas').css('height',$('#canvas').height())
+                $('.layerCanvas').css('top',$('#canvas').position().top)
+                $('.layerCanvas').css('left',$('#canvas').position().left)
+            })
+            $('.dragEvents').off(events.start).on(events.start, function(e) {
+                canefix = 0;
+                prevTouchCounter = touchCounter;
+                touchCounter++;
+                if (touchCounter==2 && prevTouchCounter==1) {
+                    try {
+                        y = e.touches[0];
+                        k = e.touches[1];//{clientX:100,clientY:100};;
+                        
+                            cdrag.x = $('#canvas').position().left;
+                            cdrag.y = $('#canvas').position().top;
+                            dist = {x:0,y:0}
+                            startZoom = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
+                            midPos = {x:(k.clientX+y.clientX)/2,y:(k.clientY+y.clientY)/2}
+                            startPosF = {
+                                x: (((midPos.x))-cdrag.x)/mainZoom,
+                                y: (((midPos.y))-cdrag.y)/mainZoom,
+                            }
+                        
+                    } catch(e) {
+                    }
+                }
+                else if(touchCounter==1 && prevTouchCounter==0) {
+                    if (e.touches)
+                        e = e.touches[0];
+                    startPos = {x:e.clientX,y:e.clientY};
+                    
+                }
+                //$('.version').html('inizio touches: '+touchCounter)
+            })
+            $('.dragEvents').off(events.end).on(events.end, function(e) {
+                prevTouchCounter = touchCounter;
+                touchCounter--
+                cdrag.x = $('#canvas').position().left;
+                cdrag.y = $('#canvas').position().top;
+                dist = {x:0,y:0}
+            })
+            //console.log(events)
+        }
+        function zoom(a,e) {
+
+            mainZoom = mainZoom*a
+
+            $('#canvas').css('width',$('#canvas').width()*a)
+            $('#canvas').css('height',$('#canvas').height()*a)
+
+            
+            var b = $('#canvas').position().left
+            var x = e.clientX
+            $('#canvas').css('left',(b-x)*(a)+x)
+
+            b = $('#canvas').position().top
+            var y = e.clientY
+            $('#canvas').css('top',(b-y)*(a)+y)
+
+
+ 
+            if($('#canvas').width()<$(window).width()) {
+                $('#canvas').css('left',($(window).width()-$('#canvas').width())/2+'px');
+                $('#canvas').css('right','initial');
+            }
+            if($('#canvas').height()<$(window).height()) {
+                $('#canvas').css('top',($(window).height()-$('#canvas').height())/2+'px');
+                $('#canvas').css('bottom','initial');
+            }
+
+            $('.layerCanvas').css('width',$('#canvas').width())
+            $('.layerCanvas').css('height',$('#canvas').height())
+            $('.layerCanvas').css('top',$('#canvas').position().top)
+            $('.layerCanvas').css('left',$('#canvas').position().left)
+        }
+        function handleFiles(e) {
+            if(e.target.files[0].type.indexOf('image')!=-1) {
+                $('.dims').hide();
+
+                $('body').append('<canvas id="imgCanvas"></canvas>')
+                document.getElementById('imgCanvas').width = $(window).width();
+                document.getElementById('imgCanvas').height = $(window).height();
+                var ctx = $('#imgCanvas')[0].getContext('2d');
+                var url = URL.createObjectURL(e.target.files[0]);
+                var img = new Image();                
+                $('body').append('<img id="tempImg" src="' + url + '"></img>')
+                img.onload = function(e) {
+                    if ($('.settings').length == 0)
+                        $('body').append('<div class="settings"><div class="settingsCont"></div></div>')
+                    $('.settingsCont').html('<div class=""><input id="opacitySelector" type="range" value="1" max="1" min=".1" step=".1"></div><div class="button back"></div><div class="setImg button"></div><div class="plus button"></div><div class="minus button"></div><div class="move button selected"></div><div class="rotate button"></div>');
+                    $('.menu').hide();
+                    var w = $('#tempImg').width();
+                    var h = $('#tempImg').height();
+                    $('#tempImg').remove();
+                    function draw(ctx,img,imagParams) {
+                        console.log(imagParams)
+                        ctx.drawImage(
+                            img,
+                            imagParams.sx,
+                            imagParams.sy,
+                            imagParams.sw,
+                            imagParams.sh,
+                            imagParams.fx,
+                            imagParams.fy,
+                            imagParams.fw,
+                            imagParams.fh,
+                        );
+                    }
+                    handleCanvas(ctx,img,w,h,$('#imgCanvas'),draw)
+
+                }
+                img.src = url;
+            } else {
+
+                menuItems.push({
+                    text:"File type not allowed",
+                    type:"warn",
+                    onClick:function(){
+                        $('.settings').remove();
+                        $('.menu').show();
+                        $('.menul').show();
+                        $('.inputfile').val('')
+                        menuItems = [];
+                        reloadMenuItems();
+                    },
+                    timeout:1000
+                })
+                reloadMenuItems();
+
+
+                
+            }
+        }
+        function handleCanvas(ctx,img,w,h,canvas,draw,text,fsize) {
+                    $('.dragEvents').hide();
+                    var cdrag = {x:0,y:0};
+                    var mult = 1;
+                    var dist = {x:0,y:0};
+                    var startZoom;
+                    var startPosF;
+                    var midPos;
+                    var prevTouchCounter = 0;
+                    var touchCounter = 0;
+                    var canefix = 0;
+                    var move = false;
+                    var mmove = true;
+                    var rotate = false;
+                    var rotatestart = false;
+                    var cangle = 0;
+                    var prevAngle = 0;
+                    var rotatestartpos = {
+                        x: 0,
+                        y: 0
+                    };
+                    var hMove = {
+                        x: 0,
+                        y: 0
+                    };
+                    var imagParams  = {sx:0,sy:0,sw:w,sh:h,fx:cdrag.x,fy:cdrag.y,fw:mainZoom*w,fh:mainZoom*h};
+                    var originaParams  = {};
+                    var tmainZoom = mainZoom;
+
+                    $('#opacitySelector').on('input', function(e) {
+                        ctx.globalAlpha = $(this).val();
+                        imgZoom(1,null)
+                    })
+                    $('.back').on('click', function(e) {
+                        canvas.remove();
+                        $('.settings').remove();
+                        $('.menu').show();
+                        $('.inputfile').val('')
+                        $('.dragEvents').show();
+                    })
+                    $('.testo').on('click', function(e) {
+                        $('.textMark').focus();
+                    })
+                     $('.colorPicker').css('background-color',color)
+                    $('.colorPicker').on('click', function(e) {
+                        $('body').append('<div class="color"><input type="color" value="' + color + '"/></div>')
+                        $('.color input').on('input', function(e) {
+                            color = $(this).val();
+                            imgZoom(1,null)
+                            $('.colorPicker').css('background-color',color)
+                        })
+                        setTimeout(function(){
+                            $('.color input').click()
+                        },10)
+                        
+                    })
+                    $('.rotate').on('click', function(e) {
+                        $(this).addClass("selected");
+                        $('.move').removeClass("selected");
+                        mmove = false;
+                        rotate = false;
+                        rotatestart = true;
+                    })
+                    $('.move').on('click', function(e) {
+                        $(this).addClass("selected");
+                        $('.rotate').removeClass("selected");
+                        mmove = true;
+                        rotate = false;
+                        rotatestart = false;
+                    })
+                    $('.setImg').on('click', function() {
+                        mainZoom = tmainZoom;
+                        $('.dragEvents').show();
+                        canvas.remove();
+                        var fCtx = $('#canvas')[0].getContext('2d')
+                        fCtx.globalAlpha = $('#opacitySelector').val();
+                        var center = {x:((imagParams.fx-$('#canvas').position().left)/mainZoom)+(imagParams.fw/mainZoom)/2,y:((imagParams.fy-$('#canvas').position().top)/mainZoom)+(imagParams.fh/mainZoom)/2}
+                        fCtx.save();
+                        fCtx.translate(center.x, center.y);
+                        fCtx.rotate(cangle);
+                        fCtx.fillStyle = color;
+                        fCtx.translate(-center.x,-center.y);
+                        
+                        imagParams.fx = ((imagParams.fx)/mainZoom)-$('#canvas').position().left/mainZoom;
+                        imagParams.fy = ((imagParams.fy)/mainZoom)-$('#canvas').position().top/mainZoom;
+                        
+                        imagParams.fw = imagParams.fw/mainZoom;
+                        imagParams.fh = imagParams.fh/mainZoom;
+                        fsize = fsize/mainZoom
+                        draw(fCtx,img,imagParams,text,fsize)
+
+                        fCtx.restore();
+                        fCtx.globalAlpha = 1;
+                        $('.settings').remove();
+                        $('.menu').show();
+                        $('.inputfile').val('')
+                        $('.menuLayers').show();
+                    })
+                    $('.textMark').on('keyup',function(e){
+                        text = $(this).val();
+                        imgZoom(1,null)
+                        if(e.keyCode==13) {
+                            $('.textMark').blur();
+                        }
+                    })
+
+                    $(window).on('mousewheel',function(e) {
+                        if(e.originalEvent.wheelDelta  < 0) {
+                            imgZoom(.9,e)
+                        }else {
+                           imgZoom(1.1,e)
+                        }
+                    })
+
+                    function imgZoom(a,e) {
+                        mult = mult*a
+                        fsize = fsize*a
+                        ctx.clearRect(0, 0, $(window).width(), $(window).height())
+                        imagParams.fw*=a
+                        imagParams.fh*=a
+                        if(e) {
+                            var b = imagParams.fx
+                            var x = e.clientX
+                            imagParams.fx = (b-x)*(a)+x
+
+                            var b = imagParams.fy
+                            var x = e.clientY
+                            imagParams.fy = (b-x)*(a)+x
+                        }
+
+                        var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
+
+                        ctx.save();
+                        ctx.translate(center.x, center.y);
+                        ctx.rotate(cangle);
+                        ctx.translate(-center.x,-center.y);
+
+                        ctx.fillStyle = color;
+                        //ctx.imageSmoothingEnabled = false;
+                        /*ctx.clearRect(0, 0, wcan, hcan)
+                        ctx.font = "24px Georgia";
+                        ctx.fillText('text', imagParams.fx, imagParams.fy);*/
+                        draw(ctx,img,imagParams,text,fsize)
+
+                        /*ctx.drawImage(
+                            img,
+                            imagParams.sx,
+                            imagParams.sy,
+                            imagParams.sw,
+                            imagParams.sh,
+                            imagParams.fx,
+                            imagParams.fy,
+                            imagParams.fw,
+                            imagParams.fh,
+                        );*/
+                        ctx.restore();
+                    }
+
+                    canvas.on(events.start, function(e) {
+                        $('.textMark').blur();
+                        prevTouchCounter = touchCounter;
+                        touchCounter++;
+
+                        if(rotatestart) {
+                            if (e.touches)
+                                e = e.touches[0];
+                            rotate = true;
+                            rotatestartpos = {
+                                    x: e.clientX,
+                                    y: e.clientY
+                                };
+                        } else {
+                            canefix = 0;
+                        
+                            if (touchCounter==2 && prevTouchCounter==1) {
+                                try {
+                                    y = e.touches[0];
+                                    k = e.touches[1];//{clientX:100,clientY:100};;
+                                    cdrag.x = imagParams.fx;
+                                    cdrag.y = imagParams.fy;
+                                    dist = {x:0,y:0}
+                                    startZoom = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
+                                    midPos = {x:(k.clientX+y.clientX)/2,y:(k.clientY+y.clientY)/2}
+                                    startPosF = {
+                                        x: (((midPos.x))-cdrag.x)/mainZoom,
+                                        y: (((midPos.y))-cdrag.y)/mainZoom,
+                                    }
+                                    
+                                } catch(e) {
+                                }
+                            }
+                            else if(touchCounter==1 && prevTouchCounter==0) {
+                                if (e.touches)
+                                    e = e.touches[0];
+                                cdrag.x = imagParams.fx;
+                                cdrag.y = imagParams.fy;
+                                startPos = {x:e.clientX,y:e.clientY};
+                            }
+
+                        }
+                    })
+                    canvas.on(events.end, function(e) {
+
+                        prevTouchCounter = touchCounter;
+                        if(touchCounter>0)
+                            touchCounter--
+                        cdrag.x = imagParams.fx;
+                        cdrag.y = imagParams.fy;
+                        dist = {x:0,y:0}
+
+
+                        if(rotatestartpos) {
+                            rotate = false;
+                            prevAngle = cangle;
+                        }
+                    })
+                    canvas.on(events.move, function(e) {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        var constantZoom = 1
+
+                        if(rotate) {
+                            if(e.touches)
+                               e = e.touches[0] 
+                            var center = {x:imagParams.fx+imagParams.fw/2,y:imagParams.fy+imagParams.fh/2}
+                            ctx.clearRect(0, 0, $(window).width(), $(window).height())
+                        
+                            function p(x, y) {return {x,y}}
+
+                            function angle(p1, center, p2) {
+                                const transformedP1 = p(p1.x - center.x, p1.y - center.y)
+                                const transformedP2 = p(p2.x - center.x, p2.y - center.y)
+
+                                const angleToP1 = Math.atan2(transformedP1.y, transformedP1.x)
+                                const angleToP2 = Math.atan2(transformedP2.y, transformedP2.x)
+
+                                return (angleToP2 - angleToP1)
+                            }
+                            cangle = prevAngle+((angle(p(rotatestartpos.x, rotatestartpos.y), p(center.x, center.y), p(e.clientX, e.clientY))))
+
+                            imgZoom(1,null)
+
+                        } else {
+                            
+                            if (e.touches) {
+                                try {
+                                    y = e.touches[0];
+                                    k = e.touches[1];
+                                    var d = Math.sqrt(Math.pow( (k.clientX - y.clientX ) ,2) + Math.pow( (k.clientY - y.clientY ) ,2))
+
+                                    if(startZoom>d) {
+                                        var l = startZoom-d;
+                                        startZoom = d+l/2
+                                    }
+                                    if(d>startZoom) {
+                                        var l = d-startZoom;
+                                        startZoom = startZoom+l/2
+                                    }
+                                    constantZoom = d/startZoom
+                                    fsize = fsize*constantZoom
+                                    if((imagParams.fw*constantZoom) > 20) {
+
+                                        imagParams.fw = imagParams.fw*constantZoom
+                                        imagParams.fh = imagParams.fh*constantZoom
+                                        ;
+                                        mainZoom = mainZoom*constantZoom;                                            
+                                        
+                                        var curr = {
+                                            x: (((midPos.x)-imagParams.fx))/mainZoom,
+                                            y: (((midPos.y)-imagParams.fy))/mainZoom,
+                                        }
+
+                                        imagParams.fx = imagParams.fx -(( startPosF.x - curr.x  )*mainZoom)
+                                        imagParams.fy = imagParams.fy -(( startPosF.y - curr.y  )*mainZoom)
+
+                                        
+                                    }
+                                    imgZoom(1,null)
+                                } catch(e) {
+                                    
+                                }
+                                e = e.touches[0];
+                            }
+                            if (touchCounter==1 && (prevTouchCounter==0)) {
+                                dist = {
+                                    x: e.clientX-startPos.x,
+                                    y: e.clientY-startPos.y
+                                }
+                                imagParams.fx = dist.x+cdrag.x
+                                imagParams.fy = dist.y+cdrag.y
+                                imgZoom(1,null)
+                               
+                            }
+                            else if(touchCounter==1 && (prevTouchCounter==2)) {
+                                    
+                                    if(canefix==0) {
+                                        canefix = 1;
+                                        startPos = {x:e.clientX,y:e.clientY};
+                                    }
+                                     dist = {
+                                        x: e.clientX-startPos.x,
+                                        y: e.clientY-startPos.y
+                                    }
+                                    imagParams.fx = dist.x+cdrag.x;
+                                    imagParams.fy = dist.y+cdrag.y
+                                    
+                            }
+
+                        }
+                    })
+
+                    imgZoom(1,null)
+                    
+        }
+        function downloadCanvasAsImage() {
+
+            $('body').append('<canvas class="mergeCanvas" width="'+$('#canvas').attr('width')+'" height="'+$('#canvas').attr('height')+'"></canvas>')
+                    
+            var ctxo = $('.mergeCanvas')[0].getContext("2d");
+
+            function step(i) {
+                console.log(layers[i])
+                if(i<layers.length) {
+                    if(!layers[i].removed) {
+                        var img = new Image();
+                        img.onload = function(e) {
+                            ctxo.drawImage(
+                                img,
+                                0,
+                                0
+                            );
+                            step(i+1)
+                        }
+                        img.src = $('#'+layers[i].id)[0].toDataURL('image/png',0.25);
+                    } else {
+                       step(i+1) 
+                    }
+                } else {
+                    var img = new Image();
+                    img.onload = function(e) {
+                        ctxo.drawImage(
+                            img,
+                            0,
+                            0
+                        );
+                        download();
+                    }
+                    img.src = $('#canvas')[0].toDataURL('image/png',0.25);
+
+
+                }
+                
+            }
+            step(0)
+            function download() {
+                let downloadLink = document.createElement('a');
+                downloadLink.setAttribute('download', 'image.png');
+                let canvas = $('.mergeCanvas')[0];//document.getElementById('canvas');
+                let dataURL = canvas.toDataURL('image/png',0.25);
+                $('body').append('<img class="downloadMe" style="display:none;" src="'+dataURL+'"></img>')
+                //let url = dataURL.replace(/^data:image\/png/, 'data:application/octet-stream');
+                //downloadLink.setAttribute('href', url);
+                //downloadLink.click();
+
+
+                var img = $('.downloadMe')[0];
+                // atob to base64_decode the data-URI
+                var image_data = atob(img.src.split(',')[1]);
+                // Use typed arrays to convert the binary data to a Blob
+                var arraybuffer = new ArrayBuffer(image_data.length);
+                var view = new Uint8Array(arraybuffer);
+                for (var i=0; i<image_data.length; i++) {
+                    view[i] = image_data.charCodeAt(i) & 0xff;
+                }
+                try {
+                    // This is the recommended method:
+                    var blob = new Blob([arraybuffer], {type: 'image/png'});
+                } catch (e) {
+                    // The BlobBuilder API has been deprecated in favour of Blob, but older
+                    // browsers don't know about the Blob constructor
+                    // IE10 also supports BlobBuilder, but since the `Blob` constructor
+                    //  also works, there's no need to add `MSBlobBuilder`.
+                    var bb = new (window.WebKitBlobBuilder || window.MozBlobBuilder);
+                    bb.append(arraybuffer);
+                    var blob = bb.getBlob('image/png'); // <-- Here's the Blob
+                }
+
+                // Use the URL object to create a temporary URL
+                var url = (window.webkitURL || window.URL).createObjectURL(blob);
+                //location.href = url; // <-- Download!
+                $('.downloadMe').remove();
+                $('.mergeCanvas').remove();
+                //window.open(url,'_blank');
+
+                  var link = document.createElement('a');
+                  link.href = url;  // use realtive url 
+                  link.download = 'img'+new Date().getTime()+'.png';
+                  document.body.appendChild(link);
+                  link.click();  
+            }
+
+        }
+        function point(p, canvas, color, linew) {
+            canvas.fillStyle = color;
+            canvas.beginPath();
+            canvas.arc(p.x, p.y, linew/2, 0, 2 * Math.PI, true);
+            canvas.fill();
+        }
+        function line(c, p, canvas, color, linew) {
+            canvas.lineJoin = "round";
+            canvas.strokeStyle = color;
+            canvas.lineWidth = linew;
+            canvas.beginPath();
+            canvas.moveTo(c.x, c.y);
+            canvas.lineTo(p.x, p.y);
+            canvas.closePath();
+            canvas.stroke();
+        }
+        function isMobile() {
+            if ($(window).height() > $(window).width()) {
+                $('body').removeClass('landscape');
+            } else {
+                $('body').addClass('landscape');
+            }
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $('body').addClass('mobile');
+                $('body').removeClass('desktop');
+                events.move = 'touchmove';
+                events.start = 'touchstart';
+                events.end = 'touchend';
+                return true;
+            } else {
+                $('body').removeClass('mobile');
+                $('body').addClass('desktop');
+                events.move = 'mousemove';
+                events.start = 'mousedown';
+                events.end = 'mouseup';
+                return false;
+            }
+        }
+        var newGuid =  function() {
+          return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,
+            function(c) {
+              var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            }).toUpperCase();
+        }
+        function replaceColor(color,repColor){
+            var ctx = $('#canvas')[0].getContext('2d');
+            var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
+            pix = canvasData.data;
+
+            var arr = []
+            for (var i = 0, n = pix.length; i <n; i += 4) {
+                if(pix[i] === color[0] && pix[i+1] === color[1] && pix[i+2] === color[2]){
+                     pix[i] = repColor[0]; 
+                     pix[i+2] = repColor[2];   
+                     pix[i+1] = repColor[1];
+                     if(pix[i+3]==0)
+                       pix[i+3] = colorAlpa         
+                }
+            }
+
+            ctx.putImageData(canvasData, 0, 0);
+        }
+        /*function stepper() {
+            var ctx = $('#canvas')[0].getContext('2d');
+            var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
+            pix = canvasData.data;
+
+            var index = 0
+            setInterval(function(){
+                console.log(index)
+                pix[index] = 255
+                pix[index+1] = 0
+                pix[index+2] = 0
+                pix[index+3] = 255
+                ctx.putImageData(canvasData, 0, 0);
+                index+=4;
+            },0)
+        }*/
+        /*function redize() {
+            var ctx = $('#canvas')[0].getContext('2d');
+            var canvasData = ctx.getImageData(0, 0, $('#canvas').attr('width'), $('#canvas').attr('height')),
+            pix = canvasData.data;
+
+            for (var i = 0, n = pix.length; i <n; i += 4) {
+                if(pix[i+3] !=0 && pix[i] === pix[i+4] && pix[i+1] === pix[i+5] && pix[i+2] === pix[i+6]){
+                    pix[i] = 255
+                    pix[i+1] = 0
+                    pix[i+2] = 0
+                    pix[i+3] = 255
+                }
+            }
+            ctx.putImageData(canvasData, 0, 0);
+
+
+        }*/
+        function hexToRgb(hex) {
+          var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+          return result ? [
+            parseInt(result[1], 16),
+            parseInt(result[2], 16),
+            parseInt(result[3], 16)
+          ] : null;
+        }
+    </script>
+</head>
+
+<body>
+
+    <body>
+        <div class="dims noselect"></div>
+        <canvas id="canvas"></canvas>
+        <canvas class="initLayerCanvas layerCanvas"></canvas>
+        <div class="version">v7.6</div>
+    </body>
+
+</html>
+
