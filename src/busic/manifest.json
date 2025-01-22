@@ -1,0 +1,7 @@
+{
+    "name": "Busic PWA",
+    "short_name" : "Busic",
+    "display": "standalone",
+    "start_url": "/",
+    "scope" : "./"
+ }
