@@ -2,6 +2,6 @@
     "name": "Busic PWA",
     "short_name" : "Busic",
     "display": "standalone",
-    "start_url": "/",
-    "scope" : "./"
+    "start_url": "https://bisata86.github.io/src/busic/index.html",
+    "scope" : "https://bisata86.github.io/src/busic/index.html"
  }
