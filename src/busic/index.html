@@ -6,19 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title">Vite App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel= "manifest" href= "./manifest.json" />
-    <script type="module" crossorigin src="./assets/index-871b7951.js"></script>
+    <link rel= "manifest" href= "manifest.json" />
+    <script type="module" crossorigin src="./assets/index-2158da05.js"></script>
     <link rel="stylesheet" href="./assets/index-11a0d5fe.css">
   </head>
   <body>
     <div id="app"></div>
     <script>
-      var sep
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
       if(window.location.href.indexOf("cst=")==-1) {
-            sep = '&'
+        var sep = '&'
         if(window.location.href.indexOf("?")==-1) {
             sep = '?'   
         }
