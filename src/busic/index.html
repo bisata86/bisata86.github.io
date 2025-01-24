@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="title">Vite App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel= "manifest" href= "manifest.json" />
-    <script type="module" crossorigin src="/assets/index-871b7951.js"></script>
-    <link rel="stylesheet" href="/assets/index-11a0d5fe.css">
+    <link rel= "manifest" href= "./manifest.json" />
+    <script type="module" crossorigin src="./assets/index-871b7951.js"></script>
+    <link rel="stylesheet" href="./assets/index-11a0d5fe.css">
   </head>
   <body>
     <div id="app"></div>
@@ -33,7 +33,7 @@
             if(window.location.href.indexOf("bisata")!=-1) {
               dynurl = 'https://bisata86.github.io/src/busic/index.html'
             }
-            window.location.href = dynurl+"/?cst="+rno
+            window.location.href = dynurl+sep"?cst="+rno
         } else {
             localStorage.setItem("rnReload",curr)
         }
